@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 700,
+                    height: 350,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: destinations.length,

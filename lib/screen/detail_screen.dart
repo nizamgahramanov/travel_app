@@ -29,48 +29,51 @@ class _DetailScreenState extends State<DetailScreen> {
       extendBody: true,
       body: Column(
         children: [
-          Stack(children: [
-            Container(
-              height: 400,
-              margin: EdgeInsets.zero,
-              width: double.infinity,
-              child: Image.network(
-                'https://source.unsplash.com/random',
-                fit: BoxFit.cover,
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 400,
+                margin: EdgeInsets.zero,
+                width: double.infinity,
+                child: Image.network(
+                  'https://source.unsplash.com/random',
+                  fit: BoxFit.cover,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(15),
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
               ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(15),
+              Positioned(
+                left: 15,
+                top: 20,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  color: Colors.white,
                 ),
               ),
-              clipBehavior: Clip.antiAlias,
-            ),
-            Positioned(
-              left: 15,
-              top: 20,
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back),
-                color: Colors.white,
-              ),
-            ),
-            Positioned(
-              top: 20,
-              right: 15,
-              child: IconButton(
-                icon: Icon(
-                  Icons.favorite_border_outlined,
+              Positioned(
+                top: 20,
+                right: 15,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.favorite_border_outlined,
+                  ),
+                  color: Colors.white,
+                  onPressed: () {},
                 ),
-                color: Colors.white,
-                onPressed: () {},
               ),
-            ),
-            Positioned(
-                bottom: 30,
-                left: 30,
+              Positioned(
+                left: 25,
+                bottom: 25,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       data['name']!,
@@ -86,19 +89,51 @@ class _DetailScreenState extends State<DetailScreen> {
                           Icons.place,
                           color: Colors.white,
                         ),
-                        Text(
-                          'region',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Qax seheri, Agcay kendi',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ],
-                ))
-          ]),
-          SizedBox(
+                ),
+              ),
+              Positioned(
+                right: 25,
+                bottom: 0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Container(
+                    width: 70,
+                    height: 270,
+                    color: Colors.white,
+                    child: ListView.builder(
+                      itemCount: 7,
+                      itemBuilder: (context, index) => Container(
+                        margin: const EdgeInsets.all(5.0),
+                        width: 60,
+                        height: 60,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Image.network(
+                          'https://source.unsplash.com/random',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
             height: 30,
           ),
           Row(
@@ -118,7 +153,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Column(
@@ -143,7 +178,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     fontSize: 16,
                   ),
                 ),
-              )
+              ),
             ],
           )
         ],
