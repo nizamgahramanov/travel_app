@@ -15,18 +15,19 @@ class DetailInfo extends StatelessWidget {
       elevation: 10.0,
       color: Colors.grey,
       child: Container(
-        width: 110,
-        height: 110,
+        width: 80,
+        height: 80,
+        margin: EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
               title,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             Text(
               info,
-              style: TextStyle(color: Colors.blueAccent, fontSize: 27),
+              style: const TextStyle(color: Colors.blueAccent, fontSize: 27),
             ),
           ],
         ),
