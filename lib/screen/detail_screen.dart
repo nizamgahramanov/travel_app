@@ -9,7 +9,8 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends State<DetailScreen>
+    with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -18,6 +19,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TabController _tabController = TabController(length: 2, vsync: this);
     final data =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>;
 
@@ -37,11 +39,11 @@ class _DetailScreenState extends State<DetailScreen> {
                 margin: EdgeInsets.zero,
                 width: double.infinity,
                 child: Image.network(
-                  'https://source.unsplash.com/random',
+                  data['image_url']!,
                   fit: BoxFit.cover,
                 ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
+                decoration: const BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(15),
                   ),
                 ),
@@ -62,7 +64,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 top: 20,
                 right: 15,
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.favorite_border_outlined,
                   ),
                   color: Colors.white,
@@ -77,7 +79,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   children: [
                     Text(
                       data['name']!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 25,
                       ),
@@ -85,13 +87,13 @@ class _DetailScreenState extends State<DetailScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.place,
                           color: Colors.white,
                         ),
                         Container(
                           alignment: Alignment.topLeft,
-                          child: Text(
+                          child: const Text(
                             'Qax seheri, Agcay kendi',
                             style: TextStyle(
                               color: Colors.white,
@@ -123,7 +125,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20)),
                         child: Image.network(
-                          'https://source.unsplash.com/random',
+                          data['image_url']!,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -134,7 +136,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
           ),
           const SizedBox(
-            height: 30,
+            height: 15,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -154,35 +156,102 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
           ),
           const SizedBox(
-            height: 30,
+            height: 10,
           ),
-          Column(
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(left: 12),
-                child: const Text(
-                  "Description",
-                  style: TextStyle(
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TabBar(
+              labelPadding: const EdgeInsets.only(left: 20, right: 20),
+              labelColor: Colors.black,
+              controller: _tabController,
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicator: CircleTabIndicator(
+                color: Colors.lightGreen,
+                radius: 4,
+              ),
+              unselectedLabelColor: Colors.grey,
+              tabs: [
+                const Tab(
+                  text: 'Overview',
+                ),
+                const Tab(
+                  text: 'Reviews',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: 80,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            color: Colors.black12,
+            width: double.infinity,
+            child: TabBarView(
+              children: [
+                Container(
+                  child: Text(
+                    "Beautiful place with its amazing nature.Live a life. You can take simple cotage here. Just relax and take a time. Something more interested an be motivated",
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 16,
+                    ),
                   ),
                 ),
+                const Text("There"),
+              ],
+              controller: _tabController,
+            ),
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          TextButton.icon(
+            onPressed: () {},
+            icon: const Icon(Icons.map_sharp),
+            label: const Text("View map"),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.black12,
+              fixedSize: Size(360, 60),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-              Container(
-                margin: EdgeInsets.only(left: 12, right: 12),
-                child: Text(
-                  "Beautiful place with its amazing nature.Live a life. You can take simple cotage here. Just relac and take a ... Read more",
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
+            ),
           )
         ],
       ),
     );
+  }
+}
+
+class CircleTabIndicator extends Decoration {
+  final Color color;
+  double radius;
+  CircleTabIndicator({required this.color, required this.radius});
+  @override
+  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
+    // TODO: implement createBoxPainter
+
+    return _CirclePainter(color: color, radius: radius);
+  }
+}
+
+class _CirclePainter extends BoxPainter {
+  final Color color;
+  double radius;
+  _CirclePainter({required this.color, required this.radius});
+
+  @override
+  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
+    // TODO: implement paint
+    Paint _paint = Paint();
+    _paint.color = color;
+    _paint.isAntiAlias = true;
+    final Offset circleOffset = Offset(
+        configuration.size!.width / 2 - radius / 2,
+        configuration.size!.height - radius);
+    canvas.drawCircle(offset + circleOffset, radius, _paint);
   }
 }

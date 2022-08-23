@@ -5,8 +5,12 @@ import 'package:travel_app/screen/detail_screen.dart';
 import '../widgets/stacked_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  List<Map<Destination_Type, String>> tab_names = [
+    {Destination_Type.place: 'Place'},
+    {Destination_Type.forest: 'Forest'},
+    {Destination_Type.lake: 'Lake'},
+    {Destination_Type.waterwall: 'Waterwall'},
+  ];
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -14,7 +18,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    TabController _tabController = TabController(length: 4, vsync: this);
+    TabController _tabController =
+        TabController(length: widget.tab_names.length, vsync: this);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -35,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.verified_user),
+                  icon: Icon(Icons.person_outline),
                 ),
               ],
             ),
@@ -50,38 +55,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Container(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TabBar(
-                  labelPadding: EdgeInsets.only(left: 20, right: 20),
-                  labelColor: Colors.black,
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicator: CircleTabIndicator(
-                    color: Colors.lightGreen,
-                    radius: 4,
-                  ),
-                  unselectedLabelColor: Colors.grey,
-                  tabs: [
-                    Tab(
-                      text: 'Place',
-                    ),
-                    Tab(
-                      text: 'Waterwall',
-                    ),
-                    Tab(
-                      text: 'Lake',
-                    ),
-                    Tab(
-                      text: 'Forest',
-                    ),
-                  ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TabBar(
+                labelPadding: const EdgeInsets.only(left: 20, right: 20),
+                labelColor: Colors.black,
+                controller: _tabController,
+                isScrollable: true,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: CircleTabIndicator(
+                  color: Colors.lightGreen,
+                  radius: 4,
                 ),
+                unselectedLabelColor: Colors.grey,
+                tabs: widget.tab_names
+                    .map((e) => Tab(
+                          text: e.values.first,
+                        ))
+                    .toList(),
               ),
             ),
             const SizedBox(
@@ -91,35 +85,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               height: 350,
               width: double.infinity,
               child: TabBarView(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 350,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: destinations.length,
-                      itemBuilder: (context, index) => GestureDetector(
-                        onTap: () {
-                          print("CLICKED");
-                          Navigator.of(context).pushNamed(
-                            DetailScreen.routeName,
-                            arguments: {
-                              'name': destinations[index].name,
-                              'image_url': destinations[index].image_url
+                children: widget.tab_names
+                    .map(
+                      (name) => Container(
+                        width: double.infinity,
+                        height: 350,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: destinations.length,
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              print("CLICKED");
+                              Navigator.of(context).pushNamed(
+                                DetailScreen.routeName,
+                                arguments: {
+                                  'name': destinations[index].name,
+                                  'image_url': destinations[index].image_url
+                                },
+                              );
                             },
-                          );
-                        },
-                        child: StackedCarousel(
-                          destinations[index].name,
-                          destinations[index].image_url,
+                            child: StackedCarousel(
+                              destinations[index].name,
+                              destinations[index].image_url,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Text("There"),
-                  Text('Bye'),
-                  Text('Bye'),
-                ],
+                    )
+                    .toList()
+
+                // Text("There"),
+                // Text('Bye'),
+                // Text('Bye'),
+                // Text('Bye'),
+                ,
                 controller: _tabController,
               ),
             ),
