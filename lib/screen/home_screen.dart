@@ -16,6 +16,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController _tabController =
@@ -37,10 +46,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       fontSize: 30,
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.person_outline),
                 ),
               ],
             ),
@@ -87,38 +92,55 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: TabBarView(
                 children: widget.tab_names
                     .map(
-                      (name) => Container(
+                      (e) => Container(
                         width: double.infinity,
                         height: 350,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: destinations.length,
+                          itemCount: destinations
+                              .where((element) => element.type == e.keys.first)
+                              .length,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () {
                               print("CLICKED");
                               Navigator.of(context).pushNamed(
                                 DetailScreen.routeName,
                                 arguments: {
-                                  'name': destinations[index].name,
-                                  'image_url': destinations[index].image_url
+                                  'name': destinations
+                                      .where((element) =>
+                                          element.type == e.keys.first)
+                                      .elementAt(index)
+                                      .name,
+                                  'image_url': destinations
+                                      .where((element) =>
+                                          element.type == e.keys.first)
+                                      .elementAt(index)
+                                      .image_url,
                                 },
                               );
                             },
                             child: StackedCarousel(
-                              destinations[index].name,
-                              destinations[index].image_url,
+                              destinations
+                                  .where(
+                                      (element) => element.type == e.keys.first)
+                                  .elementAt(index)
+                                  .name,
+                              destinations
+                                  .where(
+                                      (element) => element.type == e.keys.first)
+                                  .elementAt(index)
+                                  .image_url,
+                              destinations
+                                  .where(
+                                      (element) => element.type == e.keys.first)
+                                  .elementAt(index)
+                                  .region,
                             ),
                           ),
                         ),
                       ),
                     )
-                    .toList()
-
-                // Text("There"),
-                // Text('Bye'),
-                // Text('Bye'),
-                // Text('Bye'),
-                ,
+                    .toList(),
                 controller: _tabController,
               ),
             ),
@@ -166,6 +188,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite_border,
+            ),
+            label: 'Favorite',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+            ),
+            label: 'Profile',
+          ),
+        ],
+        onTap: _onItemTapped,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.green[300],
+      ),
     );
   }
 }
@@ -176,7 +223,6 @@ class CircleTabIndicator extends Decoration {
   CircleTabIndicator({required this.color, required this.radius});
   @override
   BoxPainter createBoxPainter([VoidCallback? onChanged]) {
-
     return _CirclePainter(color: color, radius: radius);
   }
 }
@@ -188,7 +234,6 @@ class _CirclePainter extends BoxPainter {
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-
     Paint _paint = Paint();
     _paint.color = color;
     _paint.isAntiAlias = true;
