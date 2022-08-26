@@ -9,17 +9,12 @@ class StackedCarousel extends StatelessWidget {
   StackedCarousel(this.name, this.image_url, this.region);
   @override
   Widget build(BuildContext context) {
-    print("++++++++++++++++++++++++++++++++++++++++");
-    // print(selected_type);
-    print("----------------------------------------");
-    // print(element_type);
-    // print("****************************************");
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(
-            left: 12,
-          ),
+          // margin: EdgeInsets.only(
+          //   left: 12,
+          // ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(15),

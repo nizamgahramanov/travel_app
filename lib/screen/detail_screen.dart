@@ -14,7 +14,7 @@ class _DetailScreenState extends State<DetailScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
   @override
@@ -68,7 +68,9 @@ class _DetailScreenState extends State<DetailScreen>
                     Icons.favorite_border_outlined,
                   ),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                 ),
               ),
               Positioned(
