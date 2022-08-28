@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/screen/detail_screen.dart';
+import 'package:travel_app/screen/home_screen.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/splash_screen.dart';
 
 void main() async{
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: MainScreen(),
       routes: {
         DetailScreen.routeName: (context) => DetailScreen(),
       },

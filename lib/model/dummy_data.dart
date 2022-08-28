@@ -18,13 +18,6 @@ List<Destination> destinations = [
     region: "Qax",
   ),
   Destination(
-    name: "Qiz qalasi",
-    type: Destination_Type.place,
-    image_url:
-        'https://i.picsum.photos/id/324/200/200.jpg?hmac=qhw4ORwk8T1r-Rxd2QREZORSVvc6l_R1S6F3Pl9mR_c',
-    region: "Baki",
-  ),
-  Destination(
     name: "Qəbələ meşəsi",
     type: Destination_Type.waterwall,
     image_url:

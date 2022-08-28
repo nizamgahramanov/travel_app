@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/model/dummy_data.dart';
-import 'package:travel_app/widgets/below_lined_tab_bar.dart';
+import 'package:travel_app/widgets/circle_indicator_tab_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,18 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     // await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
     super.initState();
   }
@@ -27,106 +20,97 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 0,horizontal: 5.0),
-                height: MediaQuery.of(context).size.height * 0.05,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Discover",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 35,
-                      ),
+      backgroundColor: AppColors.mainColor,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(
+                vertical: 0,
+                horizontal: 20.0,
+              ),
+              height: MediaQuery.of(context).size.height * 0.05,
+              // alignment: Alignment.topLeft,
+              child: AppLargeText(
+                text: 'Discover',
+                color: AppColors.mainTextColor,
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            CircleIndicatorTabBar(),
+            const SizedBox(height: 40),
+            Container(
+              alignment: Alignment.topLeft,
+              margin: const EdgeInsets.symmetric(
+                vertical: 0,
+                horizontal: 20,
+              ),
+              child: AppLargeText(
+                text: "Top Destinations",
+                size: 22,
+                color: AppColors.mainTextColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 100,
+              width: double.infinity,
+              margin: const EdgeInsets.only(left: 20),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: destinations.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColors.inputColor,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.search_outlined),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height*0.03,
-              ),
-              BelowLinedTabBar(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.05,
-                alignment: Alignment.topLeft,
-                // padding: EdgeInsets.only(left: 8),
-                child: Text(
-                  "Destination you can travel",
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              // SizedBox(height:  MediaQuery.of(context).size.height*0.05),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.2,
-                width: double.infinity,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: destinations.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(
-                        left: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
+                    margin: EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          width: 120,
+                          clipBehavior: Clip.antiAlias,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              destinations[index].image_url,
+                              scale: 1.0,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
-                      width: 120,
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.network(
-                        destinations[index].image_url,
-                        scale: 1.0,
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              AppLightText(text: "Caspian Sea"),
+                              AppLightText(text: "Baku")
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite_border,
-            ),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-            ),
-            label: 'Profile',
-          ),
-        ],
-        onTap: _onItemTapped,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green[300],
       ),
     );
   }

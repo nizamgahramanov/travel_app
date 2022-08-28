@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/model/destination.dart';
+import '../helpers/app_large_text.dart';
+import '../helpers/app_light_text.dart';
 import '../model/dummy_data.dart';
 
 class StackedCarousel extends StatelessWidget {
@@ -12,16 +15,13 @@ class StackedCarousel extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          // margin: EdgeInsets.only(
-          //   left: 12,
-          // ),
+          margin: EdgeInsets.only(
+            right: 15,
+          ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
+            borderRadius: BorderRadius.circular(20),
           ),
           width: 250,
-          height: 700,
           clipBehavior: Clip.antiAlias,
           child: Image.network(
             image_url,
@@ -30,44 +30,36 @@ class StackedCarousel extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: 25,
+          left: 20,
           bottom: 20,
-          right: 15,
+          right: 35,
           child: Container(
-            width: 230,
             height: 70,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Colors.white.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(20),
+              color: AppColors.inputColor.withOpacity(0.7),
             ),
             padding: EdgeInsets.only(left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: AppLargeText(
+                    text: name,
+                    size: 21,
+                    color: AppColors.mainTextColor,
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    region,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black45,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.left,
+                  child: AppLargeText(
+                    text: region,
+                    size: 16,
+                    color: AppColors.buttonBackgroundColor,
                   ),
-                )
+                ),
               ],
             ),
           ),
