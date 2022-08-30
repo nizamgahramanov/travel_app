@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../model/circle_tab_indicator.dart';
+import '../model/destination.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
@@ -27,8 +29,8 @@ class _DetailScreenState extends State<DetailScreen>
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 2, vsync: this);
     final data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-
+        ModalRoute.of(context)!.settings.arguments as Map<String,int>;
+  final Destination destination = destinations.where((element) => element.id==data['id']!).first;
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(data['name']!),
@@ -61,7 +63,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        data['image_url']!,
+                        destination.photos[0],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -108,7 +110,7 @@ class _DetailScreenState extends State<DetailScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppLargeText(
-                          text: data['name']!,
+                          text: destination.name,
                           size: 22,
                           color: AppColors.inputColor,
                         ),
@@ -143,7 +145,7 @@ class _DetailScreenState extends State<DetailScreen>
                         height: MediaQuery.of(context).size.height * 0.37,
                         color: AppColors.inputColor,
                         child: ListView.builder(
-                          itemCount: 7,
+                          itemCount: destination.photos.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (_, index) => Container(
                             margin: const EdgeInsets.all(5.0),
@@ -156,7 +158,7 @@ class _DetailScreenState extends State<DetailScreen>
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.network(
-                                data['image_url']!,
+                                destination.photos[index],
                                 fit: BoxFit.cover,
                               ),
                             ),

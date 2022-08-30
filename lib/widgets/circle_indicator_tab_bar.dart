@@ -76,16 +76,16 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                         Navigator.of(context).pushNamed(
                           DetailScreen.routeName,
                           arguments: {
-                            'name': destinations
+                            'id': destinations
                                 .where(
                                     (element) => element.type == e.keys.first)
                                 .elementAt(index)
-                                .name,
-                            'image_url': destinations
-                                .where(
-                                    (element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .image_url,
+                                .id,
+                            // 'photos': destinations
+                            //     .where(
+                            //         (element) => element.type == e.keys.first)
+                            //     .elementAt(index)
+                            //     .photos,
                           },
                         );
                       },
@@ -97,7 +97,7 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                         destinations
                             .where((element) => element.type == e.keys.first)
                             .elementAt(index)
-                            .image_url,
+                            .photos,
                         destinations
                             .where((element) => element.type == e.keys.first)
                             .elementAt(index)

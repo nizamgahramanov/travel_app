@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.network(
-                              destinations[index].image_url,
+                              destinations[index].photos[0],
                               scale: 1.0,
                               fit: BoxFit.cover,
                             ),

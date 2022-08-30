@@ -7,9 +7,9 @@ import '../model/dummy_data.dart';
 
 class StackedCarousel extends StatelessWidget {
   final String name;
-  final String image_url;
+  final List<String> photos;
   final String region;
-  StackedCarousel(this.name, this.image_url, this.region);
+  StackedCarousel(this.name, this.photos, this.region);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -22,7 +22,7 @@ class StackedCarousel extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: Image.network(
-              image_url,
+              photos[0],
               scale: 1.0,
               fit: BoxFit.fill,
             ),
