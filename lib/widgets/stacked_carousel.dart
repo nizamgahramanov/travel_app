@@ -15,28 +15,27 @@ class StackedCarousel extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             right: 15,
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
           width: 250,
-          clipBehavior: Clip.antiAlias,
-          child: Image.network(
-            image_url,
-            scale: 1.0,
-            fit: BoxFit.fill,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: Image.network(
+              image_url,
+              scale: 1.0,
+              fit: BoxFit.fill,
+            ),
           ),
         ),
         Positioned(
-          left: 20,
-          bottom: 20,
-          right: 35,
+          left: 15,
+          bottom: 15,
+          right: 30,
           child: Container(
             height: 70,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(25),
               color: AppColors.inputColor.withOpacity(0.7),
             ),
             padding: EdgeInsets.only(left: 10),

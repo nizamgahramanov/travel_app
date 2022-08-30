@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 
 class DetailInfo extends StatelessWidget {
   final String title;
@@ -10,24 +13,25 @@ class DetailInfo extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(25.0),
       ),
-      elevation: 10.0,
-      color: Colors.grey,
+      elevation: 5.0,
+      color: AppColors.inputColor,
       child: Container(
         width: 80,
         height: 80,
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 20),
+            AppLightText(
+              text: title,
+              size: 18,
             ),
-            Text(
-              info,
-              style: const TextStyle(color: Colors.blueAccent, fontSize: 27),
+            AppLargeText(
+              text: info,
+              size: 22,
+              color: AppColors.buttonBackgroundColor,
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/widgets/stacked_carousel.dart';
+import '../helpers/app_light_text.dart';
+import '../model/circle_tab_indicator.dart';
 import '../model/dummy_data.dart';
 import '../screen/detail_screen.dart';
 
@@ -29,7 +31,7 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
             alignment: Alignment.centerLeft,
             child: TabBar(
               labelPadding: const EdgeInsets.only(left: 20, right: 20),
-              labelColor: AppColors.buttonBackgroundColor,
+              // labelColor: AppColors.textColor1,
               controller: _tabController,
               isScrollable: true,
               indicatorSize: TabBarIndicatorSize.label,
@@ -37,12 +39,16 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                 color: AppColors.buttonBackgroundColor,
                 radius: 4,
               ),
-              unselectedLabelColor:
-                  AppColors.buttonBackgroundColor.withOpacity(0.5),
+              // unselectedLabelColor:
+              //     AppColors.mainTextColor.withOpacity(0.8),
               tabs: tab_names
                   .map(
                     (e) => Tab(
-                      text: e.values.first,
+                      child: AppLightText(
+                        text: e.values.first,
+                        size: 14,
+                        color: AppColors.buttonBackgroundColor,
+                      ),
                     ),
                   )
                   .toList(),
@@ -109,29 +115,4 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
   }
 }
 
-class CircleTabIndicator extends Decoration {
-  final Color color;
-  double radius;
-  CircleTabIndicator({required this.color, required this.radius});
-  @override
-  BoxPainter createBoxPainter([VoidCallback? onChanged]) {
-    return _CirclePainter(color: color, radius: radius);
-  }
-}
 
-class _CirclePainter extends BoxPainter {
-  final Color color;
-  double radius;
-  _CirclePainter({required this.color, required this.radius});
-
-  @override
-  void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    Paint _paint = Paint();
-    _paint.color = color;
-    _paint.isAntiAlias = true;
-    final Offset circleOffset = Offset(
-        configuration.size!.width / 2 - radius / 2,
-        configuration.size!.height - radius);
-    canvas.drawCircle(offset + circleOffset, radius, _paint);
-  }
-}

@@ -53,10 +53,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   size: 32,
                 ),
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.02,
+              const SizedBox(
+                height: 30,
               ),
+              Expanded(child: Container()),
               const AppButton(text: "Get Started"),
+              const SizedBox(
+                height: 30,
+              ),
             ],
           ),
         ),
