@@ -81,11 +81,6 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                                     (element) => element.type == e.keys.first)
                                 .elementAt(index)
                                 .id,
-                            // 'photos': destinations
-                            //     .where(
-                            //         (element) => element.type == e.keys.first)
-                            //     .elementAt(index)
-                            //     .photos,
                           },
                         );
                       },

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/screen/main_screen.dart';
 
 import '../helpers/app_large_text.dart';
+import '../helpers/custom_button.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -20,6 +22,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
   }
 
+  void goToMainScreen() {
+    Navigator.of(context).pushNamed(MainScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,10 +35,9 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.maxFinite,
         decoration: BoxDecoration(
           color: AppColors.mainColor,
-          image: DecorationImage(
-              image: const AssetImage('assets/images/sea.jpeg'),
-              fit: BoxFit.cover
-              ),
+          image: const DecorationImage(
+              image: AssetImage('assets/images/sea.jpeg'),
+              fit: BoxFit.cover),
         ),
         child: Container(
           height: double.maxFinite,
@@ -41,10 +46,10 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.6,
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 0,horizontal: 20),
+                margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 alignment: Alignment.topCenter,
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: AppLargeText(
@@ -57,7 +62,11 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 30,
               ),
               Expanded(child: Container()),
-              const AppButton(text: "Get Started"),
+              CustomButton(
+                buttonText: "Get Started",
+                onTap: goToMainScreen,
+                borderRadius: 20,
+              ),
               const SizedBox(
                 height: 30,
               ),

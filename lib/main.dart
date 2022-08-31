@@ -20,9 +20,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(),
+      home: SplashScreen(),
       routes: {
         DetailScreen.routeName: (context) => DetailScreen(),
+        MainScreen.routeName:(context) => MainScreen(),
       },
     );
   }

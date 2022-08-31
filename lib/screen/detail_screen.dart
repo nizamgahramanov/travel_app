@@ -19,6 +19,13 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
+  int showImageIndex = 0;
+  void verticalListItemClicked(int index) {
+    setState(() {
+      showImageIndex = index;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -28,13 +35,10 @@ class _DetailScreenState extends State<DetailScreen>
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 2, vsync: this);
-    final data =
-        ModalRoute.of(context)!.settings.arguments as Map<String,int>;
-  final Destination destination = destinations.where((element) => element.id==data['id']!).first;
+    final data = ModalRoute.of(context)!.settings.arguments as Map<String, int>;
+    final Destination destination =
+        destinations.where((element) => element.id == data['id']!).first;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(data['name']!),
-      // ),
       extendBodyBehindAppBar: true,
       extendBody: true,
       body: Container(
@@ -46,12 +50,6 @@ class _DetailScreenState extends State<DetailScreen>
               width: double.maxFinite,
               height: MediaQuery.of(context).size.height * 0.55,
               color: AppColors.mainColor,
-              // decoration: const BoxDecoration(
-              //   borderRadius: BorderRadius.only(
-              //     bottomLeft: Radius.circular(15),
-              //     bottomRight: Radius.circular(15),
-              //   ),
-              // ),
               child: Stack(
                 children: [
                   Positioned(
@@ -63,7 +61,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        destination.photos[0],
+                        destination.photos[showImageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -86,14 +84,21 @@ class _DetailScreenState extends State<DetailScreen>
                       ),
                     ),
                   ),
-                  //icon: const Icon(Icons.arrow_back),
                   Positioned(
                     top: 40,
                     right: 10,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () =>
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: AppLightText(
+                          text: "Lets create an accout",
+                          color: AppColors.buttonBackgroundColor,
+                        ),
+                        backgroundColor: AppColors.inputColor,
+                        duration: Duration(seconds: 2),
+                      )),
                       style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
+                        shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10),
                         primary: AppColors.buttonBackgroundColor,
                       ),
@@ -124,7 +129,7 @@ class _DetailScreenState extends State<DetailScreen>
                             Container(
                               alignment: Alignment.topLeft,
                               child: AppLightText(
-                                text: 'Qax seheri, Agcay kendi',
+                                text: destination.region,
                                 color: AppColors.inputColor,
                                 size: 12,
                               ),
@@ -138,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen>
                     right: 20,
                     bottom: 0,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         padding: EdgeInsets.zero,
                         width: 70,
@@ -147,21 +152,46 @@ class _DetailScreenState extends State<DetailScreen>
                         child: ListView.builder(
                           itemCount: destination.photos.length,
                           padding: EdgeInsets.zero,
-                          itemBuilder: (_, index) => Container(
-                            margin: const EdgeInsets.all(5.0),
-                            width: 60,
-                            height: 60,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.network(
-                                destination.photos[index],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () => verticalListItemClicked(index),
+                            child: showImageIndex == index
+                                ? Container(
+                                    margin: const EdgeInsets.all(1.5),
+                                    width: 65,
+                                    height: 65,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          width: 1.2,
+                                          color: AppColors.buttonBackgroundColor
+                                              .withOpacity(0.4),
+                                        )),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                        // scale:3,
+                                        destination.photos[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    margin: const EdgeInsets.all(5.0),
+                                    width: 55,
+                                    height: 55,
+                                    clipBehavior: Clip.antiAlias,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                        destination.photos[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
@@ -241,8 +271,7 @@ class _DetailScreenState extends State<DetailScreen>
                       children: [
                         Container(
                           child: AppLightText(
-                            text:
-                                "Beautiful place with its amazing nature.Live a life. You can take simple cotage here. Just relax and take a time. Something more interested an be motivated",
+                            text: destination.overview,
                           ),
                         ),
                         Container(
@@ -271,67 +300,3 @@ class _DetailScreenState extends State<DetailScreen>
     );
   }
 }
-
-//   Align(
-//     alignment: Alignment.centerLeft,
-//     child: TabBar(
-//       labelPadding: const EdgeInsets.only(left: 20, right: 20),
-//       labelColor: Colors.black,
-//       controller: _tabController,
-//       isScrollable: true,
-//       indicatorSize: TabBarIndicatorSize.label,
-//       indicator: CircleTabIndicator(
-//         color: Colors.lightGreen,
-//         radius: 4,
-//       ),
-//       unselectedLabelColor: Colors.grey,
-//       tabs: [
-//         const Tab(
-//           text: 'Overview',
-//         ),
-//         const Tab(
-//           text: 'Reviews',
-//         ),
-//       ],
-//     ),
-//   ),
-//   const SizedBox(
-//     height: 15,
-//   ),
-//   Container(
-//     height: 80,
-//     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-//     color: Colors.black12,
-//     width: double.infinity,
-//     child: TabBarView(
-//       children: [
-//         Container(
-//           child: Text(
-//             "Beautiful place with its amazing nature.Live a life. You can take simple cotage here. Just relax and take a time. Something more interested an be motivated",
-//             style: TextStyle(
-//               color: Colors.grey[600],
-//               fontSize: 16,
-//             ),
-//           ),
-//         ),
-//         const Text("There"),
-//       ],
-//       controller: _tabController,
-//     ),
-//   ),
-//   SizedBox(
-//     height: 30.0,
-//   ),
-//   TextButton.icon(
-//     onPressed: () {},
-//     icon: const Icon(Icons.map_sharp),
-//     label: const Text("View map"),
-//     style: ElevatedButton.styleFrom(
-//       primary: Colors.black12,
-//       fixedSize: Size(360, 60),
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(20),
-//       ),
-//     ),
-//   )
-// ],
