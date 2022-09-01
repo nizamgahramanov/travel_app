@@ -6,6 +6,7 @@ import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/widgets/circle_indicator_tab_bar.dart';
 
 class HomeScreen extends StatefulWidget {
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }

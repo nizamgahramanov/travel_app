@@ -9,7 +9,7 @@ class StackedCarousel extends StatelessWidget {
   final String name;
   final List<String> photos;
   final String region;
-  StackedCarousel(this.name, this.photos, this.region);
+  StackedCarousel(this.name, this.photos, this.region,);
   @override
   Widget build(BuildContext context) {
     return Stack(

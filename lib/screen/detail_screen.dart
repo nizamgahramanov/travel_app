@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/widgets/detail_info.dart';
-
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../model/circle_tab_indicator.dart';
@@ -12,7 +10,8 @@ import '../model/destination.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
-
+  Function toggleFavorite;
+  DetailScreen(this.toggleFavorite, {Key? key}) : super(key: key);
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -37,7 +36,7 @@ class _DetailScreenState extends State<DetailScreen>
     TabController _tabController = TabController(length: 2, vsync: this);
     final data = ModalRoute.of(context)!.settings.arguments as Map<String, int>;
     final Destination destination =
-        destinations.where((element) => element.id == data['id']!).first;
+        destinations.firstWhere((element) => element.id == data['id']!);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -48,12 +47,12 @@ class _DetailScreenState extends State<DetailScreen>
           children: [
             Container(
               width: double.maxFinite,
-              height: MediaQuery.of(context).size.height * 0.55,
+              height: MediaQuery.of(context).size.height * 0.5,
               color: AppColors.mainColor,
               child: Stack(
                 children: [
                   Positioned(
-                    height: MediaQuery.of(context).size.height * 0.55,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
@@ -89,14 +88,7 @@ class _DetailScreenState extends State<DetailScreen>
                     right: 10,
                     child: ElevatedButton(
                       onPressed: () =>
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: AppLightText(
-                          text: "Lets create an accout",
-                          color: AppColors.buttonBackgroundColor,
-                        ),
-                        backgroundColor: AppColors.inputColor,
-                        duration: Duration(seconds: 2),
-                      )),
+                          widget.toggleFavorite(destination.id),
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10),
@@ -105,6 +97,9 @@ class _DetailScreenState extends State<DetailScreen>
                       child: Icon(
                         Icons.favorite_border_outlined,
                         color: AppColors.inputColor,
+                      // ):Icon(
+                      //   Icons.favorite,
+                      //   color: AppColors.inputColor,
                       ),
                     ),
                   ),

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
 
 import '../helpers/app_colors.dart';
+import '../model/destination.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final List<Destination> favoriteList;
+
+  MainScreen({Key? key, required this.favoriteList}) : super(key: key);
   static const routeName = '/main';
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -15,27 +19,31 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  late List screens;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  List screens = [
-    HomeScreen(),
-    SearchScreen(),
-    FavoriteScreen(),
-    ProfileScreen(),
-  ];
+  @override
+  void initState() {
+    screens = [
+      HomeScreen(),
+      SearchScreen(),
+      FavoriteScreen(
+        favoriteList: widget.favoriteList,
+      ),
+      ProfileScreen(),
+    ];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
