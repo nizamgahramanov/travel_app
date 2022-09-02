@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/dummy_data.dart';
+import 'package:travel_app/screen/LoginSignUp.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
 
@@ -35,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
       FavoriteScreen(
         favoriteList: widget.favoriteList,
       ),
-      ProfileScreen(),
+      LoginSignUp(),
     ];
     super.initState();
   }
@@ -67,9 +68,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.person,
+              Icons.login,
             ),
-            label: 'Profile',
+            label: 'Log in',
           ),
         ],
         onTap: _onItemTapped,
