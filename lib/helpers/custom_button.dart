@@ -6,17 +6,19 @@ class CustomButton extends StatelessWidget {
   VoidCallback onTap;
   String buttonText;
   double borderRadius;
+  double margin;
   CustomButton({
     Key? key,
     required this.onTap,
     required this.buttonText,
     required this.borderRadius,
+    this.margin=20
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin:  EdgeInsets.symmetric(horizontal: margin),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
         color: AppColors.buttonBackgroundColor,

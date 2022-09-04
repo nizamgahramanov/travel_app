@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/screen/detail_screen.dart';
-import 'package:travel_app/screen/home_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/splash_screen.dart';
 
@@ -43,6 +43,11 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: AppColors.buttonBackgroundColor,
+          cursorColor: AppColors.buttonBackgroundColor,
+          selectionHandleColor: AppColors.buttonBackgroundColor,
+        ),
       ),
       home: SplashScreen(),
       routes: {

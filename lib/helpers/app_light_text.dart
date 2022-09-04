@@ -7,20 +7,24 @@ class AppLightText extends StatelessWidget {
   final Color color;
   final bool isShowCheckMark;
 
-  AppLightText({
-    Key? key,
-    this.size = 16,
-    required this.text,
-    this.color = AppColors.textColor1,
-    this.isShowCheckMark=false
-  }) : super(key: key);
+  AppLightText(
+      {Key? key,
+      this.size = 16,
+      required this.text,
+      this.color = Colors.black38,
+      this.isShowCheckMark = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-
-      children: [
-        Icon(Icons.check,color: AppColors.buttonBackgroundColor),
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        spacing: 15,
+          children: [
+        if (isShowCheckMark)
+          Icon(Icons.check, color: AppColors.buttonBackgroundColor),
         Text(
           text,
           style: TextStyle(
@@ -31,7 +35,7 @@ class AppLightText extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-      ],
+      ]),
     );
   }
 }
