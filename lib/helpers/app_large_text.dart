@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_colors.dart';
 
 class AppLargeText extends StatelessWidget {
   double size;

@@ -29,6 +29,9 @@ class _LoginSignUpState extends State<LoginSignUp> {
           return Scaffold(
             backgroundColor: AppColors.mainColor,
             appBar: AppBar(
+              leading: BackButton(
+                  color: Colors.black
+              ),
               title: AppLargeText(
                 text: "Log in or Sign up",
                 size: 17,
@@ -96,9 +99,10 @@ class _LoginSignUpState extends State<LoginSignUp> {
 
   void saveForm() {
     //check in firebase email is registered or not
+    FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
-  void checkEmailIsRegistered(value){
+  void checkEmailIsRegistered(value) {
     print("VAKUE");
     print(value);
   }
@@ -109,7 +113,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
       height: double.maxFinite,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage("https://picsum.photos/id/237/200/300"),
+          image: NetworkImage("https://i.picsum.photos/id/234/200/300.jpg?hmac=KD9xFDCez7-lqgcMm-EEi7BtpClIdCzJS6YvFVyLiDs"),
           fit: BoxFit.cover,
         ),
       ),
