@@ -10,6 +10,13 @@ class LoginSignUp extends StatefulWidget {
     "Make destinations favorite",
     "Write a destination review"
   ];
+
+  @override
+  State<LoginSignUp> createState() => _LoginSignUpState();
+}
+
+class _LoginSignUpState extends State<LoginSignUp> {
+  final _form = GlobalKey<FormState>();
   void bottomSheetForSignIn(BuildContext context) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -31,7 +38,7 @@ class LoginSignUp extends StatefulWidget {
               backgroundColor: AppColors.mainColor,
             ),
             body: Container(
-              margin: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
               child: Column(
                 children: [
                   const SizedBox(
@@ -47,43 +54,32 @@ class LoginSignUp extends StatefulWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Form(
+                      key: _form,
                       child: TextFormField(
                         decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.buttonBackgroundColor,),
+                            borderSide: BorderSide(
+                              color: AppColors.buttonBackgroundColor,
+                            ),
                           ),
                           labelText: "Email",
                           labelStyle: const TextStyle(
                             color: Colors.black,
                           ),
-
                         ),
                         textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) {
+                          saveForm();
+                        },
+                        onSaved: (value)  {
+                          checkEmailIsRegistered(value);
+                        },
                       ),
                     ),
                   ),
-                  // TextFormField(
-                  //   keyboardType: TextInputType.emailAddress,
-                  //   decoration: InputDecoration(
-                  //     errorBorder: OutlineInputBorder( //<-- SEE HERE
-                  //       borderSide: BorderSide(
-                  //           width: 3, color: Colors.redAccent),
-                  //     ),
-                  //     hintText: 'Email',
-                  //     hintStyle: TextStyle(color: Colors.black),
-                  //     //When the TextFormField is NOT on focus
-                  //     enabledBorder: UnderlineInputBorder(
-                  //       borderSide: BorderSide(color: Colors.black),
-                  //     ),
-                  //     //When the TextFormField is ON focus
-                  //     focusedBorder: UnderlineInputBorder(
-                  //       borderSide: BorderSide(color: Colors.black),
-                  //     ),
-                  //   ),
-                  // ),
                   Expanded(child: Container()),
                   CustomButton(
-                    onTap: () {},
+                    onTap: saveForm,
                     buttonText: 'Continue',
                     borderRadius: 25,
                     margin: 0,
@@ -98,11 +94,14 @@ class LoginSignUp extends StatefulWidget {
         });
   }
 
-  @override
-  State<LoginSignUp> createState() => _LoginSignUpState();
-}
-
-class _LoginSignUpState extends State<LoginSignUp> {
+  void saveForm() {
+    //check in firebase email is registered or not
+    _form.currentState!.save();
+  }
+  void checkEmailIsRegistered(value){
+    print("VAKUE");
+    print(value);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -152,7 +151,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
           Container(
             child: CustomButton(
               borderRadius: 25,
-              onTap: () => widget.bottomSheetForSignIn(
+              onTap: () => bottomSheetForSignIn(
                 context,
               ),
               buttonText: "LOG IN OR SIGN UP",
