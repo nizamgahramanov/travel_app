@@ -3,6 +3,8 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/screen/password_screen.dart';
 
 class LoginSignUp extends StatefulWidget {
   LoginSignUp({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class LoginSignUp extends StatefulWidget {
 
 class _LoginSignUpState extends State<LoginSignUp> {
   final _form = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
   void bottomSheetForSignIn(BuildContext context) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -96,11 +99,24 @@ class _LoginSignUpState extends State<LoginSignUp> {
 
   void saveForm() {
     //check in firebase email is registered or not
+    FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
-  void checkEmailIsRegistered(value){
+  void checkEmailIsRegistered(value) async {
+    List<String> isExistList;
     print("VAKUE");
     print(value);
+    isExistList = await _auth.fetchSignInMethodsForEmail(value);
+    print("ASDASDA");
+    print(isExistList);
+    if (isExistList.isEmpty) {
+    //  go to password page
+      Navigator.pushNamed(context, PasswordScreen.routeName);
+    }
+    else{
+    //  send auth cde to email adress
+
+    }
   }
   @override
   Widget build(BuildContext context) {
