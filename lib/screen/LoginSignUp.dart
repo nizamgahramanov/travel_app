@@ -3,6 +3,8 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/screen/password_screen.dart';
 
 class LoginSignUp extends StatefulWidget {
   LoginSignUp({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class LoginSignUp extends StatefulWidget {
 
 class _LoginSignUpState extends State<LoginSignUp> {
   final _form = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
   void bottomSheetForSignIn(BuildContext context) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -29,9 +32,6 @@ class _LoginSignUpState extends State<LoginSignUp> {
           return Scaffold(
             backgroundColor: AppColors.mainColor,
             appBar: AppBar(
-              leading: BackButton(
-                  color: Colors.black
-              ),
               title: AppLargeText(
                 text: "Log in or Sign up",
                 size: 17,
@@ -102,9 +102,21 @@ class _LoginSignUpState extends State<LoginSignUp> {
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
-  void checkEmailIsRegistered(value) {
+  void checkEmailIsRegistered(value) async {
+    List<String> isExistList;
     print("VAKUE");
     print(value);
+    isExistList = await _auth.fetchSignInMethodsForEmail(value);
+    print("ASDASDA");
+    print(isExistList);
+    if (isExistList.isEmpty) {
+    //  go to password page
+      Navigator.pushNamed(context, PasswordScreen.routeName);
+    }
+    else{
+    //  send auth cde to email adress
+
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -113,7 +125,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
       height: double.maxFinite,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage("https://i.picsum.photos/id/234/200/300.jpg?hmac=KD9xFDCez7-lqgcMm-EEi7BtpClIdCzJS6YvFVyLiDs"),
+          image: NetworkImage("https://picsum.photos/id/237/200/300"),
           fit: BoxFit.cover,
         ),
       ),

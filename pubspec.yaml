@@ -47,10 +47,12 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.2.8
   animated_text_kit: ^4.2.2
+  firebase_core: ^1.21.1
+  firebase_auth: ^3.7.0
 flutter_native_splash:
 
   color: "#FFFFFF"
-  image: assets/images/splash.png
+  image: assets/images/mountain.png
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

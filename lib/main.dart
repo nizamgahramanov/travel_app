@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
+import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/screen/splash_screen.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'model/destination.dart';
 import 'model/dummy_data.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -51,8 +54,10 @@ class _MyAppState extends State<MyApp> {
       ),
       home: SplashScreen(),
       routes: {
+
         DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
         MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
+        PasswordScreen.routeName:(context) =>PasswordScreen(),
       },
     );
   }
