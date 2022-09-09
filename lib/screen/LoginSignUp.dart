@@ -59,6 +59,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
                     child: Form(
                       key: _form,
                       child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(

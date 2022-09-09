@@ -33,7 +33,7 @@ class AppLightText extends StatelessWidget {
             fontWeight: FontWeight.normal,
             fontFamily: 'Montserrat',
           ),
-          textAlign: TextAlign.center,
+          // textAlign: TextAlign.center,
         ),
       ]),
     );
