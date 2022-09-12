@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/dummy_data.dart';
-import 'package:travel_app/screen/LoginSignUp.dart';
+import 'package:travel_app/screen/login_signup.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
 

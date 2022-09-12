@@ -5,6 +5,7 @@ import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:travel_app/screen/user_info.dart';
 import 'model/destination.dart';
 import 'model/dummy_data.dart';
 
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
         DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
         MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
         PasswordScreen.routeName:(context) =>PasswordScreen(),
+        UserInfo.routeName:(context) =>UserInfo(),
       },
     );
   }
