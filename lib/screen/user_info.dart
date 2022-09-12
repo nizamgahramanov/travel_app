@@ -25,17 +25,23 @@ class _UserInfoState extends State<UserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
+    // final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
     void _trySubmit() async {
       UserCredential userCredential;
       try {
         userCredential = await _auth.createUserWithEmailAndPassword(
-          email: args.email,
-          password: args.password,
+          email: "NIZ",
+          password: "1231354",
         );
       } catch (error) {
         print(error);
       }
+    }
+    void saveForm() {
+      //check in firebase email is registered or not
+      FocusScope.of(context).unfocus();
+      _form.currentState!.save();
+      _trySubmit();
     }
 
     return Scaffold(
@@ -102,7 +108,7 @@ class _UserInfoState extends State<UserInfo> {
                                 ),
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: (_) {
-                                  // saveForm();
+                                  saveForm();
                                 },
                                 onSaved: (value) {
                                   first_name = value!;
@@ -127,7 +133,7 @@ class _UserInfoState extends State<UserInfo> {
                                 ),
                                 textInputAction: TextInputAction.done,
                                 onFieldSubmitted: (_) {
-                                  // saveForm();
+                                  saveForm();
                                 },
                                 onSaved: (value) {
                                   last_name = value!;
@@ -151,35 +157,13 @@ class _UserInfoState extends State<UserInfo> {
           },
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.mainColor,
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OverflowBar(
-            overflowAlignment: OverflowBarAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  CustomButton(
-                    buttonText: "Continue",
-                    borderRadius: 25,
-                    onTap: _trySubmit,
-
-                    // onChanged: (bool val) {
-                    //   setState(() {
-                    //     _pinned = val;
-                    //   });
-                    // },
-                    // value: _pinned,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+      floatingActionButton: CustomButton(
+        buttonText: "Continue",
+        borderRadius: 15,
+        margin: 20,
+        onTap: saveForm,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

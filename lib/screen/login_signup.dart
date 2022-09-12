@@ -4,7 +4,6 @@ import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:travel_app/screen/password_screen.dart';
 
@@ -120,29 +119,13 @@ class _LoginSignUpState extends State<LoginSignUp> {
                 },
               ),
             ),
-            // bottomNavigationBar: BottomAppBar(
-            //   clipBehavior: Clip.hardEdge,
-            //   color: AppColors.mainColor,
-            //   elevation: 0,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8),
-            //     child: OverflowBar(
-            //       overflowAlignment: OverflowBarAlignment.center,
-            //       children: <Widget>[
-            //         Row(
-            //           mainAxisSize: MainAxisSize.min,
-            //           children: <Widget>[
-            //             CustomButton(
-            //               buttonText: "Continue",
-            //               borderRadius: 25,
-            //               onTap: saveForm,
-            //             ),
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            floatingActionButton: CustomButton(
+              buttonText: "Continue",
+              borderRadius: 15,
+              margin: 20,
+              onTap: saveForm,
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           );
         });
   }

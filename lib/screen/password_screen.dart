@@ -5,6 +5,7 @@ import 'package:travel_app/screen/user_info.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
+import '../reusable/slide_left_route.dart';
 
 class PasswordScreen extends StatefulWidget {
   static const routeName = '/password';
@@ -29,8 +30,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
     void checkPasswordIsValid(value) async {
       print(value);
       //  go to password page
-      Navigator.pushNamed(context, UserInfo.routeName,
-          arguments: UserCredentials(args, value));
+      // Navigator.pushNamed(
+      //   context,
+      //   UserInfo.routeName,
+      //   arguments: UserCredentials(args, value),
+      // );
+      Navigator.of(context).push(_createRoute());
     }
 
     return Scaffold(
@@ -141,32 +146,34 @@ class _PasswordScreenState extends State<PasswordScreen> {
           );
         }),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.mainColor,
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: OverflowBar(
-            overflowAlignment: OverflowBarAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  CustomButton(
-                    buttonText: "Continue",
-                    borderRadius: 25,
-                    onTap: saveForm,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+      floatingActionButton: CustomButton(
+        buttonText: "Continue",
+        borderRadius: 15,
+        margin: 20,
+        onTap: saveForm,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>  UserInfo(),
 
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
 // ),
 // SliverAppBar(
 //   pinned: _pinned,

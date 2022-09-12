@@ -55,7 +55,6 @@ class _MyAppState extends State<MyApp> {
       ),
       home: SplashScreen(),
       routes: {
-
         DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
         MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
         PasswordScreen.routeName:(context) =>PasswordScreen(),
