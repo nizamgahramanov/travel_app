@@ -5,7 +5,7 @@ import 'package:travel_app/screen/user_info.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
-import '../reusable/slide_left_route.dart';
+import '../reusable/custom_page_route.dart';
 
 class PasswordScreen extends StatefulWidget {
   static const routeName = '/password';
@@ -29,13 +29,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
     final args = ModalRoute.of(context)!.settings.arguments as String;
     void checkPasswordIsValid(value) async {
       print(value);
+      // Navigator.of(context).push(CustomPageRoute(child: UserInfo()));
       //  go to password page
-      // Navigator.pushNamed(
-      //   context,
-      //   UserInfo.routeName,
-      //   arguments: UserCredentials(args, value),
-      // );
-      Navigator.of(context).push(_createRoute());
+      Navigator.pushNamed(
+        context,
+        UserInfo.routeName,
+        arguments: UserCredentials(args, value),
+      );
     }
 
     return Scaffold(
@@ -155,24 +155,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-}
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>  UserInfo(),
-
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
 // ),
 // SliverAppBar(

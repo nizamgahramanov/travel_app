@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
@@ -25,6 +26,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<Destination> favorites = [];
 
+
+  Route? onGenerateRoute(RouteSettings settings){
+    switch(settings.name){
+      case DetailScreen.routeName:
+        return CustomPageRoute(child: DetailScreen(toggleFavorite),);
+      case MainScreen.routeName:
+        return CustomPageRoute(child: MainScreen(favoriteList: favorites,));
+      case PasswordScreen.routeName:
+        return CustomPageRoute(child: PasswordScreen());
+      case UserInfo.routeName:
+        return CustomPageRoute(child: UserInfo());
+    }
+  }
   void toggleFavorite(int id) {
     print("TOGGLE FAVORITE");
     final existingIndex = favorites.indexWhere((element) => element.id == id);
@@ -38,7 +52,6 @@ class _MyAppState extends State<MyApp> {
       });
     }
   }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -54,12 +67,14 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: SplashScreen(),
-      routes: {
-        DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
-        MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
-        PasswordScreen.routeName:(context) =>PasswordScreen(),
-        UserInfo.routeName:(context) =>UserInfo(),
-      },
+      onGenerateRoute: (route)=>onGenerateRoute(route),
+      // routes: {
+      //   DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
+      //   MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
+      //   PasswordScreen.routeName:(context) =>PasswordScreen(),
+      //   UserInfo.routeName:(context) =>UserInfo(),
+      // },
     );
+
   }
 }
