@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
+import '../model/user_credentials.dart';
 
 class UserInfo extends StatefulWidget {
   static const routeName = '/user_info';
@@ -25,14 +26,17 @@ class _UserInfoState extends State<UserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    // final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
+    final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
+    print(args.email);
+    print("KLKLKRE");
     void _trySubmit() async {
       UserCredential userCredential;
       try {
         userCredential = await _auth.createUserWithEmailAndPassword(
-          email: "NIZ",
-          password: "1231354",
+          email: args.email,
+          password: args.password,
         );
+        Navigator.of(context).pushNamed(ProfileScreen.routeName);
       } catch (error) {
         print(error);
       }

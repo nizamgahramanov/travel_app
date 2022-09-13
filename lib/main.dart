@@ -4,13 +4,14 @@ import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
+import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'model/destination.dart';
 import 'model/dummy_data.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
@@ -24,21 +25,39 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Destination> favorites = [];
+  List<Destination> favorites =  [];
 
-
-  Route? onGenerateRoute(RouteSettings settings){
-    switch(settings.name){
+  Route? onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
       case DetailScreen.routeName:
-        return CustomPageRoute(child: DetailScreen(toggleFavorite),);
+        return CustomPageRoute(
+          child: DetailScreen( toggleFavorite),
+        );
       case MainScreen.routeName:
-        return CustomPageRoute(child: MainScreen(favoriteList: favorites,));
+        return CustomPageRoute(
+            child: MainScreen(
+          favoriteList: favorites,
+        ));
       case PasswordScreen.routeName:
-        return CustomPageRoute(child: PasswordScreen());
+        print("PASSWORD GO ");
+        print(settings);
+        return CustomPageRoute(
+          child: const PasswordScreen(),
+          settings: settings,
+        );
       case UserInfo.routeName:
-        return CustomPageRoute(child: UserInfo());
+        return CustomPageRoute(
+          child: UserInfo(),
+          settings: settings,
+        );
+      case ProfileScreen.routeName:
+        return CustomPageRoute(
+          child: ProfileScreen(),
+          settings: settings,
+        );
     }
   }
+
   void toggleFavorite(int id) {
     print("TOGGLE FAVORITE");
     final existingIndex = favorites.indexWhere((element) => element.id == id);
@@ -48,10 +67,11 @@ class _MyAppState extends State<MyApp> {
       });
     } else {
       setState(() {
-        favorites.add(destinations.firstWhere((element) => element.id==id));
+        favorites.add(destinations.firstWhere((element) => element.id == id));
       });
     }
   }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -67,7 +87,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       home: SplashScreen(),
-      onGenerateRoute: (route)=>onGenerateRoute(route),
+      onGenerateRoute: (route) => onGenerateRoute(route),
       // routes: {
       //   DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
       //   MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
@@ -75,6 +95,5 @@ class _MyAppState extends State<MyApp> {
       //   UserInfo.routeName:(context) =>UserInfo(),
       // },
     );
-
   }
 }

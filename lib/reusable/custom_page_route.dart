@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomPageRoute extends PageRouteBuilder {
   final Widget child;
-  CustomPageRoute({required this.child})
+  CustomPageRoute({required this.child,RouteSettings? settings})
       : super(
             transitionDuration: const Duration(milliseconds: 300),
+            settings: settings,
             reverseTransitionDuration: const Duration(milliseconds: 300),
             pageBuilder: (context, animation, secondaryAnimation) => child);
 

@@ -145,7 +145,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
       //  go to password page
       Navigator.pushNamed(context, PasswordScreen.routeName, arguments: value);
     } else {
-      //  send auth cde to email adress
+      //  send auth cde to email address
 
     }
   }

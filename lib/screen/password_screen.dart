@@ -27,6 +27,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as String;
+    print("args");
+    print(args);
     void checkPasswordIsValid(value) async {
       print(value);
       // Navigator.of(context).push(CustomPageRoute(child: UserInfo()));
@@ -73,7 +75,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      AppLightText(text: "Welcome hjh@gmail.com"),
+                      AppLightText(text: "Welcome $args"),
                       AppLightText(
                           text: "Secure your new account with a password"),
                       SizedBox(
