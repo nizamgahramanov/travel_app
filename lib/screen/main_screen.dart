@@ -11,8 +11,9 @@ import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final List<Destination> favoriteList;
-
-  MainScreen({Key? key, required this.favoriteList}) : super(key: key);
+  bool isLogin;
+  MainScreen({Key? key, required this.favoriteList, this.isLogin = true})
+      : super(key: key);
   static const routeName = '/main';
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -20,24 +21,31 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-
-  late List screens;
+  late Map screens;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
   }
 
   @override
   void initState() {
-    screens = [
-      HomeScreen(),
-      SearchScreen(),
-      FavoriteScreen(
+    screens = {
+      0: HomeScreen(),
+      1: SearchScreen(),
+      2: FavoriteScreen(
         favoriteList: widget.favoriteList,
       ),
-      LoginSignUp(),
-    ];
+      3: LoginSignUp(),
+      4: ProfileScreen(),
+    };
+    if (widget.isLogin){
+      screens.removeWhere((key, value) => key==3);
+      screens.removeWhere((key, value) => key==4);
+      screens[3]=ProfileScreen();
+    }
+
     super.initState();
   }
 
@@ -47,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: AppColors.mainColor,
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
@@ -67,11 +75,14 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Favorite',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.login,
-            ),
-            label: 'Log in',
-          ),
+              icon: widget.isLogin
+                  ? Icon(
+                      Icons.person,
+                    )
+                  : Icon(
+                      Icons.login,
+                    ),
+              label: widget.isLogin ? "Profile" : "Login"),
         ],
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

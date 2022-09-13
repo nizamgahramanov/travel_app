@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
@@ -36,7 +37,7 @@ class _UserInfoState extends State<UserInfo> {
           email: args.email,
           password: args.password,
         );
-        Navigator.of(context).pushNamed(ProfileScreen.routeName);
+        Navigator.of(context).pushNamed(MainScreen.routeName,arguments: 3);
       } catch (error) {
         print(error);
       }
