@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/screen/main_screen.dart';
-import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
+
 
 class UserInfo extends StatefulWidget {
   static const routeName = '/user_info';
@@ -37,11 +38,22 @@ class _UserInfoState extends State<UserInfo> {
           email: args.email,
           password: args.password,
         );
-        Navigator.of(context).pushNamed(MainScreen.routeName,arguments: 3);
+        print("USER CREDENTIALS");
+        print(userCredential);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'first_name': first_name,
+          'last_name': last_name,
+          'email':args.email
+        });
+        Navigator.of(context).pushNamed(MainScreen.routeName, arguments: 3);
       } catch (error) {
         print(error);
       }
     }
+
     void saveForm() {
       //check in firebase email is registered or not
       FocusScope.of(context).unfocus();

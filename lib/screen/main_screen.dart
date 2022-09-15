@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/screen/login_signup.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
-
 import '../helpers/app_colors.dart';
 import '../model/destination.dart';
 import 'favorite_screen.dart';
@@ -12,7 +10,7 @@ import 'home_screen.dart';
 class MainScreen extends StatefulWidget {
   final List<Destination> favoriteList;
   bool isLogin;
-  MainScreen({Key? key, required this.favoriteList, this.isLogin = true})
+  MainScreen({Key? key, required this.favoriteList, this.isLogin = false})
       : super(key: key);
   static const routeName = '/main';
   @override
