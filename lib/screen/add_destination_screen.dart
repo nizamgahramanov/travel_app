@@ -78,8 +78,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     _userImageFile = File(file.path);
     var uuid = Uuid();
     if (_userImageFile != null) {
+      print(uuid.v4().toString());
       destinationItem = Destination(
-        id: 8,
+        id: 9,
         name: destinationItem.name,
         overview: destinationItem.overview,
         region: destinationItem.region,
@@ -97,9 +98,8 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             key: _formKey,
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Container(
-                  color: Colors.amber,
                   height: MediaQuery.of(context).size.height * 1,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
