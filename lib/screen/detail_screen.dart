@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/model/dummy_data.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../model/circle_tab_indicator.dart';
 import '../model/destination.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/destinations.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
@@ -26,17 +28,14 @@ class _DetailScreenState extends State<DetailScreen>
   }
 
   @override
-  void initState() {
-    super.initState();
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    print("Detail Screen");
+    final providerData = Provider.of<Destinations>(context,listen: false);
+    print(providerData);
+
     TabController _tabController = TabController(length: 2, vsync: this);
     final data = ModalRoute.of(context)!.settings.arguments as Map<String, int>;
-    final Destination destination =
-        destinations.firstWhere((element) => element.id == data['id']!);
+    final Destination destination = providerData.findById(data['id']!);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -60,7 +59,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        destination.photos[showImageIndex],
+                        destination.photo_url[showImageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -87,8 +86,7 @@ class _DetailScreenState extends State<DetailScreen>
                     top: 40,
                     right: 10,
                     child: ElevatedButton(
-                      onPressed: () =>
-                          widget.toggleFavorite(destination.id),
+                      onPressed: () => widget.toggleFavorite(destination.id),
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10),
@@ -97,9 +95,9 @@ class _DetailScreenState extends State<DetailScreen>
                       child: Icon(
                         Icons.favorite_border_outlined,
                         color: AppColors.inputColor,
-                      // ):Icon(
-                      //   Icons.favorite,
-                      //   color: AppColors.inputColor,
+                        // ):Icon(
+                        //   Icons.favorite,
+                        //   color: AppColors.inputColor,
                       ),
                     ),
                   ),
@@ -145,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen>
                         height: MediaQuery.of(context).size.height * 0.37,
                         color: AppColors.inputColor,
                         child: ListView.builder(
-                          itemCount: destination.photos.length,
+                          itemCount: destination.photo_url.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () => verticalListItemClicked(index),
@@ -166,7 +164,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
                                         // scale:3,
-                                        destination.photos[index],
+                                        destination.photo_url[index],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -182,7 +180,7 @@ class _DetailScreenState extends State<DetailScreen>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
-                                        destination.photos[index],
+                                        destination.photo_url[index],
                                         fit: BoxFit.cover,
                                       ),
                                     ),

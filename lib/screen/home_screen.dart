@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
-import 'package:travel_app/model/dummy_data.dart';
+import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/widgets/circle_indicator_tab_bar.dart';
+import 'package:provider/provider.dart';
+import 'add_destination_screen.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -12,14 +14,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  @override
-  void initState() {
-    // await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
-    super.initState();
+  void goToAddDestinationScreen(){
+    Navigator.of(context).pushNamed(AddDestinationScreen.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
+    print("HOMW SCREEN");
+    print(context);
+    final providedData = Provider.of<Destinations>(context).destinationItemsAll;
+
+    print(providedData);
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       body: SingleChildScrollView(
@@ -29,17 +34,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 0,
-                horizontal: 20.0,
-              ),
-              height: MediaQuery.of(context).size.height * 0.05,
-              // alignment: Alignment.topLeft,
-              child: AppLargeText(
-                text: 'Discover',
-                color: AppColors.mainTextColor,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 20.0,
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  // alignment: Alignment.topLeft,
+                  child: AppLargeText(
+                    text: 'Discover',
+                    color: AppColors.mainTextColor,
+                  ),
+                ),
+                ElevatedButton.icon(onPressed: goToAddDestinationScreen, label: Text("Add"), icon: Icon(Icons.add),)
+              ],
             ),
             const SizedBox(
               height: 25,
@@ -65,20 +77,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               margin: const EdgeInsets.only(left: 20),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: destinations.length,
+                itemCount: providedData.length,
                 itemBuilder: (context, index) {
                   return Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: AppColors.inputColor,
                     ),
-                    margin: EdgeInsets.only(right: 15),
+                    margin: const EdgeInsets.only(right: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -87,14 +99,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.network(
-                              destinations[index].photos[0],
+                              providedData[index].photo_url[0],
                               scale: 1.0,
                               fit: BoxFit.cover,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 8),
+                          padding: const EdgeInsets.only(right: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,

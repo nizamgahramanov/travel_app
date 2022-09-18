@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/widgets/stacked_carousel.dart';
+import 'package:provider/provider.dart';
 import '../helpers/app_light_text.dart';
+import '../helpers/destination_type.dart';
 import '../model/circle_tab_indicator.dart';
-import '../model/dummy_data.dart';
+import '../providers/destinations.dart';
 import '../screen/detail_screen.dart';
 
 class CircleIndicatorTabBar extends StatefulWidget {
@@ -13,17 +15,20 @@ class CircleIndicatorTabBar extends StatefulWidget {
 
 class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
     with TickerProviderStateMixin {
-  var tab_names = [
-    {Destination_Type.place: 'Place'},
-    {Destination_Type.forest: 'Forest'},
-    {Destination_Type.lake: 'Lake'},
-    {Destination_Type.waterwall: 'Waterwall'},
+  var tabNames = [
+    {DestinationType.place: 'Place'},
+    {DestinationType.forest: 'Forest'},
+    {DestinationType.lake: 'Lake'},
+    {DestinationType.waterfall: 'Waterfall'},
   ];
 
   @override
   Widget build(BuildContext context) {
+    final providerData = Provider.of<Destinations>(context).destinationItemsAll;
+    print("Circle Tab");
+    print(providerData);
     TabController _tabController =
-        TabController(length: tab_names.length, vsync: this);
+        TabController(length: tabNames.length, vsync: this);
     return Column(
       children: [
         Container(
@@ -41,7 +46,7 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
               ),
               // unselectedLabelColor:
               //     AppColors.mainTextColor.withOpacity(0.8),
-              tabs: tab_names
+              tabs: tabNames
                   .map(
                     (e) => Tab(
                       child: AppLightText(
@@ -63,37 +68,40 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
           padding: const EdgeInsets.only(left: 20),
           width: double.maxFinite,
           child: TabBarView(
-            children: tab_names
+            controller: _tabController,
+            children: tabNames
                 .map(
                   (e) => ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: destinations
+                    itemCount: providerData
                         .where((element) => element.type == e.keys.first)
                         .length,
                     itemBuilder: (context, index) => GestureDetector(
                       onTap: () {
                         print("CLICKED");
+                        var clickedItemId = providerData
+                            .where(
+                                (element) => element.type == e.keys.first)
+                            .elementAt(index)
+                            .id;
+                        print(clickedItemId);
                         Navigator.of(context).pushNamed(
                           DetailScreen.routeName,
                           arguments: {
-                            'id': destinations
-                                .where(
-                                    (element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .id,
+                            'id': clickedItemId,
                           },
                         );
                       },
                       child: StackedCarousel(
-                        destinations
+                        providerData
                             .where((element) => element.type == e.keys.first)
                             .elementAt(index)
                             .name,
-                        destinations
+                        providerData
                             .where((element) => element.type == e.keys.first)
                             .elementAt(index)
-                            .photos,
-                        destinations
+                            .photo_url,
+                        providerData
                             .where((element) => element.type == e.keys.first)
                             .elementAt(index)
                             .region,
@@ -102,7 +110,6 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                   ),
                 )
                 .toList(),
-            controller: _tabController,
           ),
         ),
       ],

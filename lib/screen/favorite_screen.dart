@@ -38,7 +38,7 @@ class FavoriteScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
               // scale:3,
-              favoriteList[index].photos[0],
+              favoriteList[index].photo_url[0],
               fit: BoxFit.cover,
             ),
           ),

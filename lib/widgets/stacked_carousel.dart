@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/model/destination.dart';
 import '../helpers/app_large_text.dart';
-import '../helpers/app_light_text.dart';
-import '../model/dummy_data.dart';
 
 class StackedCarousel extends StatelessWidget {
   final String name;
   final List<String> photos;
   final String region;
-  StackedCarousel(this.name, this.photos, this.region,);
+   StackedCarousel(
+    this.name,
+    this.photos,
+    this.region,
+  );
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -38,7 +39,7 @@ class StackedCarousel extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               color: AppColors.inputColor.withOpacity(0.7),
             ),
-            padding: EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
