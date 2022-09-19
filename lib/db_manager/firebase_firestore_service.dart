@@ -13,10 +13,11 @@ class FireStoreService {
   }
 
   Stream<List<Destination>> getDestinations() {
-    return _db.collection('destinations').snapshots().map((snapshot) => snapshot
+    final a = _db.collection('destinations').snapshots().map((snapshot) => snapshot
         .docs
         .map((document) => Destination.fromFirestore(document.data()))
         .toList());
+    return a;
   }
 
   // Future<void> removeItem(String productId) {

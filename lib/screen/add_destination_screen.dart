@@ -32,7 +32,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     overview: "",
     region: "",
     type: null,
-    photo_url: [],
+    photo_url: "",
   );
 
   void _saveForm() async {
@@ -83,7 +83,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
         overview: destinationItem.overview,
         region: destinationItem.region,
         type: destinationItem.type,
-        photo_url: [],
+        photo_url: "",
       );
     }
   }

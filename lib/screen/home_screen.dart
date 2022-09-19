@@ -22,108 +22,131 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     print("HOMW SCREEN");
-    print(context);
-    final providedData = Provider.of<Destinations>(context).destinationItemsAll;
+    final providedData = Provider.of<Destinations>(context);
     print(providedData);
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: StreamBuilder<List<Destination>>(
+        stream: providedData.destinationItemsAll,
+        builder: (context, snapshot) {
+          if(snapshot.connectionState==ConnectionState.active) {
+            print("snapshot");
+            print(snapshot.data!.first.photo_url);
+            return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 20.0,
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      // alignment: Alignment.topLeft,
+                      child: AppLargeText(
+                        text: 'Discover',
+                        color: AppColors.mainTextColor,
+                      ),
+                    ),
+                    ElevatedButton.icon(onPressed: goToAddDestinationScreen, label: Text("Add"), icon: Icon(Icons.add),)
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                CircleIndicatorTabBar(),
+                const SizedBox(height: 40),
                 Container(
+                  alignment: Alignment.topLeft,
                   margin: const EdgeInsets.symmetric(
                     vertical: 0,
-                    horizontal: 20.0,
+                    horizontal: 20,
                   ),
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  // alignment: Alignment.topLeft,
                   child: AppLargeText(
-                    text: 'Discover',
+                    text: "Top Destinations",
+                    size: 22,
                     color: AppColors.mainTextColor,
                   ),
                 ),
-                ElevatedButton.icon(onPressed: goToAddDestinationScreen, label: Text("Add"), icon: Icon(Icons.add),)
+                const SizedBox(height: 20),
+                Container(
+                  height: 100,
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(left: 20),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppColors.inputColor,
+                        ),
+                        margin: const EdgeInsets.only(right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              width: 120,
+                              clipBehavior: Clip.antiAlias,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(
+                                  snapshot.data![index].photo_url,
+                                  scale: 1.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AppLightText(text: "Caspian Sea"),
+                                  AppLightText(text: "Baku")
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                )
               ],
             ),
-            const SizedBox(
-              height: 25,
-            ),
-            CircleIndicatorTabBar(),
-            const SizedBox(height: 40),
-            Container(
-              alignment: Alignment.topLeft,
-              margin: const EdgeInsets.symmetric(
-                vertical: 0,
-                horizontal: 20,
-              ),
-              child: AppLargeText(
-                text: "Top Destinations",
-                size: 22,
-                color: AppColors.mainTextColor,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 100,
-              width: double.infinity,
-              margin: const EdgeInsets.only(left: 20),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: providedData.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: AppColors.inputColor,
-                    ),
-                    margin: const EdgeInsets.only(right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          width: 120,
-                          clipBehavior: Clip.antiAlias,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              providedData[index].photo_url[0],
-                              scale: 1.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppLightText(text: "Caspian Sea"),
-                              AppLightText(text: "Baku")
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
+          );
+          }
+          else if(snapshot.connectionState==ConnectionState.waiting){
+            return const Center(child: CircularProgressIndicator(),);
+          }
+          else if(snapshot.hasError){
+            print("I have error");
+            print(snapshot.error);
+            print(snapshot.connectionState);
+            return Center(child: Text("ERRORO RERER"),);
+          }else{
+            print("HERE");
+            print(snapshot.data);
+            print(snapshot.error);
+            print(snapshot.connectionState);
+            return Center(child: Text("ERRORO OCCURED"),);
+          }
+        }
       ),
     );
   }

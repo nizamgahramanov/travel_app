@@ -4,7 +4,7 @@ import '../helpers/app_large_text.dart';
 
 class StackedCarousel extends StatelessWidget {
   final String name;
-  final List<String> photos;
+  final String photos;
   final String region;
    StackedCarousel(
     this.name,
@@ -13,6 +13,8 @@ class StackedCarousel extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    print("photo");
+    print(photos);
     return Stack(
       children: [
         Container(
@@ -22,11 +24,7 @@ class StackedCarousel extends StatelessWidget {
           width: 250,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
-            child: Image.network(
-              photos[0],
-              scale: 1.0,
-              fit: BoxFit.fill,
-            ),
+            child: Image.network(photos,fit: BoxFit.cover,),
           ),
         ),
         Positioned(

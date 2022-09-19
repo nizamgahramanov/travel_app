@@ -7,8 +7,8 @@ class Destination {
   final String name;
   final String overview;
   final String region;
-  final DestinationType? type;
-  List<String> photo_url;
+  final String? type;
+  String photo_url;
   // final List<Review> reviews;
 
   Destination({
