@@ -27,7 +27,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   File? _userImageFile;
   var _isLoading = false;
   var destinationItem = Destination(
-    id: null,
+    id: const Uuid().v4(),
     name: "",
     overview: "",
     region: "",
@@ -76,16 +76,14 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
 
   void pickedImage(XFile file) {
     _userImageFile = File(file.path);
-    var uuid = Uuid();
     if (_userImageFile != null) {
-      print(uuid.v4().toString());
       destinationItem = Destination(
-        id: 9,
+        id: destinationItem.id,
         name: destinationItem.name,
         overview: destinationItem.overview,
         region: destinationItem.region,
         type: destinationItem.type,
-        photo_url: [_userImageFile!.path],
+        photo_url: [],
       );
     }
   }

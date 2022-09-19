@@ -14,7 +14,7 @@ class Destinations with ChangeNotifier {
   var uuid = Uuid();
   final List<Destination> _destinationItems = [
     Destination(
-      id: 1,
+      id: '1',
       name: "Nohur Lake",
       type: DestinationType.lake,
       photo_url: [
@@ -28,7 +28,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-        id: 2,
+        id: '2',
         name: "Mamir shelalesi",
         type: DestinationType.waterfall,
         photo_url: [
@@ -39,7 +39,7 @@ class Destinations with ChangeNotifier {
             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque p mus. Donec quam felis, ultricies nec, pellentesque eu",
         ),
     Destination(
-      id: 3,
+      id: '3',
       name: "Qəbələ meşəsi",
       type: DestinationType.waterfall,
       photo_url: [
@@ -51,7 +51,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 4,
+      id: '4',
       name: "Qəbələ meşəsi",
       type: DestinationType.lake,
       photo_url: [
@@ -63,7 +63,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 5,
+      id: '5',
       name: "Qəbələ meşəsi",
       type: DestinationType.lake,
       photo_url: [
@@ -75,7 +75,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 6,
+      id: '6',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -88,7 +88,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 7,
+      id: '7',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -100,7 +100,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 8,
+      id: '8',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -112,7 +112,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 9,
+      id: '9',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -124,7 +124,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 10,
+      id: '10',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -136,7 +136,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 11,
+      id: '11',
       name: "İlusu kendi",
       type: DestinationType.place,
       photo_url: [
@@ -154,7 +154,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 12,
+      id: '12',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -166,7 +166,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 13,
+      id: '13',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -178,7 +178,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 14,
+      id: '14',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -190,7 +190,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 15,
+      id: '15',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -202,7 +202,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 16,
+      id: '16',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -214,7 +214,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 17,
+      id: '17',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -226,7 +226,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 18,
+      id: '18',
       name: "Qəbələ meşəsi",
       type: DestinationType.lake,
       photo_url: [
@@ -239,7 +239,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 19,
+      id: '19',
       name: "Qanli gol",
       type: DestinationType.lake,
       photo_url: [
@@ -252,7 +252,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 20,
+      id: '20',
       name: "Qəbələ meşəsi",
       type: DestinationType.place,
       photo_url: [
@@ -264,7 +264,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 21,
+      id: '21',
       name: "Qəbələ meşəsi",
       type: DestinationType.lake,
       photo_url: [
@@ -276,7 +276,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 22,
+      id: '22',
       name: "Qəbələ meşəsi",
       type: DestinationType.lake,
       photo_url: [
@@ -288,7 +288,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 23,
+      id: '23',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -300,7 +300,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 24,
+      id: '24',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -316,7 +316,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 25,
+      id: '25',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -328,7 +328,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 26,
+      id: '26',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -340,7 +340,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 27,
+      id: '27',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -352,7 +352,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 28,
+      id: '28',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -364,7 +364,7 @@ class Destinations with ChangeNotifier {
       
     ),
     Destination(
-      id: 29,
+      id: '29',
       name: "Qəbələ meşəsi",
       type: DestinationType.forest,
       photo_url: [
@@ -376,7 +376,10 @@ class Destinations with ChangeNotifier {
       
     ),
   ];
-  List<Destination> get destinationItemsAll {
+  List<Destination> get destinationItemsAll  {
+     final po = firestore_service.getDestinations();
+     print("DESTINATIKON");
+     print(po);
     return [..._destinationItems];
   }
 
@@ -387,8 +390,11 @@ class Destinations with ChangeNotifier {
   void saveData(Destination newDestination,File destinationPhoto) async {
     print("DESTINAtion item");
     print(newDestination.createMap().toString());
-    await storage_service.saveDestinationImages(newDestination,destinationPhoto);
-    print("returned");
+    final url = await storage_service.saveDestinationImages(newDestination,destinationPhoto);
+    print('url');
+    print(url);
+    newDestination.photo_url=[url];
     await firestore_service.saveDestination(newDestination);
+
   }
 }

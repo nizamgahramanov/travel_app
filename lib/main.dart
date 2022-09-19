@@ -14,6 +14,7 @@ import 'package:travel_app/screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:provider/provider.dart';
+import 'db_manager/firebase_firestore_service.dart';
 import 'model/destination.dart';
 
 void main() async {

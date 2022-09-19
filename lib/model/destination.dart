@@ -3,12 +3,12 @@ import 'dart:io';
 import '../helpers/destination_type.dart';
 
 class Destination {
-  final int? id;
+  final String? id;
   final String name;
   final String overview;
   final String region;
   final DestinationType? type;
-  final List<String> photo_url;
+  List<String> photo_url;
   // final List<Review> reviews;
 
   Destination({

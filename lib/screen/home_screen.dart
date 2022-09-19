@@ -5,6 +5,7 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/widgets/circle_indicator_tab_bar.dart';
 import 'package:provider/provider.dart';
+import '../model/destination.dart';
 import 'add_destination_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     print("HOMW SCREEN");
     print(context);
     final providedData = Provider.of<Destinations>(context).destinationItemsAll;
-
     print(providedData);
     return Scaffold(
       backgroundColor: AppColors.mainColor,

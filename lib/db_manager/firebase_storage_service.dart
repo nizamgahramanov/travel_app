@@ -1,27 +1,33 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 import '../model/destination.dart';
 
 class FirebaseStorageService {
   final ref = FirebaseStorage.instance;
 
-  Future<void> saveDestinationImages(Destination destination,File destinationPhoto) {
+  Future<String> saveDestinationImages(Destination destination,File destinationPhoto) async{
     final fileRef = ref.ref().child((destination.id).toString()).child("${destination.name}.jpg");
-
-    return fileRef.putFile(destinationPhoto);
+    final refPut = await fileRef.putFile(destinationPhoto);
+    final url = await fileRef.getDownloadURL();
+    print("URL ");
+    print(url);
+    return url;
+  //   UploadTask uploadTask = fileRef.putFile(destinationPhoto);
+  //   print("GETTING URL FROM");
+  //   String url="";
+  //   await uploadTask.whenComplete(() {
+  //     fileRef.getDownloadURL().then((fileURL){
+  //       print("GET DOWNLOAD URL");
+  //       url = fileURL;
+  //       print(url);
+  //       return url;
+  //     });
+  //   });
+  //   // final url = fileRef.getDownloadURL();
+  //   // print("URL");
+  //   print(url);
+  // return url;
   }
-  //
-  // Stream<List<Destination>> getDestinations() {
-  //   return _db.collection('destinations').snapshots().map((snapshot) => snapshot
-  //       .docs
-  //       .map((document) => Destination.fromFirestore(document.data()))
-  //       .toList());
-  // }
-
-// Future<void> removeItem(String productId) {
-//   return _db.collection('Products').document(productId).delete();
-// }
 }
