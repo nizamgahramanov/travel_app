@@ -383,11 +383,11 @@ class Destinations with ChangeNotifier {
     return po;
   }
 
-  Destination findById(int id) {
+  Destination findById(String id) {
     return _destinationItems.firstWhere((element) => element.id == id);
   }
 
-  void saveData(Destination newDestination,File destinationPhoto) async {
+  void saveData(Destination newDestination,List<File?> destinationPhoto) async {
     print("DESTINAtion item");
     print(newDestination.createMap().toString());
     final url = await storage_service.saveDestinationImages(newDestination,destinationPhoto);

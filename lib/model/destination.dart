@@ -7,8 +7,8 @@ class Destination {
   final String name;
   final String overview;
   final String region;
-  final String? type;
-  String photo_url;
+  final String type;
+  List<String> photo_url;
   // final List<Review> reviews;
 
   Destination({
@@ -30,12 +30,13 @@ class Destination {
       'photo_url': photo_url,
     };
   }
-
   Destination.fromFirestore(Map<String, dynamic> firestoreMap)
       : id = firestoreMap['id'],
         name = firestoreMap['name'],
         overview = firestoreMap['overview'],
         region = firestoreMap['region'],
         type = firestoreMap['type'],
-        photo_url = firestoreMap['photo_url'];
+        photo_url = firestoreMap['photo_url'].cast<String>();
+
+
 }

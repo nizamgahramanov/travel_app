@@ -78,38 +78,23 @@ class _CircleIndicatorTabBarState extends State<CircleIndicatorTabBar>
                     .map(
                       (e) => ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data!
-                            .where((element) => element.type == e.keys.first)
-                            .length,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) => GestureDetector(
                           onTap: () {
                             print("CLICKED");
-                            var clickedItemId = snapshot.data!
-                                .where(
-                                    (element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .id;
+                            var clickedItemId = snapshot.data![index].id;
                             print(clickedItemId);
                             Navigator.of(context).pushNamed(
                               DetailScreen.routeName,
                               arguments: {
-                                'id': clickedItemId,
+                                'destination': snapshot.data![index],
                               },
                             );
                           },
                           child: StackedCarousel(
-                            snapshot.data!
-                                .where((element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .name,
-                            snapshot.data!
-                                .where((element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .photo_url,
-                            snapshot.data!
-                                .where((element) => element.type == e.keys.first)
-                                .elementAt(index)
-                                .region,
+                            snapshot.data![index].name,
+                            snapshot.data![index].photo_url[0],
+                            snapshot.data![index].region,
                           ),
                         ),
                       ),

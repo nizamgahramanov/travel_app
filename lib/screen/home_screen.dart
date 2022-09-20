@@ -9,7 +9,6 @@ import '../model/destination.dart';
 import 'add_destination_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -18,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void goToAddDestinationScreen(){
     Navigator.of(context).pushNamed(AddDestinationScreen.routeName);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: StreamBuilder<List<Destination>>(
         stream: providedData.destinationItemsAll,
         builder: (context, snapshot) {
-          if(snapshot.connectionState==ConnectionState.active) {
+          if(snapshot.hasData) {
             print("snapshot");
-            print(snapshot.data!.first.photo_url);
+            print(snapshot.data);
             return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 0,
@@ -104,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
                                 child: Image.network(
-                                  snapshot.data![index].photo_url,
+                                  snapshot.data![index].photo_url[0],
                                   scale: 1.0,
                                   fit: BoxFit.cover,
                                 ),
@@ -126,13 +125,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           );
-          }
-          else if(snapshot.connectionState==ConnectionState.waiting){
-            return const Center(child: CircularProgressIndicator(),);
           }
           else if(snapshot.hasError){
             print("I have error");

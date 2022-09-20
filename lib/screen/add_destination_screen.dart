@@ -9,6 +9,8 @@ import '../model/destination.dart';
 import '../providers/destinations.dart';
 import '../widgets/destination_image_picker.dart';
 
+
+const List<String> destinationType = <String>['Place', 'Mountain', 'Lake', 'Waterfall'];
 class AddDestinationScreen extends StatefulWidget {
   const AddDestinationScreen({Key? key}) : super(key: key);
   static const routeName = "/add_destination";
@@ -24,15 +26,18 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   final typeController = TextEditingController();
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
-  File? _userImageFile;
+  List<File?> _destinationImageFile=[];
   var _isLoading = false;
+
+  String dropdownValue = destinationType.first;
+
   var destinationItem = Destination(
     id: const Uuid().v4(),
     name: "",
     overview: "",
     region: "",
-    type: null,
-    photo_url: "",
+    type: "",
+    photo_url: [],
   );
 
   void _saveForm() async {
@@ -46,9 +51,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     }
     _formKey.currentState!.save();
     try {
-      if (_userImageFile != null) {
+      if (_destinationImageFile.isNotEmpty) {
         Provider.of<Destinations>(context, listen: false)
-            .saveData(destinationItem, _userImageFile!);
+            .saveData(destinationItem, _destinationImageFile);
       }
     } catch (error) {
       await showDialog<Null>(
@@ -74,19 +79,23 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     Navigator.of(context).pop();
   }
 
-  void pickedImage(XFile file) {
-    _userImageFile = File(file.path);
-    if (_userImageFile != null) {
+  void pickedImage(List<XFile?> xFileList) {
+    for (var xFile in xFileList){
+      _destinationImageFile.add(File(xFile!.path));
+    }
+    // _userImageFile = File(file[0]!.path);
+    if (_destinationImageFile.isNotEmpty) {
       destinationItem = Destination(
         id: destinationItem.id,
         name: destinationItem.name,
         overview: destinationItem.overview,
         region: destinationItem.region,
-        type: destinationItem.type,
-        photo_url: "",
+        type:dropdownValue,
+        photo_url: [],
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,29 +181,33 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                           );
                         },
                       ),
-                      TextFormField(
-                        controller: typeController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Type';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Destination Type',
+                      DropdownButton<String>(
+
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
                         ),
-                        onSaved: (value) {
-                          destinationItem = Destination(
-                            id: destinationItem.id,
-                            name: destinationItem.name,
-                            overview: destinationItem.overview,
-                            region: destinationItem.region,
-                            type: destinationItem.type,
-                            photo_url: destinationItem.photo_url,
-                          );
+                        onChanged: (String? value) {
+                          // This is called when the user selects an item.
+                          print("VALUE");
+                          print(value);
+                          setState(() {
+                            dropdownValue = value!;
+                          });
                         },
+                        items: destinationType
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       DestinationImagePicker(pickedImage)

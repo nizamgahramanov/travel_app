@@ -34,8 +34,8 @@ class _DetailScreenState extends State<DetailScreen>
     print(providerData);
 
     TabController _tabController = TabController(length: 2, vsync: this);
-    final data = ModalRoute.of(context)!.settings.arguments as Map<String, int>;
-    final Destination destination = providerData.findById(data['id']!);
+    final data = ModalRoute.of(context)!.settings.arguments as Destination;
+    // final Destination destination = providerData.findById(data['id']!);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -59,7 +59,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        destination.photo_url[showImageIndex],
+                        data.photo_url[showImageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -86,7 +86,7 @@ class _DetailScreenState extends State<DetailScreen>
                     top: 40,
                     right: 10,
                     child: ElevatedButton(
-                      onPressed: () => widget.toggleFavorite(destination.id),
+                      onPressed: () => widget.toggleFavorite(data.id),
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(10),
@@ -108,7 +108,7 @@ class _DetailScreenState extends State<DetailScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppLargeText(
-                          text: destination.name,
+                          text: data.name,
                           size: 22,
                           color: AppColors.inputColor,
                         ),
@@ -122,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen>
                             Container(
                               alignment: Alignment.topLeft,
                               child: AppLightText(
-                                text: destination.region,
+                                text: data.region,
                                 color: AppColors.inputColor,
                                 size: 12,
                               ),
@@ -143,7 +143,7 @@ class _DetailScreenState extends State<DetailScreen>
                         height: MediaQuery.of(context).size.height * 0.37,
                         color: AppColors.inputColor,
                         child: ListView.builder(
-                          itemCount: destination.photo_url.length,
+                          itemCount: 2,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () => verticalListItemClicked(index),
@@ -164,7 +164,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
                                         // scale:3,
-                                        destination.photo_url[index],
+                                        data.photo_url[0],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -180,7 +180,7 @@ class _DetailScreenState extends State<DetailScreen>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
-                                        destination.photo_url[index],
+                                        data.photo_url[0],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -261,10 +261,11 @@ class _DetailScreenState extends State<DetailScreen>
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                     width: double.infinity,
                     child: TabBarView(
+                      controller: _tabController,
                       children: [
                         Container(
                           child: AppLightText(
-                            text: destination.overview,
+                            text: data.overview,
                           ),
                         ),
                         Container(
@@ -274,7 +275,6 @@ class _DetailScreenState extends State<DetailScreen>
                           ),
                         ),
                       ],
-                      controller: _tabController,
                     ),
                   ),
                   Expanded(
