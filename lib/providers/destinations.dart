@@ -377,10 +377,10 @@ class Destinations with ChangeNotifier {
     // ),
   ];
   Stream<List<Destination>> get destinationItemsAll  {
-     final po = firestore_service.getDestinations();
+     final allDestination = firestore_service.getDestinations();
      print("DESTINATIKON");
-     print(po.length);
-    return po;
+     print(allDestination.length);
+    return allDestination;
   }
 
   Destination findById(String id) {
@@ -390,10 +390,9 @@ class Destinations with ChangeNotifier {
   void saveData(Destination newDestination,List<File?> destinationPhoto) async {
     print("DESTINAtion item");
     print(newDestination.createMap().toString());
-    final url = await storage_service.saveDestinationImages(newDestination,destinationPhoto);
+    final urlList = await storage_service.saveDestinationImages(newDestination,destinationPhoto);
     print('url');
-    print(url);
-    newDestination.photo_url=url;
+    newDestination.photo_url=urlList;
     await firestore_service.saveDestination(newDestination);
 
   }
