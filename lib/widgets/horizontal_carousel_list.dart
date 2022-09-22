@@ -107,9 +107,7 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
                                   print(clickedItemId);
                                   Navigator.of(context).pushNamed(
                                     DetailScreen.routeName,
-                                    arguments: {
-                                      'destination': snapshot.data![index],
-                                    },
+                                    arguments: snapshot.data![index],
                                   );
                                 },
                                 child: StackedCarousel(

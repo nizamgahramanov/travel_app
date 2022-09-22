@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void toggleFavorite(int id) {
+  void toggleFavorite(String id) {
     print("TOGGLE FAVORITE");
     final existingIndex = favorites.indexWhere((element) => element.id == id);
     if (existingIndex >= 0) {

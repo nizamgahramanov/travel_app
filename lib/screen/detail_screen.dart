@@ -35,7 +35,6 @@ class _DetailScreenState extends State<DetailScreen>
 
     TabController _tabController = TabController(length: 2, vsync: this);
     final data = ModalRoute.of(context)!.settings.arguments as Destination;
-    // final Destination destination = providerData.findById(data['id']!);
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -164,7 +163,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
                                         // scale:3,
-                                        data.photo_url[0],
+                                        data.photo_url[showImageIndex],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -180,7 +179,7 @@ class _DetailScreenState extends State<DetailScreen>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
-                                        data.photo_url[0],
+                                        data.photo_url[index],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
