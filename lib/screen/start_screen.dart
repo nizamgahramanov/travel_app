@@ -7,18 +7,21 @@ import 'package:travel_app/screen/main_screen.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/custom_button.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class StartScreen extends StatefulWidget {
+  const StartScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<StartScreen> createState() => _StartScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness: Brightness.dark,
+    ));
     super.initState();
   }
 
@@ -36,8 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: BoxDecoration(
           color: AppColors.mainColor,
           image: const DecorationImage(
-              image: AssetImage('assets/images/sea.jpeg'),
-              fit: BoxFit.cover),
+            image: AssetImage('assets/images/sea.jpeg'),
+            fit: BoxFit.cover,
+          ),
         ),
         child: Container(
           height: double.maxFinite,

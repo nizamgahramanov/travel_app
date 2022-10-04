@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/custom_button.dart';
+import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../model/circle_tab_indicator.dart';
 import '../model/destination.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/destinations.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -21,20 +23,30 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
   int showImageIndex = 0;
+  bool isSelecting= false;
   void verticalListItemClicked(int index) {
     setState(() {
       showImageIndex = index;
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     print("Detail Screen");
-    final providerData = Provider.of<Destinations>(context,listen: false);
+    final providerData = Provider.of<Destinations>(context, listen: false);
     print(providerData);
 
     TabController _tabController = TabController(length: 2, vsync: this);
     final data = ModalRoute.of(context)!.settings.arguments as Destination;
+    Map<String, dynamic> argu = {
+      "isSelecting": isSelecting,
+      "geoPoint": data.geoPoint,
+      "zoom":12.0
+    };
+    void showDestinationOnMap() {
+      Navigator.of(context).pushNamed(MapScreen.routeName, arguments: argu);
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -138,29 +150,29 @@ class _DetailScreenState extends State<DetailScreen>
                       borderRadius: BorderRadius.circular(20.0),
                       child: Container(
                         padding: EdgeInsets.zero,
-                        width: 70,
-                        height: MediaQuery.of(context).size.height * 0.37,
+                        width: 60,
+                        height: MediaQuery.of(context).size.height * 0.32,
                         color: AppColors.inputColor,
                         child: ListView.builder(
-                          itemCount: 2,
+                          itemCount: data.photo_url.length,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () => verticalListItemClicked(index),
                             child: showImageIndex == index
                                 ? Container(
                                     margin: const EdgeInsets.all(1.5),
-                                    width: 65,
-                                    height: 65,
+                                    width: 55,
+                                    height: 55,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
                                           width: 1.2,
                                           color: AppColors.buttonBackgroundColor
                                               .withOpacity(0.4),
                                         )),
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(15),
                                       child: Image.network(
                                         // scale:3,
                                         data.photo_url[showImageIndex],
@@ -170,8 +182,8 @@ class _DetailScreenState extends State<DetailScreen>
                                   )
                                 : Container(
                                     margin: const EdgeInsets.all(5.0),
-                                    width: 55,
-                                    height: 55,
+                                    width: 45,
+                                    height: 45,
                                     clipBehavior: Clip.antiAlias,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -279,13 +291,17 @@ class _DetailScreenState extends State<DetailScreen>
                   Expanded(
                     child: Container(),
                   ),
-                  const AppButton(text: "View on map"),
+                  CustomButton(
+                    onTap: showDestinationOnMap,
+                    buttonText: "View On Map",
+                    borderRadius: 20,
+                  ),
                   const SizedBox(
                     height: 30,
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

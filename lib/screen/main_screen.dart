@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       3: LoginSignUp(),
       4: const ProfileScreen(),
     };
-    if (widget.isLogin){
+    if (widget.isLogin) {
       screens.removeWhere((key, value) => key==3);
       screens.removeWhere((key, value) => key==4);
       screens[3]=const ProfileScreen();

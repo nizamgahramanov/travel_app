@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
@@ -8,18 +9,19 @@ import 'package:travel_app/screen/change_name.dart';
 import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
+import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/screen/profile_screen.dart';
-import 'package:travel_app/screen/splash_screen.dart';
+import 'package:travel_app/screen/start_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:provider/provider.dart';
-import 'db_manager/firebase_firestore_service.dart';
 import 'model/destination.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MyApp());
 }
 
@@ -82,6 +84,11 @@ class _MyAppState extends State<MyApp> {
           child: const AddDestinationScreen(),
           settings: settings,
         );
+      case MapScreen.routeName:
+        return CustomPageRoute(
+          child: MapScreen(),
+          settings: settings,
+        );
     }
   }
 
@@ -119,7 +126,7 @@ class _MyAppState extends State<MyApp> {
             selectionHandleColor: AppColors.buttonBackgroundColor,
           ),
         ),
-        home: const SplashScreen(),
+        home: const StartScreen(),
         onGenerateRoute: (route) => onGenerateRoute(route),
         // routes: {
         //   DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),

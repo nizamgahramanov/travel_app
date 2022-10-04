@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:travel_app/model/destination_location.dart';
 import 'package:uuid/uuid.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
 import '../widgets/destination_image_picker.dart';
+import '../widgets/location_input.dart';
 
 
 const List<String> destinationType = <String>['Place', 'Mountain', 'Lake', 'Waterfall'];
@@ -27,6 +30,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
   List<File?> _destinationImageFile=[];
+  DestinationLocation? _destinationLocation;
   var _isLoading = false;
 
   String dropdownValue = destinationType.first;
@@ -37,7 +41,10 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     overview: "",
     region: "",
     type: "",
+    long:"",
+    lat:"",
     photo_url: [],
+    geoPoint: const GeoPoint(40.6079186,49.5886951),
   );
 
   void _saveForm() async {
@@ -51,7 +58,18 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     }
     _formKey.currentState!.save();
     try {
-      if (_destinationImageFile.isNotEmpty) {
+      if (_destinationImageFile.isNotEmpty && _destinationLocation?.latitude != null) {
+          destinationItem = Destination(
+            id: destinationItem.id,
+            name: destinationItem.name,
+            overview: destinationItem.overview,
+            region: destinationItem.region,
+            type: dropdownValue,
+            long: _destinationLocation!.longitude.toString(),
+            lat: _destinationLocation!.latitude.toString(),
+            photo_url: [],
+            geoPoint: GeoPoint(_destinationLocation!.latitude,_destinationLocation!.longitude)
+          );
         Provider.of<Destinations>(context, listen: false)
             .saveData(destinationItem, _destinationImageFile);
       }
@@ -84,18 +102,12 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
       _destinationImageFile.add(File(xFile!.path));
     }
     // _userImageFile = File(file[0]!.path);
-    if (_destinationImageFile.isNotEmpty) {
-      destinationItem = Destination(
-        id: destinationItem.id,
-        name: destinationItem.name,
-        overview: destinationItem.overview,
-        region: destinationItem.region,
-        type:dropdownValue,
-        photo_url: [],
-      );
-    }
-  }
 
+  }
+  void _selectPlace(double lat, double lng) {
+    print(lat.toString());
+    _destinationLocation = DestinationLocation(latitude: lat, longitude: lng);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +146,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: destinationItem.region,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
+                            long: destinationItem.long,
+                            lat: destinationItem.lat,
+                            geoPoint: destinationItem.geoPoint
                           );
                         },
                       ),
@@ -156,6 +171,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: destinationItem.region,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
+                            long: destinationItem.long,
+                            lat: destinationItem.lat,
+                            geoPoint: destinationItem.geoPoint
                           );
                         },
                       ),
@@ -178,6 +196,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: value!,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
+                            long: destinationItem.long,
+                            lat: destinationItem.lat,
+                            geoPoint: destinationItem.geoPoint
                           );
                         },
                       ),
@@ -210,7 +231,8 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       const SizedBox(
                         height: 25,
                       ),
-                      DestinationImagePicker(pickedImage)
+                      DestinationImagePicker(pickedImage),
+                      LocationInput(_selectPlace),
                     ],
                   ),
                 ),

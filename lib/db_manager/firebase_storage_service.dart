@@ -13,7 +13,7 @@ class FirebaseStorageService {
           final fileRef = ref
               .ref()
               .child((destination.id).toString())
-              .child("${destination.name}$i.jpg");
+              .child("${destination.name}_$i.jpg");
 
         await fileRef.putFile(imageFile!);
 
