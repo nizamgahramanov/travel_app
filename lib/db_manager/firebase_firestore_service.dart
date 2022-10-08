@@ -13,10 +13,24 @@ class FireStoreService {
   }
 
   Stream<List<Destination>> getDestinations() {
-    final a = _db.collection('destinations').snapshots().map((snapshot) => snapshot
-        .docs
-        .map((document) => Destination.fromFirestore(document.data()))
-        .toList());
+    final a = _db.collection('destinations').snapshots().map((snapshot) =>
+        snapshot.docs
+            .map((document) => Destination.fromFirestore(document.data()))
+            .toList());
+    return a;
+  }
+
+  Stream<List<Destination>> getDestinationsBySearchText(String enteredText) {
+    print("ENTERED TEXT");
+    print(enteredText);
+    final a = _db
+        .collection('destinations')
+        .where("name", isGreaterThanOrEqualTo: enteredText)
+        .where("name", isLessThan: "${enteredText}z")
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) => Destination.fromFirestore(document.data()))
+            .toList());
     return a;
   }
 

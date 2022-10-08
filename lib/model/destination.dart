@@ -10,8 +10,6 @@ class Destination {
   final String overview;
   final String region;
   final String type;
-  final String long;
-  final String lat;
   final GeoPoint geoPoint;
   List<String> photo_url;
 
@@ -23,8 +21,6 @@ class Destination {
     required this.overview,
     required this.region,
     required this.type,
-    required this.long,
-    required this.lat,
     required this.photo_url,
     required this.geoPoint,
     // required this.reviews
@@ -36,8 +32,6 @@ class Destination {
       'overview': overview,
       'region': region,
       'type': type,
-      'long': long,
-      'lat': lat,
       'photo_url': photo_url,
       'geoPoint':geoPoint
     };
@@ -49,8 +43,6 @@ class Destination {
         overview = firestoreMap['overview'],
         region = firestoreMap['region'],
         type = firestoreMap['type'],
-        long = firestoreMap['long'],
-        lat = firestoreMap['lat'],
         photo_url = firestoreMap['photo_url'].cast<String>(),
         geoPoint = firestoreMap['geoPoint'];
 }

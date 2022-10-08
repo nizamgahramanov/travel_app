@@ -23,13 +23,12 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
   int showImageIndex = 0;
-  bool isSelecting= false;
+  bool isSelecting = false;
   void verticalListItemClicked(int index) {
     setState(() {
       showImageIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +41,12 @@ class _DetailScreenState extends State<DetailScreen>
     Map<String, dynamic> argu = {
       "isSelecting": isSelecting,
       "geoPoint": data.geoPoint,
-      "zoom":12.0
+      "zoom": 12.0
     };
     void showDestinationOnMap() {
       Navigator.of(context).pushNamed(MapScreen.routeName, arguments: argu);
     }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -147,55 +147,62 @@ class _DetailScreenState extends State<DetailScreen>
                     right: 20,
                     bottom: 0,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        width: 60,
-                        height: MediaQuery.of(context).size.height * 0.32,
-                        color: AppColors.inputColor,
-                        child: ListView.builder(
-                          itemCount: data.photo_url.length,
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) => GestureDetector(
-                            onTap: () => verticalListItemClicked(index),
-                            child: showImageIndex == index
-                                ? Container(
-                                    margin: const EdgeInsets.all(1.5),
-                                    width: 55,
-                                    height: 55,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: LimitedBox(
+                        maxHeight: MediaQuery.of(context).size.height * 0.3,
+                        maxWidth: 60,
+                        // padding: EdgeInsets.zero,
+                        // width: 60,
+                        // height: MediaQuery.of(context).size.height * 0.07 * data.photo_url.length,
+                        // color: AppColors.inputColor,
+                        child: Container(
+                          color: Colors.white,
+                          child: ListView.builder(
+                            itemCount: data.photo_url.length,
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () => verticalListItemClicked(index),
+                              child: showImageIndex == index
+                                  ? Container(
+                                      margin: const EdgeInsets.all(4.0),
+                                      width: 50,
+                                      height: 50,
+                                      // margin: const EdgeInsets.only(bottom: 8),
+                                      // padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
                                         border: Border.all(
-                                          width: 1.2,
-                                          color: AppColors.buttonBackgroundColor
-                                              .withOpacity(0.4),
-                                        )),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: Image.network(
-                                        // scale:3,
-                                        data.photo_url[showImageIndex],
-                                        fit: BoxFit.cover,
+                                          width: 3,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          data.photo_url[showImageIndex],
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      margin: const EdgeInsets.all(4),
+                                      width: 50,
+                                      height: 50,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: Image.network(
+                                          data.photo_url[index],
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  )
-                                : Container(
-                                    margin: const EdgeInsets.all(5.0),
-                                    width: 45,
-                                    height: 45,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                        data.photo_url[index],
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
+                            ),
                           ),
                         ),
                       ),

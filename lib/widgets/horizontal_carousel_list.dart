@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/widgets/stacked_carousel.dart';
+import 'package:travel_app/widgets/carousel_item.dart';
 import 'package:provider/provider.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/destination_type.dart';
@@ -54,6 +54,7 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
             if (snapshot.hasError) {
               return const Text('Error');
             } else {
+              print(snapshot.data);
               return Column(
                 children: [
                   Container(
@@ -91,34 +92,33 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
                   ),
                   Container(
                     height: 340,
-                    padding: const EdgeInsets.only(left: 20),
+                    // padding: const EdgeInsets.only(left: 20),
                     width: double.maxFinite,
                     child: TabBarView(
                       controller: _tabController,
-                      children: tabNames
-                          .map(
-                            (e) => ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) => GestureDetector(
-                                onTap: () {
-                                  print("CLICKED");
-                                  var clickedItemId = snapshot.data![index].id;
-                                  print(clickedItemId);
-                                  Navigator.of(context).pushNamed(
-                                    DetailScreen.routeName,
-                                    arguments: snapshot.data![index],
-                                  );
-                                },
-                                child: StackedCarousel(
-                                  snapshot.data![index].name,
-                                  snapshot.data![index].photo_url[0],
-                                  snapshot.data![index].region,
-                                ),
-                              ),
+                      children: tabNames.map((e) {
+                        Iterable<Destination> destinationIterable =
+                            snapshot.data!.where(
+                                (element) => element.type == e.keys.first.name);
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: destinationIterable.length,
+                          itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              print("CLICKED");
+                              Navigator.of(context).pushNamed(
+                                DetailScreen.routeName,
+                                arguments: destinationIterable.elementAt(index),
+                              );
+                            },
+                            child: CarouselItem(
+                              destinationIterable.elementAt(index).name,
+                              destinationIterable.elementAt(index).photo_url[0],
+                              destinationIterable.elementAt(index).region,
                             ),
-                          )
-                          .toList(),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ],

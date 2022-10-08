@@ -25,55 +25,58 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     print(providedData);
     return Scaffold(
       backgroundColor: AppColors.mainColor,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 0,
-                    horizontal: 20.0,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 20.0,
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    // alignment: Alignment.topLeft,
+                    child: AppLargeText(
+                      text: 'Discover',
+                      color: AppColors.mainTextColor,
+                    ),
                   ),
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  // alignment: Alignment.topLeft,
-                  child: AppLargeText(
-                    text: 'Discover',
-                    color: AppColors.mainTextColor,
-                  ),
+                  ElevatedButton.icon(
+                    onPressed: goToAddDestinationScreen,
+                    label: const Text("Add"),
+                    icon: const Icon(Icons.add),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              HorizontalCarouselList(),
+              const SizedBox(height: 40),
+              Container(
+                alignment: Alignment.topLeft,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 0,
+                  horizontal: 20,
                 ),
-                ElevatedButton.icon(
-                  onPressed: goToAddDestinationScreen,
-                  label: const Text("Add"),
-                  icon: const Icon(Icons.add),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            HorizontalCarouselList(),
-            const SizedBox(height: 40),
-            Container(
-              alignment: Alignment.topLeft,
-              margin: const EdgeInsets.symmetric(
-                vertical: 0,
-                horizontal: 20,
+                child: AppLargeText(
+                  text: "Top Destinations",
+                  size: 22,
+                  color: AppColors.mainTextColor,
+                ),
               ),
-              child: AppLargeText(
-                text: "Top Destinations",
-                size: 22,
-                color: AppColors.mainTextColor,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const TopDestination(),
-          ],
+              const SizedBox(height: 20),
+              const TopDestination(),
+            ],
+          ),
         ),
       ),
     );

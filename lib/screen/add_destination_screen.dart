@@ -13,7 +13,7 @@ import '../widgets/destination_image_picker.dart';
 import '../widgets/location_input.dart';
 
 
-const List<String> destinationType = <String>['Place', 'Mountain', 'Lake', 'Waterfall'];
+const List<String> destinationType = <String>['place', 'mountain', 'lake', 'waterfall'];
 class AddDestinationScreen extends StatefulWidget {
   const AddDestinationScreen({Key? key}) : super(key: key);
   static const routeName = "/add_destination";
@@ -41,8 +41,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     overview: "",
     region: "",
     type: "",
-    long:"",
-    lat:"",
     photo_url: [],
     geoPoint: const GeoPoint(40.6079186,49.5886951),
   );
@@ -65,8 +63,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             overview: destinationItem.overview,
             region: destinationItem.region,
             type: dropdownValue,
-            long: _destinationLocation!.longitude.toString(),
-            lat: _destinationLocation!.latitude.toString(),
             photo_url: [],
             geoPoint: GeoPoint(_destinationLocation!.latitude,_destinationLocation!.longitude)
           );
@@ -146,8 +142,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: destinationItem.region,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
-                            long: destinationItem.long,
-                            lat: destinationItem.lat,
                             geoPoint: destinationItem.geoPoint
                           );
                         },
@@ -171,8 +165,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: destinationItem.region,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
-                            long: destinationItem.long,
-                            lat: destinationItem.lat,
                             geoPoint: destinationItem.geoPoint
                           );
                         },
@@ -196,8 +188,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             region: value!,
                             type: destinationItem.type,
                             photo_url: destinationItem.photo_url,
-                            long: destinationItem.long,
-                            lat: destinationItem.lat,
                             geoPoint: destinationItem.geoPoint
                           );
                         },

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapScreen extends StatefulWidget {
   // final DestinationLocation? initialLocation;
   final bool isSelecting;
-  static const routeName = "map_screen";
+  static const routeName = "/map_screen";
   // this.initialLocation =
   // const DestinationLocation(latitude: 40.6079186, longitude: 49.5886951)
   MapScreen(

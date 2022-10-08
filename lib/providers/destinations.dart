@@ -388,12 +388,20 @@ class Destinations with ChangeNotifier {
   }
 
   void saveData(Destination newDestination,List<File?> destinationPhoto) async {
-    print("DESTINAtion item");
+    print("Destination item");
     print(newDestination.createMap().toString());
     final urlList = await storage_service.saveDestinationImages(newDestination,destinationPhoto);
     print('url');
     newDestination.photo_url=urlList;
     await firestore_service.saveDestination(newDestination);
-
   }
+
+  Stream<List<Destination>> initSearchDestination(String enteredText){
+
+    final s =  firestore_service.getDestinationsBySearchText(enteredText);
+    print("ASDA");
+    print(s);
+    return s;
+  }
+
 }

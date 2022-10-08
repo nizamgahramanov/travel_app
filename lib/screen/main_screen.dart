@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     screens = {
       0: HomeScreen(),
-      1: const SearchScreen(),
+      1: SearchScreen(),
       2: FavoriteScreen(
         favoriteList: widget.favoriteList,
       ),

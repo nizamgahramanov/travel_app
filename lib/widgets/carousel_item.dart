@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import '../helpers/app_large_text.dart';
 
-class StackedCarousel extends StatelessWidget {
+class CarouselItem extends StatelessWidget {
   final String name;
   final String photos;
   final String region;
-   StackedCarousel(
+  CarouselItem(
     this.name,
     this.photos,
     this.region,
