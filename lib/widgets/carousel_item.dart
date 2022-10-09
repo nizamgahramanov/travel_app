@@ -6,11 +6,11 @@ class CarouselItem extends StatelessWidget {
   final String name;
   final String photos;
   final String region;
-  CarouselItem(
-    this.name,
-    this.photos,
-    this.region,
-  );
+  CarouselItem({
+    required this.name,
+    required this.photos,
+    required this.region,
+  });
   @override
   Widget build(BuildContext context) {
     print("photo");
@@ -18,13 +18,16 @@ class CarouselItem extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(
-            right: 15,
-          ),
+          // margin: const EdgeInsets.only(
+          //   right: 15,
+          // ),
           width: 250,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
-            child: Image.network(photos,fit: BoxFit.cover,),
+            child: Image.network(
+              photos,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned(

@@ -397,7 +397,7 @@ class Destinations with ChangeNotifier {
   }
 
   Stream<List<Destination>> initSearchDestination(String enteredText){
-
+    print(enteredText);
     final s =  firestore_service.getDestinationsBySearchText(enteredText);
     print("ASDA");
     print(s);

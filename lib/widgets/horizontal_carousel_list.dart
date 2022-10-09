@@ -57,6 +57,9 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
               print(snapshot.data);
               return Column(
                 children: [
+                  const SizedBox(
+                    height: 25,
+                  ),
                   Container(
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -111,10 +114,13 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
                                 arguments: destinationIterable.elementAt(index),
                               );
                             },
-                            child: CarouselItem(
-                              destinationIterable.elementAt(index).name,
-                              destinationIterable.elementAt(index).photo_url[0],
-                              destinationIterable.elementAt(index).region,
+                            child: Container(
+                              margin: const EdgeInsets.only(left:15),
+                              child: CarouselItem(
+                                name:destinationIterable.elementAt(index).name,
+                                photos:destinationIterable.elementAt(index).photo_url[0],
+                                region:destinationIterable.elementAt(index).region,
+                              ),
                             ),
                           ),
                         );
