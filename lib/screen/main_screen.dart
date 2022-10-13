@@ -10,7 +10,7 @@ import 'home_screen.dart';
 class MainScreen extends StatefulWidget {
   final List<Destination> favoriteList;
   bool isLogin;
-  MainScreen({Key? key, required this.favoriteList, this.isLogin = true})
+  MainScreen({Key? key, required this.favoriteList, this.isLogin = false})
       : super(key: key);
   static const routeName = '/main';
   @override
