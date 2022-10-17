@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
@@ -23,9 +25,9 @@ class _LoginSignUpState extends State<LoginSignUp> {
   final _auth = FirebaseAuth.instance;
   void bottomSheetForSignIn(BuildContext context) {
     showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+        shape: const RoundedRectangleBorder(
+          borderRadius: const BorderRadius.only(
+              topLeft: const Radius.circular(25), topRight: const Radius.circular(25)),
         ),
         isScrollControlled: true,
         context: context,
@@ -69,7 +71,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
                               AppLightText(
                                   text:
                                       "We will check if your email is already part of SIXT"),
-                              SizedBox(
+                              const SizedBox(
                                 height: 40,
                               ),
                               Form(
@@ -158,7 +160,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
               "https://i.picsum.photos/id/678/200/300.jpg?hmac=oO5BaTGKFZ00iWC6GR1arWVrbmu2-XmgYl9ub3C_ug4"),
@@ -167,7 +169,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
       ),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           // Container(child: ,)
@@ -181,7 +183,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
               size: 35,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Container(
