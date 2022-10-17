@@ -82,7 +82,8 @@ flutter:
     - assets/images/undraw.svg
     - assets/images/profile_screen.jpg
     - assets/images/destination_search.svg
-
+    - assets/images/search.jpg
+    - assets/images/search2.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
