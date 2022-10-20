@@ -3,10 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../db_manager/firebase_firestore_service.dart';
-import '../db_manager/firebase_storage_service.dart';
-import '../helpers/destination_type.dart';
 import '../model/destination.dart';
+import '../services/firebase_firestore_service.dart';
+import '../services/firebase_storage_service.dart';
 
 class Destinations with ChangeNotifier {
   final firestore_service = FireStoreService();

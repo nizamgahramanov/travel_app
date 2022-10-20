@@ -8,6 +8,7 @@ import '../model/destination.dart';
 import 'advanced_search_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
+import 'login_signup_screen.dart';
 
 class MainScreen extends StatefulWidget {
   final List<Destination> favoriteList;
@@ -37,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       2: FavoriteScreen(
         favoriteList: widget.favoriteList,
       ),
-      3: LoginSignUp(),
+      3: LoginSignupScreen(),
       4: const ProfileScreen(),
     };
     if (widget.isLogin) {
