@@ -4,33 +4,71 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 
+import '../helpers/custom_snackbar.dart';
+
 class AuthService {
-  handleAuthState() {
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.hasData) {
-            return MainScreen(favoriteList: []);
-          } else {
-            return LoginSignupScreen();
-          }
-        });
+  // handleAuthState() {
+  //   print("ASDASDASDA");
+  //   return StreamBuilder(
+  //       stream: FirebaseAuth.instance.authStateChanges(),
+  //       builder: (BuildContext context, snapshot) {
+  //         print("SNAPSHOW");
+  //         print(snapshot);
+  //         if (snapshot.hasData) {
+  //           print("DATAAAA ");
+  //           print(snapshot.data);
+  //           return snapshot.data;
+  //         } else {
+  //           return
+  //         }
+  //       });
+  // }
+
+  signInWithGoogle({required BuildContext context}) async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await GoogleSignIn(scopes: <String>["email"]).signIn();
+
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+           AuthService.customSnackBar(content: 'The account already exists with a different credential.')
+
+        );
+      } else if (e.code == 'invalid-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          AuthService.customSnackBar(
+            content: 'Error occurred while accessing credentials. Try again.',
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        AuthService.customSnackBar(
+          content: 'Error occurred using Google Sign-In. Try again.',
+        ),
+      );
+    }
   }
-
-  signInWithGoogle() async {
-    final GoogleSignInAccount? googleSignInAccount =
-        await GoogleSignIn(scopes: <String>["email"]).signIn();
-
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
+  static SnackBar customSnackBar({required String content}) {
+    return SnackBar(
+      backgroundColor: Colors.black,
+      content: Text(
+        content,
+        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+      ),
     );
-
-    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+  
   signOut() {
     FirebaseAuth.instance.signOut();
   }

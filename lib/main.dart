@@ -45,8 +45,9 @@ class _MyAppState extends State<MyApp> {
       case MainScreen.routeName:
         return CustomPageRoute(
             child: MainScreen(
-          favoriteList: favorites,
-        ));
+              favoriteList: favorites,
+            ),
+            settings: settings);
       case PasswordScreen.routeName:
         print("PASSWORD GO ");
         print(settings);

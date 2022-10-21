@@ -87,7 +87,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   CustomButton(
                     buttonText: "Sign up with Google",
                     onTap: () {
-                      AuthService().signInWithGoogle();
+                      AuthService().signInWithGoogle(context:context);
                     },
                     borderRadius: 15,
                   )

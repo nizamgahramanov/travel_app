@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/screen/main_screen.dart';
+import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_large_text.dart';
 import '../helpers/custom_button.dart';
@@ -25,8 +27,17 @@ class _StartScreenState extends State<StartScreen> {
     super.initState();
   }
 
-  void goToMainScreen() {
-    Navigator.of(context).pushNamed(MainScreen.routeName);
+  void goToMainScreen() async {
+    // var res = await AuthService().handleAuthState();
+    // print(res);
+    User? result = FirebaseAuth.instance.currentUser;
+    print(result);
+    bool isLogin=false;
+    if(result!=null){
+      isLogin=true;
+    }
+    print(isLogin);
+    Navigator.of(context).pushReplacementNamed(MainScreen.routeName,arguments: isLogin);
   }
 
   @override

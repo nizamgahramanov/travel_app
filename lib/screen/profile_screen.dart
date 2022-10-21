@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
@@ -15,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
     "Email Address",
     "Change Password",
   ];
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -32,64 +34,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        child: Column(
-          children: [
-            Container(
-              color: Colors.yellow,
-              width: double.maxFinite,
-              height: MediaQuery.of(context).size.height * 0.38,
-              child: Stack(
-                children: [
-                  Positioned(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.width,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(35),
-                        bottomRight: Radius.circular(35),
-                      ),
-                      child: Image.asset(
-                        "assets/images/profile_screen.jpg",
-                        fit: BoxFit.cover,
-                      ),
+    User? result = FirebaseAuth.instance.currentUser;
+    if (result != null) {
+      var provider = result.providerData;
+      print(")))))))))))))))))))))");
+      print(provider[0].providerId);
+    }
+    return Container(
+      width: double.maxFinite,
+      height: double.maxFinite,
+      child: Column(
+        children: [
+          Container(
+            color: Colors.yellow,
+            width: double.maxFinite,
+            height: MediaQuery.of(context).size.height * 0.38,
+            child: Stack(
+              children: [
+                Positioned(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(35),
+                      bottomRight: Radius.circular(35),
+                    ),
+                    child: Image.asset(
+                      "assets/images/profile_screen.jpg",
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Positioned(
-                    bottom: 50,
-                    left: 20,
-                    right: 20,
-                    child: AppLargeText(
-                      text: 'YOUR SETTINGS IN TRAVEL APP',
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Positioned(
+                  bottom: 50,
+                  left: 20,
+                  right: 20,
+                  child: AppLargeText(
+                    text: 'YOUR SETTINGS IN TRAVEL APP',
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                )
+              ],
             ),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  final data = widget.titleList[index];
-                  return ListTile(
-                    trailing: const Icon(Icons.edit_outlined),
-                    title: Text(
-                      data,
-                    ),
-                    subtitle: Text("Nizam Gahramanov"),
-                    onTap: () => listTileOnTap(index),
-                  );
-                },
-                separatorBuilder: (_, __) => const Divider(),
-                itemCount: widget.titleList.length,
-              ),
+          ),
+          Container(
+            width: double.maxFinite,
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: Column(
+
+              children: [
+                ListView.separated(
+                  itemBuilder: (context, index) {
+                    final data = widget.titleList[index];
+                    return ListTile(
+                      trailing: const Icon(Icons.edit_outlined),
+                      title: Text(
+                        data,
+                      ),
+                      subtitle: Text(result!.email!),
+                      onTap: () => listTileOnTap(index),
+                    );
+                  },
+                  separatorBuilder: (_, __) => Divider(
+                    color: AppColors.buttonBackgroundColor,
+                  ),
+                  itemCount: widget.titleList.length,
+                ),
+                const Card(
+                  color: Colors.red,
+                  child: Text("Log out"),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

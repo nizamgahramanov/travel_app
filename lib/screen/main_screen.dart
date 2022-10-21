@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/screen/advanced_search.dart';
 import 'package:travel_app/screen/login_signup.dart';
@@ -32,6 +33,11 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    User? result = FirebaseAuth.instance.currentUser;
+
+    if(result!=null){
+      widget.isLogin=true;
+    }
     screens = {
       0: HomeScreen(),
       1: SearchScreen(),
@@ -52,6 +58,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       body: screens[_selectedIndex],
