@@ -81,6 +81,8 @@ class _StartScreenState extends State<StartScreen> {
                 buttonText: "Get Started",
                 onTap: goToMainScreen,
                 borderRadius: 20,
+                margin: 20,
+
               ),
               const SizedBox(
                 height: 30,

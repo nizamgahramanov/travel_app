@@ -24,8 +24,9 @@ class AuthService {
   //       });
   // }
 
-  signInWithGoogle({required BuildContext context}) async {
+  Future<UserCredential?> signInWithGoogle({required BuildContext context}) async {
     try {
+      print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
           await GoogleSignIn(scopes: <String>["email"]).signIn();
 
@@ -58,18 +59,20 @@ class AuthService {
         ),
       );
     }
+    return null;
   }
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
   }
   
   signOut() {
+    print("SIGN OUT");
     FirebaseAuth.instance.signOut();
   }
 }

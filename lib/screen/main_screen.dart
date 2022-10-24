@@ -45,12 +45,12 @@ class _MainScreenState extends State<MainScreen> {
         favoriteList: widget.favoriteList,
       ),
       3: LoginSignupScreen(),
-      4: const ProfileScreen(),
+      4: ProfileScreen(),
     };
     if (widget.isLogin) {
       screens.removeWhere((key, value) => key==3);
       screens.removeWhere((key, value) => key==4);
-      screens[3]=const ProfileScreen();
+      screens[3]=ProfileScreen();
     }
 
     super.initState();

@@ -6,25 +6,26 @@ class AppLightText extends StatelessWidget {
   final String text;
   final Color color;
   final bool isShowCheckMark;
-
+  final Widget? icon;
   AppLightText(
       {Key? key,
       this.size = 16,
       required this.text,
       this.color = Colors.black38,
-      this.isShowCheckMark = false})
+      this.isShowCheckMark = false,
+      this.icon})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.topLeft,
+      alignment: Alignment.centerLeft,
       child: Wrap(
-        alignment: WrapAlignment.start,
-        spacing: 15,
+        alignment: WrapAlignment.center,
+        spacing: 16,
           children: [
         if (isShowCheckMark)
-          Icon(Icons.check, color: AppColors.buttonBackgroundColor),
+          icon!,
         Text(
           text,
           style: TextStyle(

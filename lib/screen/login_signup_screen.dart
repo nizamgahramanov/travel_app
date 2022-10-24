@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 
@@ -10,7 +12,7 @@ import '../helpers/custom_button.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
-
+  static const routeName = '/login_signup';
   @override
   State<LoginSignupScreen> createState() => _LoginSignupScreenState();
 }
@@ -21,7 +23,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(30.0),
       child: Center(
         heightFactor: 1,
         child: Column(
@@ -31,22 +33,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               key: _form,
               child: Column(
                 children: [
-                  AppLargeText(text: "Enter your email"),
                   TextFormField(
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.emailAddress,
                     enableSuggestions: true,
                     autocorrect: true,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.buttonBackgroundColor,
-                        ),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
                       ),
-                      labelText: "EMAIL",
-                      labelStyle: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      hintText: "Enter your email",
+                      prefixIconColor: AppColors.buttonBackgroundColor,
                     ),
                     onFieldSubmitted: (_) {
                       saveForm();
@@ -61,11 +60,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   CustomButton(
                     buttonText: "Continue",
                     onTap: saveForm,
-                    borderRadius: 15,
+                    borderRadius: 20,
                   ),
                   Row(
                     children: <Widget>[
-                      Expanded(
+                      const Expanded(
                         child: Divider(
                           height: 70,
                           indent: 20,
@@ -73,8 +72,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           thickness: 1.5,
                         ),
                       ),
-                      Text("OR"),
-                      Expanded(
+                      AppLightText(
+                        text: "or",
+                        size: 12,
+                        color: Colors.black87,
+                      ),
+                      const Expanded(
                         child: Divider(
                           height: 70,
                           indent: 10,
@@ -85,11 +88,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ],
                   ),
                   CustomButton(
-                    buttonText: "Sign up with Google",
+                    buttonText: "Continue with Google",
+                    borderColor: Colors.black,
                     onTap: () {
-                      AuthService().signInWithGoogle(context:context);
+                      AuthService()
+                          .signInWithGoogle(context: context)
+                          .then((value) {
+                        if (value!.user != null) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, MainScreen.routeName, (route) => false);
+                        } else if (value.user == null) {
+                          AuthService.customSnackBar(
+                              content:
+                                  "Unknown error occured, Try again later");
+                        }
+                      });
                     },
-                    borderRadius: 15,
+                    borderRadius: 20,
+                    buttonColor: Colors.transparent,
+                    textColor: Colors.black,
+                    icon: Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      child: const Icon(Icons.favorite),
+                    ),
                   )
                 ],
               ),
