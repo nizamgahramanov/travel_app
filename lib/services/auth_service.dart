@@ -24,7 +24,8 @@ class AuthService {
   //       });
   // }
 
-  Future<UserCredential?> signInWithGoogle({required BuildContext context}) async {
+  Future<UserCredential?> signInWithGoogle(
+      {required BuildContext context}) async {
     try {
       print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
@@ -41,10 +42,9 @@ class AuthService {
       return await FirebaseAuth.instance.signInWithCredential(credential);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
-        ScaffoldMessenger.of(context).showSnackBar(
-           AuthService.customSnackBar(content: 'The account already exists with a different credential.')
-
-        );
+        ScaffoldMessenger.of(context).showSnackBar(AuthService.customSnackBar(
+            content:
+                'The account already exists with a different credential.'));
       } else if (e.code == 'invalid-credential') {
         ScaffoldMessenger.of(context).showSnackBar(
           AuthService.customSnackBar(
@@ -61,6 +61,39 @@ class AuthService {
     }
     return null;
   }
+
+  Future<UserCredential?> signInWithEmailAndPassword({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      print("signInWithEmailAndPassword");
+
+      return await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email:email,password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(AuthService.customSnackBar(
+            content:
+                'The account already exists with a different credential.'));
+      } else if (e.code == 'invalid-credential') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          AuthService.customSnackBar(
+            content: 'Error occurred while accessing credentials. Try again.',
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        AuthService.customSnackBar(
+          content: 'Error occurred using Google Sign-In. Try again.',
+        ),
+      );
+    }
+    return null;
+  }
+
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
@@ -70,7 +103,7 @@ class AuthService {
       ),
     );
   }
-  
+
   signOut() {
     print("SIGN OUT");
     FirebaseAuth.instance.signOut();

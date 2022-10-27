@@ -9,6 +9,7 @@ import 'package:travel_app/screen/change_name.dart';
 import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
+import 'package:travel_app/screen/login_with_password_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
@@ -94,6 +95,11 @@ class _MyAppState extends State<MyApp> {
       case LoginSignupScreen.routeName:
         return CustomPageRoute(
           child: const LoginSignupScreen(),
+          settings: settings,
+        );
+      case LoginWithPasswordScreen.routeName:
+        return CustomPageRoute(
+          child: LoginWithPasswordScreen(),
           settings: settings,
         );
     }

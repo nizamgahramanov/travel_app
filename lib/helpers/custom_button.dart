@@ -51,7 +51,7 @@ class CustomButton extends StatelessWidget {
                 child: Center(
                   child: AppLargeText(
                     text: buttonText,
-                    size: 16,
+                    size: 18,
                     color: textColor==null? Colors.white : textColor!,
                   ),
                 ),

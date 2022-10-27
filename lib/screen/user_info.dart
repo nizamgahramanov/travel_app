@@ -4,6 +4,7 @@ import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/screen/main_screen.dart';
+import 'package:travel_app/services/auth_service.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
@@ -32,12 +33,10 @@ class _UserInfoState extends State<UserInfo> {
     print(args.email);
     print("KLKLKRE");
     void _trySubmit() async {
-      UserCredential userCredential;
       try {
-        userCredential = await _auth.createUserWithEmailAndPassword(
-          email: args.email,
-          password: args.password,
-        );
+       AuthService().signInWithEmailAndPassword(context: context, email: args.email, password: args.password).then((UserCredentials? value) {
+
+       });
         print("USER CREDENTIALS");
         print(userCredential);
         await FirebaseFirestore.instance

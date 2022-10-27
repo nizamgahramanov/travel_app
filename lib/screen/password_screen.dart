@@ -26,18 +26,26 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     print("args");
     print(args);
     void checkPasswordIsValid(value) async {
       print(value);
       // Navigator.of(context).push(CustomPageRoute(child: UserInfo()));
       //  go to password page
-      Navigator.pushNamed(
-        context,
-        UserInfo.routeName,
-        arguments: UserCredentials(args, value),
-      );
+      if (args['provider']) {
+
+      } else {
+        Navigator.pushNamed(
+          context,
+          UserInfo.routeName,
+          arguments: UserCredentials(
+            args['email'],
+            value,
+          ),
+        );
+      }
     }
 
     return Scaffold(
@@ -72,13 +80,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   height: MediaQuery.of(context).size.height * 0.7 + 60,
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      AppLightText(text: "Welcome $args"),
+                      AppLightText(text: "Welcome ${args['email']}"),
                       AppLightText(
                           text: "Secure your new account with a password"),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Form(
@@ -117,28 +125,58 @@ class _PasswordScreenState extends State<PasswordScreen> {
                             text:
                                 "Password must meet the following requirements:"),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       AppLightText(
                         text: "Minimum of 8 characters",
                         isShowCheckMark: true,
+                        icon: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Icon(Icons.check),
+                        ),
                       ),
                       AppLightText(
                         text: "At least one lower case",
                         isShowCheckMark: true,
+                        icon: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Icon(Icons.check),
+                        ),
                       ),
                       AppLightText(
                         text: "At least one upper case",
                         isShowCheckMark: true,
+                        icon: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Icon(Icons.check),
+                        ),
                       ),
                       AppLightText(
                         text: "At least one number",
                         isShowCheckMark: true,
+                        icon: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Icon(Icons.check),
+                        ),
                       ),
                       AppLightText(
                         text: "At least one special character",
                         isShowCheckMark: true,
+                        icon: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Icon(Icons.check),
+                        ),
                       ),
                     ],
                   ),

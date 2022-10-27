@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_button.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
@@ -9,6 +8,7 @@ import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
+import 'login_with_password_screen.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({Key? key}) : super(key: key);
@@ -108,10 +108,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     buttonColor: Colors.transparent,
                     textColor: Colors.black,
                     icon: Container(
-                      margin: const EdgeInsets.only(right: 20),
-                      child: const Icon(Icons.favorite),
+                      width: 22,
+                      height: 22,
+                      margin: const EdgeInsets.only(right: 25),
+                      child: SvgPicture.asset(
+                          'assets/images/google-color-icon.svg'),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -131,13 +134,28 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     List<String> isExistList;
     print("value");
     print(value);
+
     isExistList = await _auth.fetchSignInMethodsForEmail(value);
+    Map<String, dynamic> arguments = {"provider": true, "email": value};
     print(isExistList);
     if (isExistList.isEmpty) {
       //  go to password page
-      Navigator.pushNamed(context, PasswordScreen.routeName, arguments: value);
+      Navigator.pushNamed(context, PasswordScreen.routeName,
+          arguments: arguments);
     } else {
       //  send auth cde to email address
+      // AuthService.customSnackBar(content: "Thank you for being our valuable member");
+      if (isExistList[0] == "google.com") {
+        AuthService().signInWithGoogle(context: context).then((value) {
+          if (value!.user != null) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, MainScreen.routeName, (route) => false);
+          }
+        });
+      } else {
+        Navigator.pushNamed(context, LoginWithPasswordScreen.routeName,
+            arguments: arguments);
+      }
     }
   }
 }
