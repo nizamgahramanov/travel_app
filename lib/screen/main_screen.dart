@@ -4,6 +4,7 @@ import 'package:travel_app/screen/advanced_search.dart';
 import 'package:travel_app/screen/login_signup.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
+import 'package:travel_app/services/auth_service.dart';
 import '../helpers/app_colors.dart';
 import '../model/destination.dart';
 import 'advanced_search_screen.dart';
@@ -12,10 +13,9 @@ import 'home_screen.dart';
 import 'login_signup_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  final List<Destination> favoriteList;
-  bool isLogin;
-  MainScreen({Key? key, required this.favoriteList, this.isLogin = false})
-      : super(key: key);
+  bool? isLogin;
+
+  MainScreen({Key? key, favoriteList}) : super(key: key);
   static const routeName = '/main';
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -23,42 +23,39 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  late Map screens;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-
   }
-
+  @override
+  void didChangeDependencies() {
+    AuthService().onAuthStateChanged.listen((event) {
+      print("EVENTTT");
+      print(event);
+      if (event != null) {
+        widget.isLogin = true;
+      } else{
+        widget.isLogin = false;
+      }
+    });
+    super.didChangeDependencies();
+  }
   @override
   void initState() {
-    User? result = FirebaseAuth.instance.currentUser;
-
-    if(result!=null){
-      widget.isLogin=true;
-    }
-    screens = {
-      0: HomeScreen(),
-      1: SearchScreen(),
-      2: FavoriteScreen(
-        favoriteList: widget.favoriteList,
-      ),
-      3: LoginSignupScreen(),
-      4: ProfileScreen(),
-    };
-    if (widget.isLogin) {
-      screens.removeWhere((key, value) => key==3);
-      screens.removeWhere((key, value) => key==4);
-      screens[3]=ProfileScreen();
-    }
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    Map<int, Widget> screens = {
+      0: HomeScreen(),
+      1: SearchScreen(),
+      2: FavoriteScreen(),
+      3: widget.isLogin! ? ProfileScreen() : const LoginSignupScreen(),
+    };
     return Scaffold(
       backgroundColor: AppColors.mainColor,
       body: screens[_selectedIndex],
@@ -83,14 +80,15 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Favorite',
           ),
           BottomNavigationBarItem(
-              icon: widget.isLogin
-                  ? const Icon(
-                      Icons.person,
-                    )
-                  : const Icon(
-                      Icons.login,
-                    ),
-              label: widget.isLogin ? "Profile" : "Login"),
+            icon: widget.isLogin!
+                ? const Icon(
+                    Icons.person,
+                  )
+                : const Icon(
+                    Icons.login,
+                  ),
+            label: widget.isLogin! ? "Profile" : "Login",
+          ),
         ],
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,

@@ -34,9 +34,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       print(value);
       // Navigator.of(context).push(CustomPageRoute(child: UserInfo()));
       //  go to password page
-      if (args['provider']) {
-
-      } else {
+      if (!args['provider']) {
         Navigator.pushNamed(
           context,
           UserInfo.routeName,

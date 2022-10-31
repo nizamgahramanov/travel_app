@@ -34,7 +34,20 @@ class FireStoreService {
     return a;
   }
 
-  // Future<void> removeItem(String productId) {
+  //This method is used to create the user in firestore
+  Future<void> createUserInFirestore(String uid, String firstName,String lastName, String email, String password) async {
+    //Creates the user doc named whatever the user uid is in te collection "users"
+    //and adds the user data
+    await _db.collection("users").doc(uid).set({
+      'firstName': firstName,
+      'lastName': lastName,
+      'email' : email,
+      'password':password
+    });
+  }
+
+
+// Future<void> removeItem(String productId) {
   //   return _db.collection('Products').document(productId).delete();
   // }
 }

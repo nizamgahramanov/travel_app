@@ -134,15 +134,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     List<String> isExistList;
     print("value");
     print(value);
-
+    bool provider = false;
     isExistList = await _auth.fetchSignInMethodsForEmail(value);
-    Map<String, dynamic> arguments = {"provider": true, "email": value};
+    Map<String, dynamic> arguments = {"provider": provider, "email": value};
     print(isExistList);
     if (isExistList.isEmpty) {
       //  go to password page
       Navigator.pushNamed(context, PasswordScreen.routeName,
           arguments: arguments);
     } else {
+      provider = true;
       //  send auth cde to email address
       // AuthService.customSnackBar(content: "Thank you for being our valuable member");
       if (isExistList[0] == "google.com") {
