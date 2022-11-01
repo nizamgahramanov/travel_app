@@ -1,14 +1,16 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:travel_app/model/user.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
 
 import '../exception/custom_auth_exception.dart';
 import '../helpers/custom_snackbar.dart';
+import 'firebase_firestore_service.dart';
 
 class AuthService {
-  final _firebaseAuth = FirebaseAuth.instance;
+  final _firebaseAuth = auth.FirebaseAuth.instance;
   // Stream<User?> handleAuthState() async{
   //   print("ASDASDASDA");
   //   return StreamBuilder(
@@ -25,9 +27,20 @@ class AuthService {
   //         }
   //       });
   // }
-  Stream<User?> get onAuthStateChanged => _firebaseAuth.authStateChanges();
+  User? _userFromFirebase(auth.User? user) {
+    if (user == null) {
+      return null;
+    }
+    return User(uid: user.uid, email: user.email!);
+  }
 
-  Future<UserCredential?> signInWithGoogle(
+  Stream<User?>? get user {
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
+  }
+
+  // Stream<User?> get onAuthStateChanged => _firebaseAuth.authStateChanges();
+
+  Future<auth.UserCredential?> signInWithGoogle(
       {required BuildContext context}) async {
     try {
       print("signInWithGoogle");
@@ -37,13 +50,13 @@ class AuthService {
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
 
-      final credential = GoogleAuthProvider.credential(
+      final credential = auth.GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
 
       return await _firebaseAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
+    } on auth.FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         ScaffoldMessenger.of(context).showSnackBar(AuthService.customSnackBar(
             content:
@@ -65,7 +78,7 @@ class AuthService {
     return null;
   }
 
-  Future<UserCredential> registerUser({
+  Future<User?> registerUser({
     required BuildContext context,
     required String firstName,
     required String lastName,
@@ -75,15 +88,51 @@ class AuthService {
     try {
       print("signInWithEmailAndPassword");
 
-      return await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-    } on FirebaseAuthException catch (authError) {
+      final userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      )
+          .then((credential) {
+        if (credential.user != null) {
+          FireStoreService().createUserInFirestore(
+            credential.user!.uid,
+            firstName,
+            lastName,
+            email,
+            password,
+          );
+        }
+      });
+      return _userFromFirebase(userCredential.user);
+    } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
     } catch (e) {
       throw CustomException(errorMessage: "Unknown Error");
     }
   }
 
+  Future<User?> loginUser({
+    required BuildContext context,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      print("signInWithEmailAndPassword");
+
+      final userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return _userFromFirebase(userCredential.user);
+    } on auth.FirebaseAuthException catch (authError) {
+      throw CustomAuthException(authError.code, authError.message!);
+    } catch (e) {
+      throw CustomException(errorMessage: "Unknown Error");
+    }
+
+  }
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,

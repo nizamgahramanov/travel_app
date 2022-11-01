@@ -31,15 +31,15 @@ class _MainScreenState extends State<MainScreen> {
   }
   @override
   void didChangeDependencies() {
-    AuthService().onAuthStateChanged.listen((event) {
-      print("EVENTTT");
-      print(event);
-      if (event != null) {
-        widget.isLogin = true;
-      } else{
-        widget.isLogin = false;
-      }
-    });
+    // AuthService().onAuthStateChanged.listen((event) {
+    //   print("EVENTTT");
+    //   print(event);
+    //   if (event != null) {
+    //     widget.isLogin = true;
+    //   } else {
+    //     widget.isLogin = false;
+    //   }
+    // });
     super.didChangeDependencies();
   }
   @override
@@ -56,52 +56,59 @@ class _MainScreenState extends State<MainScreen> {
       2: FavoriteScreen(),
       3: widget.isLogin! ? ProfileScreen() : const LoginSignupScreen(),
     };
-    return Scaffold(
-      backgroundColor: AppColors.mainColor,
-      body: screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: 'Home',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-            ),
-            label: 'Search',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite_border,
-            ),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
-            icon: widget.isLogin!
-                ? const Icon(
-                    Icons.person,
-                  )
-                : const Icon(
-                    Icons.login,
-                  ),
-            label: widget.isLogin! ? "Profile" : "Login",
-          ),
-        ],
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        selectedFontSize: 0,
-        unselectedFontSize: 0,
-        selectedItemColor: AppColors.buttonBackgroundColor,
-        showUnselectedLabels: false,
-        showSelectedLabels: true,
-        // selectedIconTheme:IconThemeData() ,
-        elevation: 0,
-        unselectedItemColor: AppColors.buttonBackgroundColor.withOpacity(0.6),
-      ),
-    );
+    // return StreamBuilder(builder: (_,AsyncSnapshot<User?> snapshot){
+    //   if(snapshot.connectionState == ConnectionState.active){
+    //     final User? user = snapshot.data;
+    //     return user==null ?
+    //
+    //   }
+    // });
+    // return Scaffold(
+    //   backgroundColor: AppColors.mainColor,
+    //   body: screens[_selectedIndex],
+    //   bottomNavigationBar: BottomNavigationBar(
+    //     items: <BottomNavigationBarItem>[
+    //       const BottomNavigationBarItem(
+    //         icon: Icon(
+    //           Icons.home,
+    //         ),
+    //         label: 'Home',
+    //       ),
+    //       const BottomNavigationBarItem(
+    //         icon: Icon(
+    //           Icons.search,
+    //         ),
+    //         label: 'Search',
+    //       ),
+    //       const BottomNavigationBarItem(
+    //         icon: Icon(
+    //           Icons.favorite_border,
+    //         ),
+    //         label: 'Favorite',
+    //       ),
+    //       BottomNavigationBarItem(
+    //         icon: widget.isLogin!
+    //             ? const Icon(
+    //                 Icons.person,
+    //               )
+    //             : const Icon(
+    //                 Icons.login,
+    //               ),
+    //         label: widget.isLogin! ? "Profile" : "Login",
+    //       ),
+    //     ],
+    //     onTap: _onItemTapped,
+    //     type: BottomNavigationBarType.fixed,
+    //     currentIndex: _selectedIndex,
+    //     selectedFontSize: 0,
+    //     unselectedFontSize: 0,
+    //     selectedItemColor: AppColors.buttonBackgroundColor,
+    //     showUnselectedLabels: false,
+    //     showSelectedLabels: true,
+    //     // selectedIconTheme:IconThemeData() ,
+    //     elevation: 0,
+    //     unselectedItemColor: AppColors.buttonBackgroundColor.withOpacity(0.6),
+    //   ),
+    // );
   }
 }

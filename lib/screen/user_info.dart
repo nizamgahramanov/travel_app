@@ -39,18 +39,18 @@ class _UserInfoState extends State<UserInfo> {
         lastName: lastName,
         email: args.email,
         password: args.password,
-      )
-          .then((value) {
-        if (value.user != null) {
-          FireStoreService().createUserInFirestore(
-            value.user!.uid,
-            firstName,
-            lastName,
-            args.email,
-            args.password,
-          );
-        }
-      });
+      );
+      //     .then((value) {
+      //   if (value.user != null) {
+      //     FireStoreService().createUserInFirestore(
+      //       value.user!.uid,
+      //       firstName,
+      //       lastName,
+      //       args.email,
+      //       args.password,
+      //     );
+      //   }
+      // });
       Navigator.pushNamedAndRemoveUntil(context,
           MainScreen.routeName, (route) => false);
     }

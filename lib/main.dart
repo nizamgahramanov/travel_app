@@ -18,6 +18,7 @@ import 'package:travel_app/screen/start_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/services/auth_service.dart';
 import 'model/destination.dart';
 
 void main() async {
@@ -126,7 +127,9 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: Destinations(),
+
         ),
+        Provider<AuthService>(create: (_) => AuthService(),),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -1,10 +1,8 @@
 class User {
-  final String name;
-  final String surname;
-  final String profile_image_url;
+  final String uid;
+  final String email;
   User({
-    required this.name,
-    required this.surname,
-    required this.profile_image_url,
+    required this.uid,
+    required this.email,
   });
 }
