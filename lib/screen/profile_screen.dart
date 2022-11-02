@@ -180,8 +180,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         GestureDetector(
                           onTap: () {
                             AuthService().signOut();
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                MainScreen.routeName, (route) => false);
                           },
                           child: AppLightText(
                             text: "Log out",

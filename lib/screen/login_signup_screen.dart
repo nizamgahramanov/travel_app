@@ -91,18 +91,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     buttonText: "Continue with Google",
                     borderColor: Colors.black,
                     onTap: () {
-                      AuthService()
-                          .signInWithGoogle(context: context)
-                          .then((value) {
-                        if (value!.user != null) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, MainScreen.routeName, (route) => false);
-                        } else if (value.user == null) {
-                          AuthService.customSnackBar(
-                              content:
-                                  "Unknown error occured, Try again later");
-                        }
-                      });
+                      AuthService().signInWithGoogle();
                     },
                     borderRadius: 20,
                     buttonColor: Colors.transparent,
@@ -147,12 +136,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       //  send auth cde to email address
       // AuthService.customSnackBar(content: "Thank you for being our valuable member");
       if (isExistList[0] == "google.com") {
-        AuthService().signInWithGoogle(context: context).then((value) {
-          if (value!.user != null) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, MainScreen.routeName, (route) => false);
-          }
-        });
+        AuthService().signInWithGoogle();
       } else {
         Navigator.pushNamed(context, LoginWithPasswordScreen.routeName,
             arguments: arguments);

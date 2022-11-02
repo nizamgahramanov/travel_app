@@ -127,9 +127,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: Destinations(),
-
         ),
-        Provider<AuthService>(create: (_) => AuthService(),),
+        Provider<AuthService>(
+          create: (_) => AuthService(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -144,12 +145,6 @@ class _MyAppState extends State<MyApp> {
         ),
         home: const StartScreen(),
         onGenerateRoute: (route) => onGenerateRoute(route),
-        // routes: {
-        //   DetailScreen.routeName: (context) => DetailScreen(toggleFavorite),
-        //   MainScreen.routeName:(context) => MainScreen(favoriteList: favorites,),
-        //   PasswordScreen.routeName:(context) =>PasswordScreen(),
-        //   UserInfo.routeName:(context) =>UserInfo(),
-        // },
       ),
     );
   }

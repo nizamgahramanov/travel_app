@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/model/user.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
 import 'package:travel_app/screen/main_screen.dart';
-
+import 'package:crypto/crypto.dart';
 import '../exception/custom_auth_exception.dart';
 import '../helpers/custom_snackbar.dart';
 import 'firebase_firestore_service.dart';
@@ -40,8 +42,7 @@ class AuthService {
 
   // Stream<User?> get onAuthStateChanged => _firebaseAuth.authStateChanges();
 
-  Future<auth.UserCredential?> signInWithGoogle(
-      {required BuildContext context}) async {
+  Future<auth.UserCredential?> signInWithGoogle() async {
     try {
       print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
@@ -56,26 +57,11 @@ class AuthService {
       );
 
       return await _firebaseAuth.signInWithCredential(credential);
-    } on auth.FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        ScaffoldMessenger.of(context).showSnackBar(AuthService.customSnackBar(
-            content:
-                'The account already exists with a different credential.'));
-      } else if (e.code == 'invalid-credential') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          AuthService.customSnackBar(
-            content: 'Error occurred while accessing credentials. Try again.',
-          ),
-        );
-      }
+    } on auth.FirebaseAuthException catch (authError) {
+      throw CustomAuthException(authError.code, authError.message!);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        AuthService.customSnackBar(
-          content: 'Error occurred using Google Sign-In. Try again.',
-        ),
-      );
+      throw CustomException(errorMessage: "Unknown Error");
     }
-    return null;
   }
 
   Future<User?> registerUser({
@@ -87,7 +73,10 @@ class AuthService {
   }) async {
     try {
       print("signInWithEmailAndPassword");
-
+      var passwordInBytes = utf8.encoder.convert(password);
+      String hashedPassword= sha256.convert(passwordInBytes).toString();
+      print("HASHED PASSWORd");
+      print(hashedPassword);
       final userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(
         email: email,
@@ -100,7 +89,7 @@ class AuthService {
             firstName,
             lastName,
             email,
-            password,
+            hashedPassword,
           );
         }
       });
@@ -108,7 +97,7 @@ class AuthService {
     } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
     } catch (e) {
-      throw CustomException(errorMessage: "Unknown Error");
+      throw CustomException(errorMessage: e.toString());
     }
   }
 
@@ -131,7 +120,6 @@ class AuthService {
     } catch (e) {
       throw CustomException(errorMessage: "Unknown Error");
     }
-
   }
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
