@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
@@ -17,21 +18,26 @@ class LoginWithPasswordScreen extends StatefulWidget {
 
 class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   final _login_with_password_form = GlobalKey<FormState>();
+  // final o =
 
   void saveForm() {
     //check in firebase email is registered or not
     FocusScope.of(context).unfocus();
     _login_with_password_form.currentState!.save();
   }
-  void isPasswordCorrect(value) async{
+  void isPasswordCorrect(value,context) async{
   //    1. Daxil olan userin emailinə vasitəsi ilə firestoredan məlumatlarını çəkirik
   //    2. Melumatlarda encrypt olunmuş passvordu decrypt edib userin daxil etiyi passvordla yoxlayiriq
   //    3. userin daxil etdiyi passvord dogrudursa home page yoneldirik
   //    4. dogru deyilse dialog gosteririk
-
+    final args =
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print("ARGS");
+    print(args);
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: AppLargeText(
@@ -70,7 +76,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                       // initSearchDestination(enteredText);
                     },
                     onSaved: (value) {
-                      isPasswordCorrect(value);
+                      isPasswordCorrect(value,context);
                     },
                     decoration: InputDecoration(
                       filled: true,

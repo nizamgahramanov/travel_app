@@ -129,8 +129,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     print(isExistList);
     if (isExistList.isEmpty) {
       //  go to password page
-      Navigator.pushNamed(context, PasswordScreen.routeName,
-          arguments: arguments);
+      Navigator.pushNamed(
+        context,
+        PasswordScreen.routeName,
+        arguments: arguments,
+      );
     } else {
       provider = true;
       //  send auth cde to email address
@@ -138,8 +141,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       if (isExistList[0] == "google.com") {
         AuthService().signInWithGoogle();
       } else {
-        Navigator.pushNamed(context, LoginWithPasswordScreen.routeName,
-            arguments: arguments);
+        Navigator.pushNamed(
+          context,
+          LoginWithPasswordScreen.routeName,
+          arguments: arguments,
+        );
       }
     }
   }

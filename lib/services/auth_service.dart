@@ -4,11 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/model/user.dart';
-import 'package:travel_app/screen/login_signup_screen.dart';
-import 'package:travel_app/screen/main_screen.dart';
 import 'package:crypto/crypto.dart';
 import '../exception/custom_auth_exception.dart';
-import '../helpers/custom_snackbar.dart';
 import 'firebase_firestore_service.dart';
 
 class AuthService {
@@ -81,18 +78,17 @@ class AuthService {
           .createUserWithEmailAndPassword(
         email: email,
         password: password,
-      )
-          .then((credential) {
-        if (credential.user != null) {
+      );
+        if (userCredential.user != null) {
           FireStoreService().createUserInFirestore(
-            credential.user!.uid,
+            userCredential.user!.uid,
             firstName,
             lastName,
             email,
             hashedPassword,
           );
         }
-      });
+
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
