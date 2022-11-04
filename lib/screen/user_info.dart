@@ -40,19 +40,8 @@ class _UserInfoState extends State<UserInfo> {
         email: args.email,
         password: args.password,
       );
-      //     .then((value) {
-      //   if (value.user != null) {
-      //     FireStoreService().createUserInFirestore(
-      //       value.user!.uid,
-      //       firstName,
-      //       lastName,
-      //       args.email,
-      //       args.password,
-      //     );
-      //   }
-      // });
-      Navigator.pushNamedAndRemoveUntil(context,
-          MainScreen.routeName, (route) => false);
+      // Navigator.pushNamedAndRemoveUntil(context,
+      //     MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
@@ -132,7 +121,7 @@ class _UserInfoState extends State<UserInfo> {
                                   firstName = value!;
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               TextFormField(

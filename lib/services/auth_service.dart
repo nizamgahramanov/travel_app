@@ -30,7 +30,7 @@ class AuthService {
     if (user == null) {
       return null;
     }
-    return User(uid: user.uid, email: user.email!);
+    return User(uid: user.uid, email: user.email!, );
   }
 
   Stream<User?>? get user {
@@ -70,10 +70,10 @@ class AuthService {
   }) async {
     try {
       print("signInWithEmailAndPassword");
-      var passwordInBytes = utf8.encoder.convert(password);
-      String hashedPassword= sha256.convert(passwordInBytes).toString();
-      print("HASHED PASSWORd");
-      print(hashedPassword);
+      // var passwordInBytes = utf8.encoder.convert(password);
+      // String hashedPassword= sha256.convert(passwordInBytes).toString();
+      // print("HASHED PASSWORd");
+      // print(hashedPassword);
       final userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(
         email: email,
@@ -85,7 +85,7 @@ class AuthService {
             firstName,
             lastName,
             email,
-            hashedPassword,
+            password,
           );
         }
 

@@ -1,6 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:encrypt/encrypt.dart';
+import 'package:travel_app/services/en_de_cryption.dart';
 import '../model/destination.dart';
+import '../model/firestore_user.dart';
 
 class FireStoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -35,18 +39,56 @@ class FireStoreService {
   }
 
   //This method is used to create the user in firestore
-  Future<void> createUserInFirestore(String uid, String firstName,String lastName, String email, String password) async {
-    //Creates the user doc named whatever the user uid is in te collection "users"
+  Future<void> createUserInFirestore(String uid, String firstName,
+      String lastName, String email, String password) async {
+    //Encrypts password before store in firestore
+    final plainText = password;
+    const key = "This 32 char key have 256 bits..";
+    Encrypted encrypted = EnDeCryption().encryptWithAES(key, plainText);
+    print("encrypted");
+    print(encrypted);
+    //Creates the user doc named whatever the user uid is in the collection "users"
     //and adds the user data
     await _db.collection("users").doc(uid).set({
+      'email': email,
       'firstName': firstName,
       'lastName': lastName,
-      'email' : email,
-      'password':password
+      'password': encrypted.base16
     });
   }
 
+  Stream<FirestoreUser> getUserByEmail(String email) {
+    // return _db
+    //     .collection("users")
+    //     .where('email', isEqualTo: email).get().then((value) {
+    //
+    //       if (value.docs.isNotEmpty){
+    //         print(value.docs.single.data());
+    //         value.docs.single.data();
+    //       }
+    //
+    // });
+    return _db
+        .collection("users")
+        .where("email", isEqualTo: email)
+        .snapshots()
+        .map((event) => event.docs
+            .map((e) => FirestoreUser.fromFirestore(e.data()))
+            .first);
+  }
 
+  Future<String> getUserFromFirestore(String email) async{
+    final snapshot = await _db.collection("users").where("email",isEqualTo: email).get();
+    // print(snapshot.docs.first['password']);
+    // var hashedPassword = snapshot.docs.first['password'];
+    // sha256.
+    return snapshot.docs.first['password'];
+  }
+   // Future<Fir estoreUser> getUserByEmailField(String email) async {
+  //   return await _db.collection("users").where("email", isEqualTo: email).snapshots().map(
+  //       (event) =>
+  //           event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).single);
+  // }
 // Future<void> removeItem(String productId) {
   //   return _db.collection('Products').document(productId).delete();
   // }
