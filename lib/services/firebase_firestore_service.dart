@@ -43,8 +43,8 @@ class FireStoreService {
       String lastName, String email, String password) async {
     //Encrypts password before store in firestore
     final plainText = password;
-    const key = "This 32 char key have 256 bits..";
-    Encrypted encrypted = EnDeCryption().encryptWithAES(key, plainText);
+
+    Encrypted encrypted = EnDeCryption().encryptWithAES(plainText);
     print("encrypted");
     print(encrypted);
     //Creates the user doc named whatever the user uid is in the collection "users"

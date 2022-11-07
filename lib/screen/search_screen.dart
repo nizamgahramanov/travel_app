@@ -16,7 +16,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   // SearchScreen({Key? key}) : super(key: key);
   Future<QuerySnapshot>? destinationList;
-  String? region;
+  String? searchedText;
 
   // void initSearchDestination(String enteredText) {
   //   print(enteredText);
@@ -58,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
             child: TextField(
               onChanged: (enteredText) {
                 setState(() {
-                  region = enteredText;
+                  searchedText = enteredText;
                 });
                 // initSearchDestination(enteredText);
               },
@@ -74,11 +74,11 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ),
-          if (region != null)
+          if (searchedText != null)
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder<List<Destination>>(
-                  stream: providerData.initSearchDestination(region!),
+                  stream: providerData.initSearchDestination(searchedText!),
                   initialData: const [],
                   builder: (ctx, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -104,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
             ),
-          if (region == null)
+          if (searchedText == null)
             Expanded(
               child: SvgPicture.asset('assets/images/destination_search.svg'),
             ),
