@@ -3,6 +3,7 @@ import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/search_screen.dart';
 
 import '../helpers/app_colors.dart';
+import 'algolia_search_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
 import 'login_signup_screen.dart';
@@ -29,7 +30,7 @@ class _WrapperState extends State<Wrapper> {
 
     Map<int, Widget> screens = {
       0: HomeScreen(),
-      1: SearchScreen(),
+      1: const AlgoliaSearchScreen(),
       2: FavoriteScreen(),
       3: widget.isLogin ? ProfileScreen() : const LoginSignupScreen(),
     };

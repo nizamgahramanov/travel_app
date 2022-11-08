@@ -7,13 +7,19 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/model/destination_location.dart';
 import 'package:uuid/uuid.dart';
+import '../helpers/utility.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
 import '../widgets/destination_image_picker.dart';
 import '../widgets/location_input.dart';
 
+const List<String> destinationType = <String>[
+  'place',
+  'mountain',
+  'lake',
+  'waterfall'
+];
 
-const List<String> destinationType = <String>['place', 'mountain', 'lake', 'waterfall'];
 class AddDestinationScreen extends StatefulWidget {
   const AddDestinationScreen({Key? key}) : super(key: key);
   static const routeName = "/add_destination";
@@ -29,7 +35,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   final typeController = TextEditingController();
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
-  List<File?> _destinationImageFile=[];
+  List<File?> _destinationImageFile = [];
   DestinationLocation? _destinationLocation;
   var _isLoading = false;
 
@@ -42,7 +48,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     region: "",
     type: "",
     photo_url: [],
-    geoPoint: const GeoPoint(40.6079186,49.5886951),
+    geoPoint: const GeoPoint(40.6079186, 49.5886951),
   );
 
   void _saveForm() async {
@@ -56,35 +62,26 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     }
     _formKey.currentState!.save();
     try {
-      if (_destinationImageFile.isNotEmpty && _destinationLocation?.latitude != null) {
-          destinationItem = Destination(
+      if (_destinationImageFile.isNotEmpty &&
+          _destinationLocation?.latitude != null) {
+        destinationItem = Destination(
             id: destinationItem.id,
             name: destinationItem.name,
             overview: destinationItem.overview,
             region: destinationItem.region,
             type: dropdownValue,
             photo_url: [],
-            geoPoint: GeoPoint(_destinationLocation!.latitude,_destinationLocation!.longitude)
-          );
+            geoPoint: GeoPoint(_destinationLocation!.latitude,
+                _destinationLocation!.longitude));
         Provider.of<Destinations>(context, listen: false)
-            .saveData(destinationItem, _destinationImageFile);
+             .saveData(destinationItem, _destinationImageFile);
       }
     } catch (error) {
-      await showDialog<Null>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Sorry'),
-          content: Text('Something went wrong'),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Okay'),
-            ),
-          ],
-        ),
-      );
+      Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: "Something went wrong",
+          popButtonText: "Ok",
+          onPopTap: () => Navigator.of(context).pop());
     }
 
     setState(() {
@@ -94,12 +91,12 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   }
 
   void pickedImage(List<XFile?> xFileList) {
-    for (var xFile in xFileList){
+    for (var xFile in xFileList) {
       _destinationImageFile.add(File(xFile!.path));
     }
     // _userImageFile = File(file[0]!.path);
-
   }
+
   void _selectPlace(double lat, double lng) {
     print(lat.toString());
     _destinationLocation = DestinationLocation(latitude: lat, longitude: lng);
@@ -136,14 +133,13 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         ),
                         onSaved: (value) {
                           destinationItem = Destination(
-                            id: destinationItem.id,
-                            name: value!,
-                            overview: destinationItem.overview,
-                            region: destinationItem.region,
-                            type: destinationItem.type,
-                            photo_url: destinationItem.photo_url,
-                            geoPoint: destinationItem.geoPoint
-                          );
+                              id: destinationItem.id,
+                              name: value!,
+                              overview: destinationItem.overview,
+                              region: destinationItem.region,
+                              type: destinationItem.type,
+                              photo_url: destinationItem.photo_url,
+                              geoPoint: destinationItem.geoPoint);
                         },
                       ),
                       TextFormField(
@@ -159,14 +155,13 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         ),
                         onSaved: (value) {
                           destinationItem = Destination(
-                            id: destinationItem.id,
-                            name: destinationItem.name,
-                            overview: value!,
-                            region: destinationItem.region,
-                            type: destinationItem.type,
-                            photo_url: destinationItem.photo_url,
-                            geoPoint: destinationItem.geoPoint
-                          );
+                              id: destinationItem.id,
+                              name: destinationItem.name,
+                              overview: value!,
+                              region: destinationItem.region,
+                              type: destinationItem.type,
+                              photo_url: destinationItem.photo_url,
+                              geoPoint: destinationItem.geoPoint);
                         },
                       ),
                       TextFormField(
@@ -182,18 +177,16 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         ),
                         onSaved: (value) {
                           destinationItem = Destination(
-                            id: destinationItem.id,
-                            name: destinationItem.name,
-                            overview: destinationItem.overview,
-                            region: value!,
-                            type: destinationItem.type,
-                            photo_url: destinationItem.photo_url,
-                            geoPoint: destinationItem.geoPoint
-                          );
+                              id: destinationItem.id,
+                              name: destinationItem.name,
+                              overview: destinationItem.overview,
+                              region: value!,
+                              type: destinationItem.type,
+                              photo_url: destinationItem.photo_url,
+                              geoPoint: destinationItem.geoPoint);
                         },
                       ),
                       DropdownButton<String>(
-
                         value: dropdownValue,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,

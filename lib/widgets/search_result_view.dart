@@ -1,10 +1,11 @@
+import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/destination.dart';
 
 import 'carousel_item.dart';
 
 class SearchResultView extends StatefulWidget {
-  final List<Destination> dataSnapshot;
+  final AlgoliaObjectSnapshot dataSnapshot;
   const SearchResultView(this.dataSnapshot, {Key? key}) : super(key: key);
   @override
   State<SearchResultView> createState() => _SearchResultViewState();
@@ -24,12 +25,12 @@ class _SearchResultViewState extends State<SearchResultView> {
       ),
       itemBuilder: (_, index) {
         return CarouselItem(
-          name: widget.dataSnapshot.elementAt(index).name,
-          photos: widget.dataSnapshot.elementAt(index).photo_url[0],
-          region: widget.dataSnapshot.elementAt(index).region,
+          name: widget.dataSnapshot.data['name'],
+          photos: widget.dataSnapshot.data['photo_url'][0],
+          region: widget.dataSnapshot.data['region'],
         );
       },
-      itemCount: widget.dataSnapshot.length,
+      itemCount: widget.dataSnapshot.data.length,
     );
   }
 }

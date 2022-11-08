@@ -93,7 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       } else {
                         print("***************");
                         print(snapshot.data!.length);
-                        return SearchResultView(snapshot.data!);
+                        return Text("NIZMA");
                       }
                     } else {
                       return const Center(
