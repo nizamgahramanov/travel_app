@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/screen/maps_screen.dart';
+import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
@@ -30,6 +32,15 @@ class _DetailScreenState extends State<DetailScreen>
     });
   }
 
+  void toggleFavorite(String id){
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user!=null){
+
+    } else {
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     print("Detail Screen");
@@ -38,13 +49,13 @@ class _DetailScreenState extends State<DetailScreen>
 
     TabController _tabController = TabController(length: 2, vsync: this);
     final data = ModalRoute.of(context)!.settings.arguments as Destination;
-    Map<String, dynamic> argu = {
+    Map<String, dynamic> mapArgument = {
       "isSelecting": isSelecting,
       "geoPoint": data.geoPoint,
       "zoom": 12.0
     };
     void showDestinationOnMap() {
-      Navigator.of(context).pushNamed(MapScreen.routeName, arguments: argu);
+      Navigator.of(context).pushNamed(MapScreen.routeName, arguments: mapArgument);
     }
 
     return Scaffold(
@@ -103,12 +114,15 @@ class _DetailScreenState extends State<DetailScreen>
                         padding: const EdgeInsets.all(10),
                         primary: AppColors.buttonBackgroundColor,
                       ),
-                      child: Icon(
-                        Icons.favorite_border_outlined,
-                        color: AppColors.inputColor,
-                        // ):Icon(
-                        //   Icons.favorite,
-                        //   color: AppColors.inputColor,
+                      child: GestureDetector(
+                        onTap: () => toggleFavorite(data.id!),
+                        child: Icon(
+                          Icons.favorite_border_outlined,
+                          color: AppColors.inputColor,
+                          // ):Icon(
+                          //   Icons.favorite,
+                          //   color: AppColors.inputColor,
+                        ),
                       ),
                     ),
                   ),

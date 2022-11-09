@@ -1,6 +1,9 @@
 import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../helpers/app_colors.dart';
+import '../widgets/carousel_item.dart';
 import '../widgets/search_result_view.dart';
 
 class AlgoliaSearchScreen extends StatefulWidget {
@@ -37,57 +40,82 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text("Search"),
-          TextField(
-            controller: _searchText,
-            decoration: InputDecoration(hintText: "Search query here..."),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              ElevatedButton(
-                child: Text(
-                  "Search",
-                  style: TextStyle(color: Colors.white),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextField(
+              controller: _searchText,
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none,
                 ),
-                onPressed: _search,
+                hintText: "Search for a Destination",
+                prefixIcon: const Icon(Icons.search),
+                prefixIconColor: AppColors.buttonBackgroundColor,
               ),
-            ],
-          ),
-          Expanded(
-            child: _searching == true
-                ? Center(
-                    child: Text("Searching, please wait..."),
-                  )
-                : _results.length == 0
-                    ? Center(
-                        child: Text("No results found."),
-                      )
-                    : ListView.builder(
-                        itemCount: _results.length,
-                        itemBuilder: (BuildContext ctx, int index) {
-                          AlgoliaObjectSnapshot snap = _results[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              child: Text(
-                                (index + 1).toString(),
-                              ),
-                            ),
-                            title: Text(snap.data["name"]),
-                            subtitle: Text(snap.data["region"]),
-                          );
-                        },
-                      ),
-          ),
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                ElevatedButton(
+                  child: Text(
+                    "Search",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: _search,
+                ),
+              ],
+            ),
+            Expanded(
+              child: _searching == true
+                  ? const Center(
+                      child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(),
+                    ))
+                  : _results.isEmpty
+                      ? Center(
+                          child: SvgPicture.asset(
+                              'assets/images/destination_search.svg'),
+                        )
+                      : GridView.builder(
+                          itemCount: _results.length,
+                          itemBuilder: (BuildContext ctx, int index) {
+                            print("ENTERED");
+                            AlgoliaObjectSnapshot snap = _results[index];
+                            return CarouselItem(
+                              name: snap.data['name'],
+                              photos: snap.data['photo_url'][0],
+                              region: snap.data['region'],
+                            );
+                            // return ListTile(
+                            //   leading: CircleAvatar(
+                            //     child: Text(
+                            //       (index + 1).toString(),
+                            //     ),
+                            //   ),
+                            //   title: Text(snap.data["name"]),
+                            //   subtitle: Text(snap.data["region"]),
+                            // );
+                          },
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 12,
+                                  crossAxisSpacing: 12),
+                        ),
+            ),
+          ],
+        ),
       ),
     );
   }
