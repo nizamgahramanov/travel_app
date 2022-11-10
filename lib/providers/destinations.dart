@@ -28,7 +28,7 @@ class Destinations with ChangeNotifier {
     print(newDestination.createMap().toString());
     final urlList = await storage_service.saveDestinationImages(newDestination,destinationPhoto);
     print('url');
-    newDestination.photo_url=urlList;
+    newDestination.photoUrl=urlList;
     await firestore_service.saveDestination(newDestination);
   }
 
@@ -39,5 +39,4 @@ class Destinations with ChangeNotifier {
     print(s);
     return s;
   }
-
 }

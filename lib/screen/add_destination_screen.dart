@@ -47,7 +47,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     overview: "",
     region: "",
     type: "",
-    photo_url: [],
+    photoUrl: [],
     geoPoint: const GeoPoint(40.6079186, 49.5886951),
   );
 
@@ -70,7 +70,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             overview: destinationItem.overview,
             region: destinationItem.region,
             type: dropdownValue,
-            photo_url: [],
+            photoUrl: [],
             geoPoint: GeoPoint(_destinationLocation!.latitude,
                 _destinationLocation!.longitude));
         Provider.of<Destinations>(context, listen: false)
@@ -138,7 +138,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                               overview: destinationItem.overview,
                               region: destinationItem.region,
                               type: destinationItem.type,
-                              photo_url: destinationItem.photo_url,
+                              photoUrl: destinationItem.photoUrl,
                               geoPoint: destinationItem.geoPoint);
                         },
                       ),
@@ -160,7 +160,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                               overview: value!,
                               region: destinationItem.region,
                               type: destinationItem.type,
-                              photo_url: destinationItem.photo_url,
+                              photoUrl: destinationItem.photoUrl,
                               geoPoint: destinationItem.geoPoint);
                         },
                       ),
@@ -182,7 +182,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                               overview: destinationItem.overview,
                               region: value!,
                               type: destinationItem.type,
-                              photo_url: destinationItem.photo_url,
+                              photoUrl: destinationItem.photoUrl,
                               geoPoint: destinationItem.geoPoint);
                         },
                       ),

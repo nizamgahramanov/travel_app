@@ -16,6 +16,10 @@ class FireStoreService {
         .set(destination.createMap());
   }
 
+  Future<void> saveFavorites(String userId, String destinationId) {
+    return _db.collection("users").doc(userId).set({"favorite": destinationId});
+  }
+
   Stream<List<Destination>> getDestinations() {
     final a = _db.collection('destinations').snapshots().map((snapshot) =>
         snapshot.docs
@@ -44,17 +48,19 @@ class FireStoreService {
     //Encrypts password before store in firestore
     final plainText = password;
 
-    Encrypted encrypted = EnDeCryption().encryptWithAES(plainText);
+    String encryptedPassword = EnDeCryption().encryptWithAES(plainText).base16;
     print("encrypted");
-    print(encrypted);
+    print(encryptedPassword);
+    var firestoreUserItem = FirestoreUser(email: email, firstName: firstName,lastName: lastName, password: encryptedPassword, favorites: [] );
     //Creates the user doc named whatever the user uid is in the collection "users"
     //and adds the user data
-    await _db.collection("users").doc(uid).set({
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'password': encrypted.base16
-    });
+    // await _db.collection("users").doc(uid).set({
+    //   'email': email,
+    //   'firstName': firstName,
+    //   'lastName': lastName,
+    //   'password': encrypted.base16
+    // });
+    await _db.collection("users").doc(uid).set(firestoreUserItem.createMap());
   }
 
   Stream<FirestoreUser> getUserByEmail(String email) {
@@ -72,19 +78,19 @@ class FireStoreService {
         .collection("users")
         .where("email", isEqualTo: email)
         .snapshots()
-        .map((event) => event.docs
-            .map((e) => FirestoreUser.fromFirestore(e.data()))
-            .first);
+        .map((event) =>
+            event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).first);
   }
 
-  Future<String> getUserFromFirestore(String email) async{
-    final snapshot = await _db.collection("users").where("email",isEqualTo: email).get();
+  Future<String> getUserFromFirestore(String email) async {
+    final snapshot =
+        await _db.collection("users").where("email", isEqualTo: email).get();
     // print(snapshot.docs.first['password']);
     // var hashedPassword = snapshot.docs.first['password'];
     // sha256.
     return snapshot.docs.first['password'];
   }
-   // Future<Fir estoreUser> getUserByEmailField(String email) async {
+  // Future<Fir estoreUser> getUserByEmailField(String email) async {
   //   return await _db.collection("users").where("email", isEqualTo: email).snapshots().map(
   //       (event) =>
   //           event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).single);

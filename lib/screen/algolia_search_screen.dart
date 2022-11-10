@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 
 import '../helpers/app_colors.dart';
 import '../widgets/carousel_item.dart';
-import '../widgets/search_result_view.dart';
 
 class AlgoliaSearchScreen extends StatefulWidget {
   const AlgoliaSearchScreen({Key? key}) : super(key: key);

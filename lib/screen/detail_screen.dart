@@ -6,6 +6,7 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
+import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
@@ -32,9 +33,11 @@ class _DetailScreenState extends State<DetailScreen>
     });
   }
 
-  void toggleFavorite(String id){
+  void toggleFavorite(String destinationId){
     User? user = FirebaseAuth.instance.currentUser;
     if(user!=null){
+    // store destination in firestore database
+      FireStoreService().saveFavorites(user.uid, destinationId);
 
     } else {
 
@@ -81,7 +84,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        data.photo_url[showImageIndex],
+                        data.photoUrl[showImageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -172,7 +175,7 @@ class _DetailScreenState extends State<DetailScreen>
                         child: Container(
                           color: Colors.white,
                           child: ListView.builder(
-                            itemCount: data.photo_url.length,
+                            itemCount: data.photoUrl.length,
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
                             itemBuilder: (context, index) => GestureDetector(
@@ -195,7 +198,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: Image.network(
-                                          data.photo_url[showImageIndex],
+                                          data.photoUrl[showImageIndex],
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -211,7 +214,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Image.network(
-                                          data.photo_url[index],
+                                          data.photoUrl[index],
                                           fit: BoxFit.cover,
                                         ),
                                       ),

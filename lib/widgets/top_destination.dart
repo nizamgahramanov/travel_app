@@ -74,7 +74,7 @@ class TopDestination extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
                                 child: Image.network(
-                                  snapshot.data![index].photo_url[0],
+                                  snapshot.data![index].photoUrl[0],
                                   scale: 1.0,
                                   fit: BoxFit.cover,
                                 ),
