@@ -17,7 +17,11 @@ class FireStoreService {
   }
 
   Future<void> saveFavorites(String userId, String destinationId) {
-    return _db.collection("users").doc(userId).set({"favorite": destinationId});
+    print("ADD FAVORITE");
+    print(destinationId);
+    return _db.collection("users").doc(userId).update({
+      "favorites": FieldValue.arrayUnion([destinationId])
+    });
   }
 
   Stream<List<Destination>> getDestinations() {
@@ -51,7 +55,13 @@ class FireStoreService {
     String encryptedPassword = EnDeCryption().encryptWithAES(plainText).base16;
     print("encrypted");
     print(encryptedPassword);
-    var firestoreUserItem = FirestoreUser(email: email, firstName: firstName,lastName: lastName, password: encryptedPassword, favorites: [] );
+    var firestoreUserItem = FirestoreUser(
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      password: encryptedPassword,
+      favorites: [],
+    );
     //Creates the user doc named whatever the user uid is in the collection "users"
     //and adds the user data
     // await _db.collection("users").doc(uid).set({

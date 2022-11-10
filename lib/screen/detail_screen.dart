@@ -14,6 +14,7 @@ import '../model/circle_tab_indicator.dart';
 import '../model/destination.dart';
 import 'package:provider/provider.dart';
 import '../providers/destinations.dart';
+import '../providers/firestore_users.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
@@ -107,24 +108,26 @@ class _DetailScreenState extends State<DetailScreen>
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 40,
-                    right: 10,
-                    child: ElevatedButton(
-                      onPressed: () => widget.toggleFavorite(data.id),
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(10),
-                        primary: AppColors.buttonBackgroundColor,
-                      ),
-                      child: GestureDetector(
-                        onTap: () => toggleFavorite(data.id!),
-                        child: Icon(
-                          Icons.favorite_border_outlined,
-                          color: AppColors.inputColor,
-                          // ):Icon(
-                          //   Icons.favorite,
-                          //   color: AppColors.inputColor,
+                  Consumer<FirestoreUsers>(
+                    builder: (context,firestoreUsers,child)=> Positioned(
+                      top: 40,
+                      right: 10,
+                      child: ElevatedButton(
+                        onPressed: () => widget.toggleFavorite(data.id),
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: const EdgeInsets.all(10),
+                          primary: AppColors.buttonBackgroundColor,
+                        ),
+                        child: GestureDetector(
+                          onTap: () => toggleFavorite(data.id!),
+                          child: Icon(
+                            Icons.favorite_border_outlined,
+                            color: AppColors.inputColor,
+                            // ):Icon(
+                            //   Icons.favorite,
+                            //   color: AppColors.inputColor,
+                          ),
                         ),
                       ),
                     ),
@@ -168,10 +171,6 @@ class _DetailScreenState extends State<DetailScreen>
                       child: LimitedBox(
                         maxHeight: MediaQuery.of(context).size.height * 0.3,
                         maxWidth: 60,
-                        // padding: EdgeInsets.zero,
-                        // width: 60,
-                        // height: MediaQuery.of(context).size.height * 0.07 * data.photo_url.length,
-                        // color: AppColors.inputColor,
                         child: Container(
                           color: Colors.white,
                           child: ListView.builder(

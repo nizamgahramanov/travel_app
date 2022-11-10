@@ -30,14 +30,15 @@ class AuthService {
     if (user == null) {
       return null;
     }
-    return User(uid: user.uid, email: user.email!, );
+    return User(
+      uid: user.uid,
+      email: user.email!,
+    );
   }
 
   Stream<User?>? get user {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
-
-  // Stream<User?> get onAuthStateChanged => _firebaseAuth.authStateChanges();
 
   Future<auth.UserCredential?> signInWithGoogle() async {
     try {
@@ -70,24 +71,19 @@ class AuthService {
   }) async {
     try {
       print("signInWithEmailAndPassword");
-      // var passwordInBytes = utf8.encoder.convert(password);
-      // String hashedPassword= sha256.convert(passwordInBytes).toString();
-      // print("HASHED PASSWORd");
-      // print(hashedPassword);
-      final userCredential = await _firebaseAuth
-          .createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-        if (userCredential.user != null) {
-          FireStoreService().createUserInFirestore(
-            userCredential.user!.uid,
-            firstName,
-            lastName,
-            email,
-            password,
-          );
-        }
+      if (userCredential.user != null) {
+        FireStoreService().createUserInFirestore(
+          userCredential.user!.uid,
+          firstName,
+          lastName,
+          email,
+          password,
+        );
+      }
 
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
@@ -105,8 +101,7 @@ class AuthService {
     try {
       print("signInWithEmailAndPassword");
 
-      final userCredential = await _firebaseAuth
-          .signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -117,6 +112,7 @@ class AuthService {
       throw CustomException(errorMessage: "Unknown Error");
     }
   }
+
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,

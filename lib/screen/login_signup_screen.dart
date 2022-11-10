@@ -137,7 +137,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     } else {
       provider = true;
       //  send auth cde to email address
-      // AuthService.customSnackBar(content: "Thank you for being our valuable member");
       if (isExistList[0] == "google.com") {
         AuthService().signInWithGoogle();
       } else {
