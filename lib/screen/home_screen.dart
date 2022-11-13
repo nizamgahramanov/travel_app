@@ -23,9 +23,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     print("HOMW SCREEN");
     final providedData = Provider.of<Destinations>(context);
     print(providedData);
-    return Scaffold(
-      backgroundColor: AppColors.mainColor,
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -59,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             const TopDestination(),
           ],
         ),
-      ),
-    );
+      );
   }
 }

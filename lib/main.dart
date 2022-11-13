@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/model/firestore_user.dart';
 import 'package:travel_app/providers/destinations.dart';
-import 'package:travel_app/providers/firestore_users.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/add_destination_screen.dart';
 import 'package:travel_app/screen/change_email_screen.dart';
@@ -44,7 +41,7 @@ class _MyAppState extends State<MyApp> {
     switch (settings.name) {
       case DetailScreen.routeName:
         return CustomPageRoute(
-          child: DetailScreen(toggleFavorite),
+          child: DetailScreen(),
           settings: settings,
         );
       case MainScreen.routeName:
@@ -108,19 +105,19 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void toggleFavorite(String id) {
-    print("TOGGLE FAVORITE");
-    final existingIndex = favorites.indexWhere((element) => element.id == id);
-    if (existingIndex >= 0) {
-      setState(() {
-        favorites.removeAt(existingIndex);
-      });
-    } else {
-      setState(() {
-        // favorites.add(destinations.firstWhere((element) => element.id == id));
-      });
-    }
-  }
+  // void toggleFavorite(String id) {
+  //   print("TOGGLE FAVORITE");
+  //   final existingIndex = favorites.indexWhere((element) => element.id == id);
+  //   if (existingIndex >= 0) {
+  //     setState(() {
+  //       favorites.removeAt(existingIndex);
+  //     });
+  //   } else {
+  //     setState(() {
+  //       // favorites.add(destinations.firstWhere((element) => element.id == id));
+  //     });
+  //   }
+  // }
 
   // This widget is the root of your application.
   @override
@@ -129,9 +126,6 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: Destinations(),
-        ),
-        ChangeNotifierProvider.value(
-          value: FirestoreUsers(),
         ),
         Provider<AuthService>(
           create: (_) => AuthService(),

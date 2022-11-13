@@ -44,7 +44,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String base16Encrypted =
-        await FireStoreService().getUserFromFirestore(args['email']);
+        await FireStoreService().getUserPasswordFromFirestore(args['email']);
     final String decryptedPassword =
         EnDeCryption().decryptWithAES(Encrypted.fromBase16(base16Encrypted));
     print(decryptedPassword);

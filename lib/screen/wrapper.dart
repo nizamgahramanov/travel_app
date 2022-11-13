@@ -35,7 +35,7 @@ class _WrapperState extends State<Wrapper> {
       3: widget.isLogin ? ProfileScreen() : const LoginSignupScreen(),
     };
     return Scaffold(
-      backgroundColor: AppColors.mainColor,
+      backgroundColor: AppColors.backgroundColorOfApp,
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[

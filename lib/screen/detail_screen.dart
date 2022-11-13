@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:travel_app/model/user.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -14,12 +15,10 @@ import '../model/circle_tab_indicator.dart';
 import '../model/destination.dart';
 import 'package:provider/provider.dart';
 import '../providers/destinations.dart';
-import '../providers/firestore_users.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
-  Function toggleFavorite;
-  DetailScreen(this.toggleFavorite, {Key? key}) : super(key: key);
+  DetailScreen({Key? key}) : super(key: key);
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -28,21 +27,18 @@ class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
   int showImageIndex = 0;
   bool isSelecting = false;
+  var user = FirebaseAuth.instance.currentUser;
   void verticalListItemClicked(int index) {
     setState(() {
       showImageIndex = index;
     });
   }
 
-  void toggleFavorite(String destinationId){
-    User? user = FirebaseAuth.instance.currentUser;
-    if(user!=null){
-    // store destination in firestore database
-      FireStoreService().saveFavorites(user.uid, destinationId);
-
-    } else {
-
-    }
+  void toggleFavorite(Destination destination) {
+    if (user != null) {
+      // store destination in firestore database
+      FireStoreService().saveFavorites(user!.uid, destination);
+    } else {}
   }
 
   @override
@@ -52,14 +48,16 @@ class _DetailScreenState extends State<DetailScreen>
     print(providerData);
 
     TabController _tabController = TabController(length: 2, vsync: this);
-    final data = ModalRoute.of(context)!.settings.arguments as Destination;
+    final clickedDestination =
+        ModalRoute.of(context)!.settings.arguments as Destination;
     Map<String, dynamic> mapArgument = {
       "isSelecting": isSelecting,
-      "geoPoint": data.geoPoint,
+      "geoPoint": clickedDestination.geoPoint,
       "zoom": 12.0
     };
     void showDestinationOnMap() {
-      Navigator.of(context).pushNamed(MapScreen.routeName, arguments: mapArgument);
+      Navigator.of(context)
+          .pushNamed(MapScreen.routeName, arguments: mapArgument);
     }
 
     return Scaffold(
@@ -85,7 +83,7 @@ class _DetailScreenState extends State<DetailScreen>
                         bottomRight: Radius.circular(35),
                       ),
                       child: Image.network(
-                        data.photoUrl[showImageIndex],
+                        clickedDestination.photoUrl[showImageIndex],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -108,29 +106,38 @@ class _DetailScreenState extends State<DetailScreen>
                       ),
                     ),
                   ),
-                  Consumer<FirestoreUsers>(
-                    builder: (context,firestoreUsers,child)=> Positioned(
-                      top: 40,
-                      right: 10,
-                      child: ElevatedButton(
-                        onPressed: () => widget.toggleFavorite(data.id),
-                        style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(10),
-                          primary: AppColors.buttonBackgroundColor,
-                        ),
-                        child: GestureDetector(
-                          onTap: () => toggleFavorite(data.id!),
-                          child: Icon(
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FireStoreService().isDestinationFavorite(clickedDestination.id!),
+                    builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      return Positioned(
+                        top: 40,
+                        right: 10,
+                        child: ElevatedButton(
+                          onPressed: () =>
+                              toggleFavorite(clickedDestination),
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                            primary: AppColors.buttonBackgroundColor,
+                          ),
+                          child: snapshot.data!.docs.isEmpty
+                              ? Icon(
                             Icons.favorite_border_outlined,
                             color: AppColors.inputColor,
-                            // ):Icon(
-                            //   Icons.favorite,
-                            //   color: AppColors.inputColor,
+                          )
+                              : Icon(
+                            Icons.favorite,
+                            color: AppColors.inputColor,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    }
                   ),
                   Positioned(
                     left: 20,
@@ -139,7 +146,7 @@ class _DetailScreenState extends State<DetailScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppLargeText(
-                          text: data.name,
+                          text: clickedDestination.name,
                           size: 22,
                           color: AppColors.inputColor,
                         ),
@@ -153,7 +160,7 @@ class _DetailScreenState extends State<DetailScreen>
                             Container(
                               alignment: Alignment.topLeft,
                               child: AppLightText(
-                                text: data.region,
+                                text: clickedDestination.region,
                                 color: AppColors.inputColor,
                                 size: 12,
                               ),
@@ -174,7 +181,7 @@ class _DetailScreenState extends State<DetailScreen>
                         child: Container(
                           color: Colors.white,
                           child: ListView.builder(
-                            itemCount: data.photoUrl.length,
+                            itemCount: clickedDestination.photoUrl.length,
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
                             itemBuilder: (context, index) => GestureDetector(
@@ -197,7 +204,8 @@ class _DetailScreenState extends State<DetailScreen>
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: Image.network(
-                                          data.photoUrl[showImageIndex],
+                                          clickedDestination
+                                              .photoUrl[showImageIndex],
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -213,7 +221,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(15),
                                         child: Image.network(
-                                          data.photoUrl[index],
+                                          clickedDestination.photoUrl[index],
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -299,7 +307,7 @@ class _DetailScreenState extends State<DetailScreen>
                       children: [
                         Container(
                           child: AppLightText(
-                            text: data.overview,
+                            text: clickedDestination.overview,
                           ),
                         ),
                         Container(

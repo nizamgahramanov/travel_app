@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrypt/encrypt.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import '../model/destination.dart';
 import '../model/firestore_user.dart';
 
 class FireStoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
+  final User? _firebaseAuth = FirebaseAuth.instance.currentUser;
+  // FirebaseFirestore.instance.collection("favorites").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").where("id", isEqualTo: clickedDestination.id).snapshots()
   Future<void> saveDestination(Destination destination) {
     return _db
         .collection('destinations')
@@ -16,12 +15,17 @@ class FireStoreService {
         .set(destination.createMap());
   }
 
-  Future<void> saveFavorites(String userId, String destinationId) {
-    print("ADD FAVORITE");
-    print(destinationId);
-    return _db.collection("users").doc(userId).update({
-      "favorites": FieldValue.arrayUnion([destinationId])
-    });
+  void saveFavorites(String userId, Destination destination) {
+    // print(destination);
+    _db
+        .collection("favorites")
+        .doc(userId)
+        .collection("items")
+        .doc(destination.id)
+        .set(destination.createMap());
+    // return _db.collection("favorites").doc(userId).update({
+    //   "favorites": FieldValue.arrayUnion([destinationId])
+    // });
   }
 
   Stream<List<Destination>> getDestinations() {
@@ -92,12 +96,9 @@ class FireStoreService {
             event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).first);
   }
 
-  Future<String> getUserFromFirestore(String email) async {
+  Future<String> getUserPasswordFromFirestore(String email) async {
     final snapshot =
         await _db.collection("users").where("email", isEqualTo: email).get();
-    // print(snapshot.docs.first['password']);
-    // var hashedPassword = snapshot.docs.first['password'];
-    // sha256.
     return snapshot.docs.first['password'];
   }
   // Future<Fir estoreUser> getUserByEmailField(String email) async {
@@ -108,4 +109,34 @@ class FireStoreService {
 // Future<void> removeItem(String productId) {
   //   return _db.collection('Products').document(productId).delete();
   // }
+
+  Future<List<dynamic>> getUserByUid(String uid) {
+    return _db.collection("users").doc(uid).get().then((value) {
+      print("value");
+      print(value.exists);
+      print(value);
+      return value.data()!['favorites'];
+    });
+  }
+
+  Stream<QuerySnapshot> isDestinationFavorite(String destinationId) {
+    return _db
+        .collection("favorites")
+        .doc(_firebaseAuth!.uid)
+        .collection("items")
+        .where("id", isEqualTo: destinationId)
+        .snapshots();
+  }
+
+  Stream<List<Destination>> getFavoriteList() {
+    final favoriteList = _db
+        .collection('favorites')
+        .doc(_firebaseAuth!.uid)
+        .collection("items")
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) => Destination.fromFirestore(document.data()))
+            .toList());
+    return favoriteList;
+  }
 }

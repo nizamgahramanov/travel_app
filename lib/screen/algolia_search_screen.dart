@@ -84,7 +84,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                   : _results.isEmpty
                       ? Center(
                           child: SvgPicture.asset(
-                              'assets/images/destination_search.svg'),
+                              'assets/svg/search_screen.svg'),
                         )
                       : GridView.builder(
                           itemCount: _results.length,
