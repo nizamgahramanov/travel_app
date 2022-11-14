@@ -184,6 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Utility.getInstance().showAlertDialog(
                               context:context,
                               alertTitle:"Do want to log out?",
+                              popButtonColor: Colors.red,
                               popButtonText: "Cancel",
                               onPopTap: () => Navigator.of(context).pop(),
                               isShowActionButton: true,

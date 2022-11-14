@@ -74,13 +74,14 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             geoPoint: GeoPoint(_destinationLocation!.latitude,
                 _destinationLocation!.longitude));
         Provider.of<Destinations>(context, listen: false)
-             .saveData(destinationItem, _destinationImageFile);
+            .saveData(destinationItem, _destinationImageFile);
       }
     } catch (error) {
       Utility.getInstance().showAlertDialog(
           context: context,
           alertTitle: "Something went wrong",
           popButtonText: "Ok",
+          popButtonColor: Colors.redAccent,
           onPopTap: () => Navigator.of(context).pop());
     }
 
@@ -133,13 +134,14 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         ),
                         onSaved: (value) {
                           destinationItem = Destination(
-                              id: destinationItem.id,
-                              name: value!,
-                              overview: destinationItem.overview,
-                              region: destinationItem.region,
-                              type: destinationItem.type,
-                              photoUrl: destinationItem.photoUrl,
-                              geoPoint: destinationItem.geoPoint);
+                            id: destinationItem.id,
+                            name: value!,
+                            overview: destinationItem.overview,
+                            region: destinationItem.region,
+                            type: destinationItem.type,
+                            photoUrl: destinationItem.photoUrl,
+                            geoPoint: destinationItem.geoPoint,
+                          );
                         },
                       ),
                       TextFormField(

@@ -28,7 +28,6 @@ class LoginWithPasswordScreen extends StatefulWidget {
 
 class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   final _login_with_password_form = GlobalKey<FormState>();
-  // final o =
 
   void saveForm() {
     //check in firebase email is registered or not
@@ -59,6 +58,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
           context, MainScreen.routeName, (route) => false);
     } else {
       Utility.getInstance().showAlertDialog(
+          popButtonColor: Colors.red,
           context: context,
           alertTitle: "Password is correct",
           alertMessage: "Please check and try again",

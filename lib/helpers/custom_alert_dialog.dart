@@ -9,6 +9,7 @@ class CustomAlertDialog extends StatefulWidget {
     this.description,
     required this.popButtonText,
     required this.onPopTap,
+    required this.popButtonColor,
     this.isShowActionButton,
     this.actionButtonText,
     this.onTapAction,
@@ -21,6 +22,7 @@ class CustomAlertDialog extends StatefulWidget {
   final VoidCallback? onTapAction;
   final bool? isShowActionButton;
   final Color? actionButtonColor;
+  final Color popButtonColor;
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState();
 }
@@ -34,7 +36,6 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         return  Future.value(false);
       },
       child: Dialog(
-
         elevation: 0,
         backgroundColor: const Color(0xffffffff),
         shape: RoundedRectangleBorder(
@@ -73,6 +74,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               buttonText: widget.popButtonText,
               borderRadius: 25,
               margin: 30,
+              buttonColor: widget.popButtonColor,
             ),
             const SizedBox(height: 20),
             // Container(

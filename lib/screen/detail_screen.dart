@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -38,7 +40,21 @@ class _DetailScreenState extends State<DetailScreen>
     if (user != null) {
       // store destination in firestore database
       FireStoreService().saveFavorites(user!.uid, destination);
-    } else {}
+    } else {
+      // should be open dialog in order to make kindly force user to login
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: "Be our valuable member",
+        popButtonText: "Back",
+        onPopTap: () => {Navigator.of(context).pop()},
+        popButtonColor: Colors.redAccent,
+        isShowActionButton: true,
+        alertMessage: "It is required to sign up before make favorite",
+        actionButtonText: "Sign up",
+        actionButtonColor: AppColors.buttonBackgroundColor,
+        onTapAction: () => Navigator.pushNamed(context, MainScreen.routeName),
+      );
+    }
   }
 
   @override
@@ -107,38 +123,45 @@ class _DetailScreenState extends State<DetailScreen>
                     ),
                   ),
                   StreamBuilder<QuerySnapshot>(
-                    stream: FireStoreService().isDestinationFavorite(clickedDestination.id!),
-                    builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.active) {
-                      return Positioned(
-                        top: 40,
-                        right: 10,
-                        child: ElevatedButton(
-                          onPressed: () =>
-                              toggleFavorite(clickedDestination),
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(10),
-                            primary: AppColors.buttonBackgroundColor,
-                          ),
-                          child: snapshot.data!.docs.isEmpty
-                              ? Icon(
-                            Icons.favorite_border_outlined,
-                            color: AppColors.inputColor,
-                          )
-                              : Icon(
-                            Icons.favorite,
-                            color: AppColors.inputColor,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    }
-                  ),
+                      stream: user == null
+                          ? null
+                          : FireStoreService()
+                              .isDestinationFavorite(clickedDestination.id!),
+                      builder: (context, snapshot) {
+                        print("SANPSHAP");
+                        print(snapshot);
+                        if (snapshot.connectionState == ConnectionState.none ||
+                            snapshot.connectionState ==
+                                ConnectionState.active) {
+                          return Positioned(
+                            top: 40,
+                            right: 10,
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  toggleFavorite(clickedDestination),
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: const EdgeInsets.all(10),
+                                primary: AppColors.buttonBackgroundColor,
+                              ),
+                              child: !snapshot.hasData ||
+                                      snapshot.data!.docs.isNotEmpty
+                                  ? Icon(
+                                      Icons.favorite_border_outlined,
+                                      color: AppColors.inputColor,
+                                    )
+                                  : Icon(
+                                      Icons.favorite,
+                                      color: AppColors.inputColor,
+                                    ),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
                   Positioned(
                     left: 20,
                     bottom: 20,
