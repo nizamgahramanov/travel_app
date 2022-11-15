@@ -1,16 +1,14 @@
 class FirestoreUser {
   final String email;
-  final String firstName;
-  final String lastName;
-  final String password;
-  final List<String> favorites;
+  final String? firstName;
+  final String? lastName;
+  final String? password;
 
   FirestoreUser({
     required this.email,
     required this.firstName,
     required this.lastName,
     required this.password,
-    required this.favorites,
   });
 
   Map<String, dynamic> createMap() {
@@ -19,7 +17,6 @@ class FirestoreUser {
       'firstName': firstName,
       'lastName': lastName,
       'password': password,
-      'favorites': favorites,
     };
   }
 
@@ -27,6 +24,5 @@ class FirestoreUser {
       : email = firestoreMap['email'],
         firstName = firestoreMap['firstName'],
         lastName = firestoreMap['lastName'],
-        password = firestoreMap['password'],
-        favorites = firestoreMap['favorites'];
+        password = firestoreMap['password'];
 }

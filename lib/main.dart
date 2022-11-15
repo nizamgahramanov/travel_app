@@ -17,6 +17,7 @@ import 'package:travel_app/screen/start_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'model/destination.dart';
 
@@ -100,6 +101,11 @@ class _MyAppState extends State<MyApp> {
       case LoginWithPasswordScreen.routeName:
         return CustomPageRoute(
           child: LoginWithPasswordScreen(),
+          settings: settings,
+        );
+      case Wrapper.routeName:
+        return CustomPageRoute(
+          child: Wrapper(isLogin: false, bottomNavIndex: 3),
           settings: settings,
         );
     }

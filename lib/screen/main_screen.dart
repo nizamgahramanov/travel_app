@@ -14,7 +14,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -29,8 +28,14 @@ class _MainScreenState extends State<MainScreen> {
             print(snapshot.data);
             final app.User? user = snapshot.data;
             return user == null
-                ? Wrapper(isLogin: false)
-                : Wrapper(isLogin: true);
+                ? Wrapper(
+                    isLogin: false,
+                    bottomNavIndex: 0,
+                  )
+                : Wrapper(
+                    isLogin: true,
+                    bottomNavIndex: 0,
+                  );
           } else {
             print("PROGRESS");
             return const Scaffold(

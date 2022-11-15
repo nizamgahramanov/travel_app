@@ -20,21 +20,25 @@ class AppLightText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: Wrap(alignment: WrapAlignment.center, spacing: 16, children: [
-        if (isShowCheckMark) icon!,
-        Text(
-          text,
-          style: TextStyle(
-            color: color,
-            fontSize: size,
-            fontWeight: FontWeight.normal,
-            fontFamily: 'Montserrat',
+    return Container(
+      padding: const EdgeInsets.only(left: 10),
+      // color: Colors.amberAccent,
+      child: Align(
+        alignment: alignment,
+        child: Wrap(alignment: WrapAlignment.center, spacing: 16, children: [
+          if (isShowCheckMark) icon!,
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: size,
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Montserrat',
+            ),
+            // textAlign: textAlign,
           ),
-          // textAlign: textAlign,
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

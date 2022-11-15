@@ -53,8 +53,23 @@ class AuthService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
+      print(googleSignInAccount);
 
-      return await _firebaseAuth.signInWithCredential(credential);
+      auth.UserCredential result =
+          await _firebaseAuth.signInWithCredential(credential);
+      if (result.user != null) {
+        List<String>? nameAndSurname =
+            splitGoogleFullName(result.user!.displayName);
+        FireStoreService().createUserInFirestore(
+          result.user!.uid,
+          nameAndSurname == null ? null : nameAndSurname[0],
+          nameAndSurname == null ? null : nameAndSurname[1],
+          result.user!.email!,
+          null,
+        );
+      }
+
+      return result;
     } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
     } catch (e) {
@@ -126,5 +141,13 @@ class AuthService {
   signOut() {
     print("SIGN OUT");
     _firebaseAuth.signOut();
+  }
+
+  splitGoogleFullName(String? fullName) {
+    List<String>? result;
+    if (fullName != null) {
+      result = fullName.split(" ");
+    }
+    return result;
   }
 }

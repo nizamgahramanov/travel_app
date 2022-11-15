@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/screen/profile_screen.dart';
-import 'package:travel_app/screen/search_screen.dart';
-
 import '../helpers/app_colors.dart';
 import 'algolia_search_screen.dart';
 import 'favorite_screen.dart';
@@ -10,24 +8,27 @@ import 'login_signup_screen.dart';
 
 class Wrapper extends StatefulWidget {
   final bool isLogin;
-  const Wrapper({Key? key, required this.isLogin}) : super(key: key);
+  int bottomNavIndex;
+  static const routeName = '/wrapper';
+  Wrapper({
+    Key? key,
+    required this.isLogin,
+    required this.bottomNavIndex,
+  }) : super(key: key);
 
   @override
   State<Wrapper> createState() => _WrapperState();
 }
 
 class _WrapperState extends State<Wrapper> {
-  int _selectedIndex = 0;
-
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      widget.bottomNavIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     Map<int, Widget> screens = {
       0: HomeScreen(),
       1: const AlgoliaSearchScreen(),
@@ -36,7 +37,7 @@ class _WrapperState extends State<Wrapper> {
     };
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
-      body: screens[_selectedIndex],
+      body: screens[widget.bottomNavIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(
@@ -70,7 +71,7 @@ class _WrapperState extends State<Wrapper> {
         ],
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
+        currentIndex: widget.bottomNavIndex,
         selectedFontSize: 0,
         unselectedFontSize: 0,
         selectedItemColor: AppColors.buttonBackgroundColor,

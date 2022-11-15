@@ -8,6 +8,7 @@ import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:travel_app/widgets/detail_info.dart';
@@ -44,15 +45,22 @@ class _DetailScreenState extends State<DetailScreen>
       // should be open dialog in order to make kindly force user to login
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: "Be our valuable member",
+        alertTitle: "Be our valuable member in Seyr Et",
         popButtonText: "Back",
-        onPopTap: () => {Navigator.of(context).pop()},
+        onPopTap: () => Navigator.of(context).pop(),
         popButtonColor: Colors.redAccent,
         isShowActionButton: true,
         alertMessage: "It is required to sign up before make favorite",
         actionButtonText: "Sign up",
         actionButtonColor: AppColors.buttonBackgroundColor,
-        onTapAction: () => Navigator.pushNamed(context, MainScreen.routeName),
+        onTapAction: () => Navigator.of(context).pushNamed(
+          Wrapper.routeName
+          // MaterialPageRoute(
+          //     builder: (context) => Wrapper(
+          //           isLogin: false,
+          //           bottomNavIndex: 3,
+          //         )),
+        ),
       );
     }
   }
@@ -145,7 +153,7 @@ class _DetailScreenState extends State<DetailScreen>
                                 primary: AppColors.buttonBackgroundColor,
                               ),
                               child: !snapshot.hasData ||
-                                      snapshot.data!.docs.isNotEmpty
+                                      snapshot.data!.docs.isEmpty
                                   ? Icon(
                                       Icons.favorite_border_outlined,
                                       color: AppColors.inputColor,

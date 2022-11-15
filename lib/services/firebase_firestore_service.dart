@@ -51,12 +51,14 @@ class FireStoreService {
   }
 
   //This method is used to create the user in firestore
-  Future<void> createUserInFirestore(String uid, String firstName,
-      String lastName, String email, String password) async {
+  Future<void> createUserInFirestore(String uid, String? firstName,
+      String? lastName, String email, String? password) async {
     //Encrypts password before store in firestore
-    final plainText = password;
+    String? encryptedPassword;
+    if(password!=null){
+      encryptedPassword = EnDeCryption().encryptWithAES(password).base16;
+    }
 
-    String encryptedPassword = EnDeCryption().encryptWithAES(plainText).base16;
     print("encrypted");
     print(encryptedPassword);
     var firestoreUserItem = FirestoreUser(
@@ -64,7 +66,6 @@ class FireStoreService {
       firstName: firstName,
       lastName: lastName,
       password: encryptedPassword,
-      favorites: [],
     );
     //Creates the user doc named whatever the user uid is in the collection "users"
     //and adds the user data
