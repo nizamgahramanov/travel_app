@@ -29,8 +29,7 @@ class _UserInfoState extends State<UserInfo> {
     print(args.email);
     print("KLKLKRE");
     void registerUser() async {
-      AuthService()
-          .registerUser(
+      AuthService().registerUser(
         context: context,
         firstName: firstName,
         lastName: lastName,
@@ -38,8 +37,8 @@ class _UserInfoState extends State<UserInfo> {
         password: args.password,
       );
       // I think this approach is not correct
-      Navigator.pushNamedAndRemoveUntil(context,
-          MainScreen.routeName, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
@@ -91,8 +90,16 @@ class _UserInfoState extends State<UserInfo> {
                         //       .map((e) => AppLightText(text: e))
                         //       .toList(),
                         // ),
-                        AppLightText(text: "You made the right decision"),
-                        AppLightText(text: "How shall we call you?"),
+                        AppLightText(
+                          spacing: 16,
+                          text: "You made the right decision",
+                          padding: EdgeInsets.zero,
+                        ),
+                        AppLightText(
+                          spacing: 16,
+                          text: "How shall we call you?",
+                          padding: EdgeInsets.zero,
+                        ),
                         Form(
                           key: _form,
                           child: Column(

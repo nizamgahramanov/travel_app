@@ -73,9 +73,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         ),
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "or",
                         size: 12,
                         color: Colors.black87,
+                        padding: EdgeInsets.zero,
                       ),
                       const Expanded(
                         child: Divider(

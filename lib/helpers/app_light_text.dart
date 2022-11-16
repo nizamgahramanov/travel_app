@@ -5,28 +5,32 @@ class AppLightText extends StatelessWidget {
   double size;
   final String text;
   final Color color;
-  final bool isShowCheckMark;
+  final bool isShowIcon;
   final Widget? icon;
   final Alignment alignment;
+  final EdgeInsets padding;
+  final double spacing;
   AppLightText({
     Key? key,
     this.size = 16,
     required this.text,
     this.color = Colors.black38,
-    this.isShowCheckMark = false,
+    this.isShowIcon = false,
     this.icon,
     this.alignment = Alignment.centerLeft,
+    required this.padding,
+    required this.spacing,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10),
+      padding: padding,
       // color: Colors.amberAccent,
       child: Align(
         alignment: alignment,
-        child: Wrap(alignment: WrapAlignment.center, spacing: 16, children: [
-          if (isShowCheckMark) icon!,
+        child: Wrap(alignment: WrapAlignment.center, spacing: spacing, children: [
+          if (isShowIcon) icon!,
           Text(
             text,
             style: TextStyle(

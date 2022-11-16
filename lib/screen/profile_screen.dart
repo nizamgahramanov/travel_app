@@ -36,11 +36,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Navigator.of(context).pushNamed(ChangePasswordScreen.routeName);
     }
   }
+
   void logoutAction() {
     Navigator.of(context).pop();
     AuthService().signOut();
-
   }
+
   @override
   Widget build(BuildContext context) {
     User? result = FirebaseAuth.instance.currentUser;
@@ -101,19 +102,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       itemBuilder: (context, index) {
                         final data = widget.titleList[index];
                         return ListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 16),
                           visualDensity:
                               const VisualDensity(horizontal: 0, vertical: -3),
                           trailing: const Icon(Icons.edit_outlined),
                           title: AppLightText(
+                            spacing: 16,
                             text: data,
                             size: 16,
                             color: Colors.black,
+                            padding: EdgeInsets.zero,
                           ),
                           subtitle: AppLightText(
+                            spacing: 16,
                             text: result!.email!,
                             size: 14,
+                            padding: EdgeInsets.zero,
                           ),
                           onTap: () => listTileOnTap(index),
                         );
@@ -143,9 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               AppLightText(
+                                spacing: 16,
                                 text: "Language",
                                 size: 20,
                                 color: Colors.black,
+                                padding: EdgeInsets.zero,
                               ),
                               const SizedBox(
                                 height: 5,
@@ -182,23 +189,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         GestureDetector(
                           onTap: () {
                             Utility.getInstance().showAlertDialog(
-                              context:context,
-                              alertTitle:"Do want to log out?",
-                              popButtonColor: Colors.red,
-                              popButtonText: "Cancel",
-                              onPopTap: () => Navigator.of(context).pop(),
-                              isShowActionButton: true,
-                              actionButtonText: "Log out",
-                              onTapAction: logoutAction,
-                              actionButtonColor: Colors.red
-                            );
+                                context: context,
+                                alertTitle: "Do want to log out?",
+                                popButtonColor: Colors.red,
+                                popButtonText: "Cancel",
+                                onPopTap: () => Navigator.of(context).pop(),
+                                isShowActionButton: true,
+                                actionButtonText: "Log out",
+                                onTapAction: logoutAction,
+                                actionButtonColor: Colors.red);
                             // AuthService().signOut();
                           },
                           child: AppLightText(
+                            spacing: 16,
                             text: "Log out",
                             size: 18,
                             color: Colors.red,
-                            isShowCheckMark: true,
+                            isShowIcon: true,
                             icon: Transform(
                               alignment: Alignment.center,
                               transform: Matrix4.rotationY(math.pi),
@@ -208,6 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Colors.red,
                               ),
                             ),
+                            padding: EdgeInsets.zero,
                           ),
                         ),
                       ],

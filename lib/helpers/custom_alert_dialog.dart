@@ -31,9 +31,9 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         Navigator.of(context, rootNavigator: true).pop();
-        return  Future.value(false);
+        return Future.value(false);
       },
       child: Dialog(
         elevation: 0,
@@ -55,8 +55,10 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
             ),
             if (widget.description != null)
               AppLightText(
+                spacing: 16,
                 text: widget.description!,
                 alignment: Alignment.center,
+                padding: EdgeInsets.zero,
               ),
 
             const SizedBox(height: 25),

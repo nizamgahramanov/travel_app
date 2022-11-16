@@ -29,7 +29,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   },
                   child: const Icon(
                     Icons.arrow_back,
-                    color:  Colors.black,
+                    color: Colors.black,
                   ),
                 ),
                 backgroundColor: Colors.white,
@@ -42,8 +42,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   title: Text(
                     "Change Password",
                     // "Great time to discover",
-                    style: TextStyle(
-                        color: Colors.black ),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -139,32 +138,45 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: AppLightText(
-                              size: 14,
-                              text:
-                              "Password must meet the following requirements:"),
+                            spacing: 16,
+                            size: 14,
+                            text:
+                                "Password must meet the following requirements:",
+                            padding: EdgeInsets.zero,
+                          ),
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text: "Minimum of 8 characters",
-                          isShowCheckMark: true,
+                          isShowIcon: true,
+                          padding: EdgeInsets.zero,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text: "At least one lower case",
-                          isShowCheckMark: true,
+                          isShowIcon: true,
+                          padding: EdgeInsets.zero,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text: "At least one upper case",
-                          isShowCheckMark: true,
+                          isShowIcon: true,
+                          padding: EdgeInsets.zero,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text: "At least one number",
-                          isShowCheckMark: true,
+                          isShowIcon: true,
+                          padding: EdgeInsets.zero,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text: "At least one special character",
-                          isShowCheckMark: true,
+                          isShowIcon: true,
+                          padding: EdgeInsets.zero,
                         ),
                       ],
                     ),
@@ -185,7 +197,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         buttonText: "SAVE",
         borderRadius: 15,
         margin: 20,
-        onTap: (){},
+        onTap: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
