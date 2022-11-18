@@ -73,9 +73,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         ),
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "or",
                         size: 12,
                         color: Colors.black87,
+                        padding: EdgeInsets.zero,
                       ),
                       const Expanded(
                         child: Divider(
@@ -129,17 +131,22 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     print(isExistList);
     if (isExistList.isEmpty) {
       //  go to password page
-      Navigator.pushNamed(context, PasswordScreen.routeName,
-          arguments: arguments);
+      Navigator.pushNamed(
+        context,
+        PasswordScreen.routeName,
+        arguments: arguments,
+      );
     } else {
       provider = true;
       //  send auth cde to email address
-      // AuthService.customSnackBar(content: "Thank you for being our valuable member");
       if (isExistList[0] == "google.com") {
         AuthService().signInWithGoogle();
       } else {
-        Navigator.pushNamed(context, LoginWithPasswordScreen.routeName,
-            arguments: arguments);
+        Navigator.pushNamed(
+          context,
+          LoginWithPasswordScreen.routeName,
+          arguments: arguments,
+        );
       }
     }
   }

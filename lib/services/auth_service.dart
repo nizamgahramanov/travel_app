@@ -4,11 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/model/user.dart';
-import 'package:travel_app/screen/login_signup_screen.dart';
-import 'package:travel_app/screen/main_screen.dart';
 import 'package:crypto/crypto.dart';
 import '../exception/custom_auth_exception.dart';
-import '../helpers/custom_snackbar.dart';
 import 'firebase_firestore_service.dart';
 
 class AuthService {
@@ -33,14 +30,15 @@ class AuthService {
     if (user == null) {
       return null;
     }
-    return User(uid: user.uid, email: user.email!);
+    return User(
+      uid: user.uid,
+      email: user.email!,
+    );
   }
 
   Stream<User?>? get user {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
-
-  // Stream<User?> get onAuthStateChanged => _firebaseAuth.authStateChanges();
 
   Future<auth.UserCredential?> signInWithGoogle() async {
     try {
@@ -55,8 +53,23 @@ class AuthService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
+      print(googleSignInAccount);
 
-      return await _firebaseAuth.signInWithCredential(credential);
+      auth.UserCredential result =
+          await _firebaseAuth.signInWithCredential(credential);
+      if (result.user != null) {
+        List<String>? nameAndSurname =
+            splitGoogleFullName(result.user!.displayName);
+        FireStoreService().createUserInFirestore(
+          result.user!.uid,
+          nameAndSurname == null ? null : nameAndSurname[0],
+          nameAndSurname == null ? null : nameAndSurname[1],
+          result.user!.email!,
+          null,
+        );
+      }
+
+      return result;
     } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
     } catch (e) {
@@ -73,26 +86,20 @@ class AuthService {
   }) async {
     try {
       print("signInWithEmailAndPassword");
-      var passwordInBytes = utf8.encoder.convert(password);
-      String hashedPassword= sha256.convert(passwordInBytes).toString();
-      print("HASHED PASSWORd");
-      print(hashedPassword);
-      final userCredential = await _firebaseAuth
-          .createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      )
-          .then((credential) {
-        if (credential.user != null) {
-          FireStoreService().createUserInFirestore(
-            credential.user!.uid,
-            firstName,
-            lastName,
-            email,
-            hashedPassword,
-          );
-        }
-      });
+      );
+      if (userCredential.user != null) {
+        FireStoreService().createUserInFirestore(
+          userCredential.user!.uid,
+          firstName,
+          lastName,
+          email,
+          password,
+        );
+      }
+
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
       throw CustomAuthException(authError.code, authError.message!);
@@ -109,8 +116,7 @@ class AuthService {
     try {
       print("signInWithEmailAndPassword");
 
-      final userCredential = await _firebaseAuth
-          .signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -121,6 +127,7 @@ class AuthService {
       throw CustomException(errorMessage: "Unknown Error");
     }
   }
+
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(
       backgroundColor: Colors.black,
@@ -134,5 +141,13 @@ class AuthService {
   signOut() {
     print("SIGN OUT");
     _firebaseAuth.signOut();
+  }
+
+  splitGoogleFullName(String? fullName) {
+    List<String>? result;
+    if (fullName != null) {
+      result = fullName.split(" ");
+    }
+    return result;
   }
 }

@@ -27,7 +27,8 @@ class _LoginSignUpState extends State<LoginSignUp> {
     showModalBottomSheet(
         shape: const RoundedRectangleBorder(
           borderRadius: const BorderRadius.only(
-              topLeft: const Radius.circular(25), topRight: const Radius.circular(25)),
+              topLeft: const Radius.circular(25),
+              topRight: const Radius.circular(25)),
         ),
         isScrollControlled: true,
         context: context,
@@ -60,7 +61,8 @@ class _LoginSignUpState extends State<LoginSignUp> {
                       ),
                       SliverToBoxAdapter(
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 0),
                           color: AppColors.mainColor,
                           height: MediaQuery.of(context).size.height * 0.7,
                           child: Column(
@@ -69,8 +71,11 @@ class _LoginSignUpState extends State<LoginSignUp> {
                                 height: 20,
                               ),
                               AppLightText(
-                                  text:
-                                      "We will check if your email is already part of SIXT"),
+                                spacing: 16,
+                                text:
+                                    "We will check if your email is already part of SEYRET",
+                                padding: EdgeInsets.zero,
+                              ),
                               const SizedBox(
                                 height: 40,
                               ),
@@ -115,7 +120,6 @@ class _LoginSignUpState extends State<LoginSignUp> {
                           color: AppColors.mainColor,
                         ),
                       ),
-
                     ],
                   );
                 },
@@ -127,7 +131,8 @@ class _LoginSignUpState extends State<LoginSignUp> {
               margin: 20,
               onTap: saveForm,
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           );
         });
   }
@@ -137,6 +142,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
+
   void checkEmailIsRegistered(value) async {
     List<String> isExistList;
     print("value");
@@ -152,11 +158,8 @@ class _LoginSignUpState extends State<LoginSignUp> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
@@ -193,9 +196,11 @@ class _LoginSignUpState extends State<LoginSignUp> {
             child: Column(
               children: widget.signupBenefit
                   .map((e) => AppLightText(
+                        spacing: 16,
                         text: e,
                         color: AppColors.inputColor,
-                        isShowCheckMark: true,
+                        isShowIcon: true,
+                        padding: EdgeInsets.zero,
                       ))
                   .toList(),
             ),

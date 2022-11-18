@@ -7,6 +7,11 @@ class CustomSnackbar extends StatelessWidget {
   CustomSnackbar({required this.content});
   @override
   Widget build(BuildContext context) {
-    return SnackBar(content: AppLightText(text: content,));
+    return SnackBar(
+        content: AppLightText(
+      spacing: 16,
+      text: content,
+      padding: EdgeInsets.zero,
+    ));
   }
 }

@@ -5,4 +5,5 @@ class User {
     required this.uid,
     required this.email,
   });
+
 }

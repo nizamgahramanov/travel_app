@@ -57,7 +57,7 @@ class CarouselItem extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: AppLargeText(
                     text: region,
-                    size: 16,
+                    size: 10,
                     color: AppColors.buttonBackgroundColor,
                   ),
                 ),

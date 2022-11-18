@@ -47,7 +47,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
               ),
             ),
           ];
-        },
+        } ,
         body: Builder(
           builder: (BuildContext context) {
             return CustomScrollView(
@@ -69,9 +69,11 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                           height: 20,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text:
                           "Enter your new email address and confirm with your password. A confirmation link will be sent to your new email address.",
                           size: 14,
+                          padding: EdgeInsets.zero,
                         ),
                         const SizedBox(
                           height: 20,

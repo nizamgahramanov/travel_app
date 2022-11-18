@@ -11,7 +11,7 @@ class Destination {
   final String region;
   final String type;
   final GeoPoint geoPoint;
-  List<String> photo_url;
+  List<String> photoUrl;
 
   // final List<Review> reviews;
 
@@ -21,7 +21,7 @@ class Destination {
     required this.overview,
     required this.region,
     required this.type,
-    required this.photo_url,
+    required this.photoUrl,
     required this.geoPoint,
     // required this.reviews
   });
@@ -32,7 +32,7 @@ class Destination {
       'overview': overview,
       'region': region,
       'type': type,
-      'photo_url': photo_url,
+      'photo_url': photoUrl,
       'geoPoint':geoPoint
     };
   }
@@ -43,6 +43,6 @@ class Destination {
         overview = firestoreMap['overview'],
         region = firestoreMap['region'],
         type = firestoreMap['type'],
-        photo_url = firestoreMap['photo_url'].cast<String>(),
+        photoUrl = firestoreMap['photo_url'].cast<String>(),
         geoPoint = firestoreMap['geoPoint'];
 }

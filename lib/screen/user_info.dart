@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
-import '../services/firebase_firestore_service.dart';
 
 class UserInfo extends StatefulWidget {
   static const routeName = '/user_info';
@@ -21,7 +19,6 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   final _form = GlobalKey<FormState>();
-  // final _auth = FirebaseAuth.instance;
 
   String firstName = "";
   String lastName = "";
@@ -32,27 +29,16 @@ class _UserInfoState extends State<UserInfo> {
     print(args.email);
     print("KLKLKRE");
     void registerUser() async {
-      AuthService()
-          .registerUser(
+      AuthService().registerUser(
         context: context,
         firstName: firstName,
         lastName: lastName,
         email: args.email,
         password: args.password,
       );
-      //     .then((value) {
-      //   if (value.user != null) {
-      //     FireStoreService().createUserInFirestore(
-      //       value.user!.uid,
-      //       firstName,
-      //       lastName,
-      //       args.email,
-      //       args.password,
-      //     );
-      //   }
-      // });
-      Navigator.pushNamedAndRemoveUntil(context,
-          MainScreen.routeName, (route) => false);
+      // I think this approach is not correct
+      Navigator.pushNamedAndRemoveUntil(
+          context, MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
@@ -104,8 +90,16 @@ class _UserInfoState extends State<UserInfo> {
                         //       .map((e) => AppLightText(text: e))
                         //       .toList(),
                         // ),
-                        AppLightText(text: "You made the right decision"),
-                        AppLightText(text: "How shall we call you?"),
+                        AppLightText(
+                          spacing: 16,
+                          text: "You made the right decision",
+                          padding: EdgeInsets.zero,
+                        ),
+                        AppLightText(
+                          spacing: 16,
+                          text: "How shall we call you?",
+                          padding: EdgeInsets.zero,
+                        ),
                         Form(
                           key: _form,
                           child: Column(
@@ -132,7 +126,7 @@ class _UserInfoState extends State<UserInfo> {
                                   firstName = value!;
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               TextFormField(
@@ -176,7 +170,7 @@ class _UserInfoState extends State<UserInfo> {
         ),
       ),
       floatingActionButton: CustomButton(
-        buttonText: "Continue",
+        buttonText: "Done",
         borderRadius: 15,
         margin: 20,
         onTap: saveForm,

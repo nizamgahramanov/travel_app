@@ -81,9 +81,16 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      AppLightText(text: "Welcome ${args['email']}"),
                       AppLightText(
-                          text: "Secure your new account with a password"),
+                        spacing: 16,
+                        text: "Welcome ${args['email']}",
+                        padding: EdgeInsets.zero,
+                      ),
+                      AppLightText(
+                        spacing: 16,
+                        text: "Secure your new account with a password",
+                        padding: EdgeInsets.zero,
+                      ),
                       const SizedBox(
                         height: 30,
                       ),
@@ -119,62 +126,75 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: AppLightText(
-                            size: 14,
-                            text:
-                                "Password must meet the following requirements:"),
+                          spacing: 16,
+                          size: 14,
+                          text:
+                              "Password must meet the following requirements:",
+                          padding: EdgeInsets.zero,
+                        ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "Minimum of 8 characters",
-                        isShowCheckMark: true,
+                        isShowIcon: true,
                         icon: Container(
                           width: 10,
                           height: 10,
                           margin: const EdgeInsets.only(right: 5),
                           child: const Icon(Icons.check),
                         ),
+                        padding: EdgeInsets.zero,
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "At least one lower case",
-                        isShowCheckMark: true,
+                        isShowIcon: true,
                         icon: Container(
                           width: 10,
                           height: 10,
                           margin: const EdgeInsets.only(right: 5),
                           child: const Icon(Icons.check),
                         ),
+                        padding: EdgeInsets.zero,
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "At least one upper case",
-                        isShowCheckMark: true,
+                        isShowIcon: true,
                         icon: Container(
                           width: 10,
                           height: 10,
                           margin: const EdgeInsets.only(right: 5),
                           child: const Icon(Icons.check),
                         ),
+                        padding: EdgeInsets.zero,
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "At least one number",
-                        isShowCheckMark: true,
+                        isShowIcon: true,
                         icon: Container(
                           width: 10,
                           height: 10,
                           margin: const EdgeInsets.only(right: 5),
                           child: const Icon(Icons.check),
                         ),
+                        padding: EdgeInsets.zero,
                       ),
                       AppLightText(
+                        spacing: 16,
                         text: "At least one special character",
-                        isShowCheckMark: true,
+                        isShowIcon: true,
                         icon: Container(
                           width: 10,
                           height: 10,
                           margin: const EdgeInsets.only(right: 5),
                           child: const Icon(Icons.check),
                         ),
+                        padding: EdgeInsets.zero,
                       ),
                     ],
                   ),

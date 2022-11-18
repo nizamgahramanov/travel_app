@@ -25,8 +25,10 @@ class DetailInfo extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             AppLightText(
+              spacing: 16,
               text: title,
               size: 18,
+              padding: EdgeInsets.zero,
             ),
             AppLargeText(
               text: info,

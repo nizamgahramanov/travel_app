@@ -80,9 +80,11 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
                             .map(
                               (e) => Tab(
                                 child: AppLightText(
+                                  spacing: 16,
                                   text: e.values.first,
                                   size: 14,
                                   color: AppColors.buttonBackgroundColor,
+                                  padding: EdgeInsets.zero,
                                 ),
                               ),
                             )
@@ -115,11 +117,14 @@ class _HorizontalCarouselListState extends State<HorizontalCarouselList>
                               );
                             },
                             child: Container(
-                              margin: const EdgeInsets.only(left:15),
+                              margin: const EdgeInsets.only(left: 15),
                               child: CarouselItem(
-                                name:destinationIterable.elementAt(index).name,
-                                photos:destinationIterable.elementAt(index).photo_url[0],
-                                region:destinationIterable.elementAt(index).region,
+                                name: destinationIterable.elementAt(index).name,
+                                photos: destinationIterable
+                                    .elementAt(index)
+                                    .photoUrl[0],
+                                region:
+                                    destinationIterable.elementAt(index).region,
                               ),
                             ),
                           ),

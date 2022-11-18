@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
@@ -18,6 +17,7 @@ import 'package:travel_app/screen/start_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'model/destination.dart';
 
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     switch (settings.name) {
       case DetailScreen.routeName:
         return CustomPageRoute(
-          child: DetailScreen(toggleFavorite),
+          child: DetailScreen(),
           settings: settings,
         );
       case MainScreen.routeName:
@@ -103,22 +103,27 @@ class _MyAppState extends State<MyApp> {
           child: LoginWithPasswordScreen(),
           settings: settings,
         );
+      case Wrapper.routeName:
+        return CustomPageRoute(
+          child: Wrapper(isLogin: false, bottomNavIndex: 3),
+          settings: settings,
+        );
     }
   }
 
-  void toggleFavorite(String id) {
-    print("TOGGLE FAVORITE");
-    final existingIndex = favorites.indexWhere((element) => element.id == id);
-    if (existingIndex >= 0) {
-      setState(() {
-        favorites.removeAt(existingIndex);
-      });
-    } else {
-      setState(() {
-        // favorites.add(destinations.firstWhere((element) => element.id == id));
-      });
-    }
-  }
+  // void toggleFavorite(String id) {
+  //   print("TOGGLE FAVORITE");
+  //   final existingIndex = favorites.indexWhere((element) => element.id == id);
+  //   if (existingIndex >= 0) {
+  //     setState(() {
+  //       favorites.removeAt(existingIndex);
+  //     });
+  //   } else {
+  //     setState(() {
+  //       // favorites.add(destinations.firstWhere((element) => element.id == id));
+  //     });
+  //   }
+  // }
 
   // This widget is the root of your application.
   @override

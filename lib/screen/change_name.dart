@@ -60,7 +60,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                 SliverToBoxAdapter(
                   child: Container(
                     margin:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                     color: AppColors.mainColor,
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: Column(
@@ -69,9 +69,11 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                           height: 20,
                         ),
                         AppLightText(
+                          spacing: 16,
                           text:
-                          "Enter your new first name  and or last name with your password. A confirmation link will be sent to your email address.",
+                              "Enter your new first name  and or last name with your password. A confirmation link will be sent to your email address.",
                           size: 14,
+                          padding: EdgeInsets.zero,
                         ),
                         const SizedBox(
                           height: 20,
@@ -174,7 +176,6 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
         onTap: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
     );
   }
 }

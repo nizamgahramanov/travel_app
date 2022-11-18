@@ -33,7 +33,7 @@ class _MapScreenState extends State<MapScreen> {
     print(geoPointArgument);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("PLACE NAME"),
+        title: Text(data['name']),
         actions: [
           if (data["isSelecting"])
             IconButton(

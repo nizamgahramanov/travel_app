@@ -4,25 +4,33 @@ class AppLargeText extends StatelessWidget {
   double size;
   final String text;
   final Color color;
+  final TextAlign textAlign;
 
   AppLargeText({
     Key? key,
     this.size = 30,
     required this.text,
     this.color = Colors.white,
+    this.textAlign = TextAlign.center,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: color,
-        fontSize: size,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Montserrat',
+    return Container(
+      padding: EdgeInsets.zero,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: color,
+            fontSize: size,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
+          ),
+          textAlign: textAlign,
+        ),
       ),
-      textAlign: TextAlign.center,
     );
   }
 }

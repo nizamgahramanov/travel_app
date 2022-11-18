@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/change_name.dart';
-import 'package:travel_app/screen/login_signup_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_large_text.dart';
 import '../helpers/custom_switch.dart';
+import '../helpers/utility.dart';
 import 'change_email_screen.dart';
 import 'change_password_screen.dart';
 import 'dart:math' as math;
-
-import 'main_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -37,6 +35,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } else {
       Navigator.of(context).pushNamed(ChangePasswordScreen.routeName);
     }
+  }
+
+  void logoutAction() {
+    Navigator.of(context).pop();
+    AuthService().signOut();
   }
 
   @override
@@ -99,19 +102,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       itemBuilder: (context, index) {
                         final data = widget.titleList[index];
                         return ListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 16),
                           visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -3),
+                              const VisualDensity(horizontal: 0, vertical: -3),
                           trailing: const Icon(Icons.edit_outlined),
                           title: AppLightText(
+                            spacing: 16,
                             text: data,
                             size: 16,
                             color: Colors.black,
+                            padding: EdgeInsets.zero,
                           ),
                           subtitle: AppLightText(
+                            spacing: 16,
                             text: result!.email!,
                             size: 14,
+                            padding: EdgeInsets.zero,
                           ),
                           onTap: () => listTileOnTap(index),
                         );
@@ -123,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Flexible(
@@ -141,9 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               AppLightText(
+                                spacing: 16,
                                 text: "Language",
                                 size: 20,
                                 color: Colors.black,
+                                padding: EdgeInsets.zero,
                               ),
                               const SizedBox(
                                 height: 5,
@@ -169,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Flexible(
                   child: Container(
                     color: Colors.white,
-                    padding: EdgeInsets.only(left: 6),
+                    padding: const EdgeInsets.only(left: 6),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,13 +188,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            AuthService().signOut();
+                            Utility.getInstance().showAlertDialog(
+                                context: context,
+                                alertTitle: "Do want to log out?",
+                                popButtonColor: Colors.red,
+                                popButtonText: "Cancel",
+                                onPopTap: () => Navigator.of(context).pop(),
+                                isShowActionButton: true,
+                                actionButtonText: "Log out",
+                                onTapAction: logoutAction,
+                                actionButtonColor: Colors.red);
+                            // AuthService().signOut();
                           },
                           child: AppLightText(
+                            spacing: 16,
                             text: "Log out",
                             size: 18,
                             color: Colors.red,
-                            isShowCheckMark: true,
+                            isShowIcon: true,
                             icon: Transform(
                               alignment: Alignment.center,
                               transform: Matrix4.rotationY(math.pi),
@@ -195,6 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: Colors.red,
                               ),
                             ),
+                            padding: EdgeInsets.zero,
                           ),
                         ),
                       ],

@@ -12,36 +12,42 @@ class CustomButton extends StatelessWidget {
   Color? textColor;
   Widget? icon;
 
-  CustomButton({
-    Key? key,
-    required this.onTap,
-    required this.buttonText,
-    this.buttonColor,
-    required this.borderRadius,
-    this.borderColor,
-    this.margin=0.0,
-    this.textColor,
-    this.icon
-  }) : super(key: key);
+  CustomButton(
+      {Key? key,
+      required this.onTap,
+      required this.buttonText,
+      this.buttonColor,
+      required this.borderRadius,
+      this.borderColor,
+      this.margin = 0.0,
+      this.textColor,
+      this.icon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       height: 60,
       width: double.infinity,
-      margin:  EdgeInsets.symmetric(horizontal: margin),
+      margin: EdgeInsets.symmetric(horizontal: margin),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(borderRadius),
-        color: buttonColor ?? AppColors.buttonBackgroundColor,
-        border: borderColor==null ? Border.all(color: AppColors.inputColor):Border.all(color: Colors.black),
-
-      ),
+          borderRadius: BorderRadius.circular(borderRadius),
+          color: buttonColor ?? AppColors.buttonBackgroundColor,
+          border: borderColor == null
+              ? Border.all(color: AppColors.inputColor)
+              : Border.all(color: Colors.black),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 10,
+              blurRadius: 10,
+              offset: Offset(0,1),
+            )
+          ]),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon!=null)
-            icon!,
+          if (icon != null) icon!,
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -52,7 +58,7 @@ class CustomButton extends StatelessWidget {
                   child: AppLargeText(
                     text: buttonText,
                     size: 18,
-                    color: textColor==null? Colors.white : textColor!,
+                    color: textColor == null ? Colors.white : textColor!,
                   ),
                 ),
               ),
