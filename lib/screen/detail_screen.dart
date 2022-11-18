@@ -101,22 +101,40 @@ class _DetailScreenState extends State<DetailScreen>
                   ),
                 ),
                 actions: [
-                  Consumer(
-                    builder: (context, value, child) => TextButton(
-                      onPressed: () => toggleFavorite(clickedDestination),
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(10),
-                        primary: AppColors.buttonBackgroundColor,
-                      ),
-                      child: Icon(
-                        Icons.favorite_border_outlined,
-                        color: AppColors.backgroundColorOfApp,
-                        size: 30,
-                      ),
-                    ),
-
-                  )
+                  StreamBuilder<QuerySnapshot>(
+                      stream: user == null
+                          ? null
+                          : FireStoreService()
+                              .isDestinationFavorite(clickedDestination.id!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none ||
+                            snapshot.connectionState ==
+                                ConnectionState.active) {
+                          return TextButton(
+                            onPressed: () => toggleFavorite(clickedDestination),
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              padding: const EdgeInsets.all(10),
+                              primary: AppColors.buttonBackgroundColor,
+                            ),
+                            child:
+                                !snapshot.hasData || snapshot.data!.docs.isEmpty
+                                    ? Icon(
+                                        Icons.favorite_border_outlined,
+                                        color: AppColors.backgroundColorOfApp,
+                                        size: 30,
+                                      )
+                                    : Icon(
+                                        Icons.favorite,
+                                        color: AppColors.backgroundColorOfApp,
+                                      ),
+                          );
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }),
                 ],
                 expandedHeight: MediaQuery.of(context).size.height * .6,
                 floating: false,
