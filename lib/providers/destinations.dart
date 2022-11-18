@@ -40,3 +40,4 @@ class Destinations with ChangeNotifier {
     return s;
   }
 }
+

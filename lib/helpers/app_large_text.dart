@@ -16,15 +16,21 @@ class AppLargeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-        color: color,
-        fontSize: size,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Montserrat',
+    return Container(
+      padding: EdgeInsets.zero,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: color,
+            fontSize: size,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
+          ),
+          textAlign: textAlign,
+        ),
       ),
-      textAlign: textAlign,
     );
   }
 }

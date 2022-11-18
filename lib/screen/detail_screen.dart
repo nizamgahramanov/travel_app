@@ -28,14 +28,8 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
-  int showImageIndex = 0;
   bool isSelecting = false;
   var user = FirebaseAuth.instance.currentUser;
-  void verticalListItemClicked(int index) {
-    setState(() {
-      showImageIndex = index;
-    });
-  }
 
   void toggleFavorite(Destination destination) {
     if (user != null) {
@@ -71,7 +65,8 @@ class _DetailScreenState extends State<DetailScreen>
     Map<String, dynamic> mapArgument = {
       "isSelecting": isSelecting,
       "geoPoint": clickedDestination.geoPoint,
-      "zoom": 12.0
+      "zoom": 12.0,
+      "name": clickedDestination.name
     };
     void showDestinationOnMap() {
       Navigator.of(context)
@@ -79,13 +74,14 @@ class _DetailScreenState extends State<DetailScreen>
     }
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
-                centerTitle: false,
+                centerTitle: true,
                 titleSpacing: 0,
                 backgroundColor: AppColors.buttonBackgroundColor,
                 // automaticallyImplyLeading: false,
@@ -101,190 +97,67 @@ class _DetailScreenState extends State<DetailScreen>
                   child: Icon(
                     Icons.arrow_back_rounded,
                     size: 30,
-                    color: AppColors.inputColor,
+                    color: AppColors.backgroundColorOfApp,
                   ),
                 ),
                 actions: [
-                  TextButton(
-                    onPressed: () => toggleFavorite(clickedDestination),
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      padding: const EdgeInsets.all(10),
-                      primary: AppColors.buttonBackgroundColor,
+                  Consumer(
+                    builder: (context, value, child) => TextButton(
+                      onPressed: () => toggleFavorite(clickedDestination),
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(10),
+                        primary: AppColors.buttonBackgroundColor,
+                      ),
+                      child: Icon(
+                        Icons.favorite_border_outlined,
+                        color: AppColors.backgroundColorOfApp,
+                        size: 30,
+                      ),
                     ),
-                    child: true
-                        ? Icon(
-                            Icons.favorite_border_outlined,
-                            color: AppColors.inputColor,
-                            size: 30,
-                          )
-                        : Icon(
-                            Icons.favorite,
-                            color: AppColors.inputColor,
-                          ),
-                  ),
+
+                  )
                 ],
                 expandedHeight: MediaQuery.of(context).size.height * .6,
                 floating: false,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  expandedTitleScale: 2,
+                  expandedTitleScale: 1.7,
                   // titlePadding:
                   //     const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   centerTitle: false,
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AppLargeText(
-                        text: clickedDestination.name,
-                        size: 20,
-                        color: AppColors.inputColor,
-                      ),
-                      // AppLightText(
-                      //   spacing: 2,
-                      //   padding: EdgeInsets.zero,
-                      //   text: clickedDestination.region,
-                      //   color: Colors.white,
-                      //   isShowIcon: true,
-                      //   icon: Icon(
-                      //     size: 20,
-                      //     Icons.place,
-                      //     color: Colors.white,
-                      //   ),
-                      // )
-                    ],
-                  ),
-                  background: Container(
-                    width: double.maxFinite,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
-                      ),
-                    ),
-                    height: MediaQuery.of(context).size.height * .6,
-                    child: Stack(
-                      fit: StackFit.expand,
+                  title: Container(
+                    // color: Colors.redAccent,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Positioned(
-                          height: MediaQuery.of(context).size.height * .6,
-                          width: MediaQuery.of(context).size.width,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(35),
-                              bottomRight: Radius.circular(35),
-                            ),
-                            child: Image.network(
-                              clickedDestination.photoUrl[showImageIndex],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        AppLargeText(
+                          text: clickedDestination.name,
+                          size: 18,
+                          color: AppColors.backgroundColorOfApp,
                         ),
-
-                        // Positioned(
-                        //   left: 20,
-                        //   bottom: 20,
-                        // child: Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     AppLargeText(
-                        //       text: clickedDestination.name,
-                        //       size: 22,
-                        //       color: AppColors.inputColor,
-                        //     ),
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.start,
-                        //       children: [
-                        //         const Icon(
-                        //           Icons.place,
-                        //           color: Colors.white,
-                        //         ),
-                        //         Container(
-                        //           alignment: Alignment.topLeft,
-                        //           child: AppLightText(
-                        //             text: clickedDestination.region,
-                        //             color: AppColors.inputColor,
-                        //             size: 12,
-                        //             padding: EdgeInsets.zero,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                        // ),
-                        Positioned(
-                          right: 20,
-                          bottom: 0,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: LimitedBox(
-                              maxHeight:
-                                  MediaQuery.of(context).size.height * 0.3,
-                              maxWidth: 60,
-                              child: Container(
-                                color: Colors.white,
-                                child: ListView.builder(
-                                  itemCount: clickedDestination.photoUrl.length,
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) =>
-                                      GestureDetector(
-                                    onTap: () => verticalListItemClicked(index),
-                                    child: showImageIndex == index
-                                        ? Container(
-                                            margin: const EdgeInsets.all(4.0),
-                                            width: 50,
-                                            height: 50,
-                                            // margin: const EdgeInsets.only(bottom: 8),
-                                            // padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              border: Border.all(
-                                                width: 3,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.network(
-                                                clickedDestination
-                                                    .photoUrl[showImageIndex],
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            margin: const EdgeInsets.all(4),
-                                            width: 50,
-                                            height: 50,
-                                            clipBehavior: Clip.antiAlias,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              child: Image.network(
-                                                clickedDestination
-                                                    .photoUrl[index],
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                        AppLightText(
+                          spacing: 2,
+                          padding: EdgeInsets.zero,
+                          text: clickedDestination.region,
+                          size: 11,
+                          color: Colors.white,
+                          isShowIcon: true,
+                          icon: Icon(
+                            size: 15,
+                            Icons.place,
+                            color: Colors.white,
                           ),
-                        ),
+                        )
                       ],
                     ),
+                  ),
+                  background: Builder(
+                    builder: (BuildContext context) {
+                      return MyBackground(
+                          clickedDestination: clickedDestination);
+                    },
                   ),
                 ),
               ),
@@ -303,52 +176,50 @@ class _DetailScreenState extends State<DetailScreen>
                 SliverToBoxAdapter(
                   child: Container(
                     width: double.maxFinite,
-                    height: double.maxFinite,
+                    height: MediaQuery.of(context).size.height * .4,
                     child: Column(
                       children: [
-                        Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            // color: Colors.amberAccent,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                AppLargeText(
-                                  text: "Overview",
-                                  color: Colors.black,
-                                  textAlign: TextAlign.left,
-                                  size: 22,
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                AppLightText(
-                                  spacing: 16,
-                                  text: clickedDestination.overview,
-                                  padding: EdgeInsets.zero,
-                                )
-                              ],
-                            ),
+                        Container(
+                          width: double.infinity,
+                          // color: Colors.amberAccent,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              AppLargeText(
+                                text: "Overview",
+                                color: Colors.black,
+                                textAlign: TextAlign.left,
+                                size: 22,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              AppLightText(
+                                spacing: 16,
+                                text: clickedDestination.overview,
+                                padding: EdgeInsets.zero,
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
                           height: 15,
                         ),
-                        CustomButton(
-                          onTap: showDestinationOnMap,
-                          buttonText: "View On Map",
-                          borderRadius: 20,
-                          margin: 20,
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        )
+                        // CustomButton(
+                        //   onTap: showDestinationOnMap,
+                        //   buttonText: "View On Map",
+                        //   borderRadius: 20,
+                        //   margin: 20,
+                        // ),
+                        // const SizedBox(
+                        //   height: 25,
+                        // )
                       ],
                     ),
                   ),
@@ -358,8 +229,143 @@ class _DetailScreenState extends State<DetailScreen>
           },
         ),
       ),
+      floatingActionButton: CustomButton(
+        borderRadius: 25,
+        buttonText: "View on Map",
+        onTap: showDestinationOnMap,
+        margin: 20,
+      ),
+      // floatingActionButton: Container(
+      //   decoration:
+      //       BoxDecoration(color: Colors., boxShadow: [
+      //     BoxShadow(
+      //       color: Colors.black.withOpacity(0.2),
+      //       spreadRadius: 4,
+      //       blurRadius: 10,
+      //       // offset: Offset(0,1),
+      //     )
+      //   ]),
+      //   // margin: EdgeInsets.,
+      //   // color: Colors.redAccent,
+      //   height: 80,
+      //   width: double.infinity,
+      //   child: Text("Button"),
+      // ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+}
+
+class MyBackground extends StatefulWidget {
+  final Destination clickedDestination;
+
+  MyBackground({required this.clickedDestination});
+
+  @override
+  State<MyBackground> createState() => _MyBackgroundState();
+}
+
+class _MyBackgroundState extends State<MyBackground> {
+  int showImageIndex = 0;
+
+  void verticalListItemClicked(int index) {
+    setState(() {
+      showImageIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final FlexibleSpaceBarSettings? settings =
+        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    if (settings != null) {
+      print(settings.currentExtent);
+      print(settings.maxExtent);
+      print(settings.minExtent);
+      print(settings.isScrolledUnder);
+      print(settings.toolbarOpacity);
+    }
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned(
+          height: settings!.maxExtent,
+          width: MediaQuery.of(context).size.width,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.zero,
+              bottomRight: Radius.zero,
+            ),
+            child: Image.network(
+              widget.clickedDestination.photoUrl[showImageIndex],
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          right: 20,
+          bottom: 0,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: LimitedBox(
+              maxHeight: MediaQuery.of(context).size.height * 0.3,
+              maxWidth: 60,
+              child: Container(
+                color: Colors.white,
+                child: ListView.builder(
+                  itemCount: widget.clickedDestination.photoUrl.length,
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => verticalListItemClicked(index),
+                    child: showImageIndex == index
+                        ? Container(
+                            margin: const EdgeInsets.all(4.0),
+                            width: 50,
+                            height: 50,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                width: 3,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                widget.clickedDestination
+                                    .photoUrl[showImageIndex],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            margin: const EdgeInsets.all(4),
+                            width: 50,
+                            height: 50,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                widget.clickedDestination.photoUrl[index],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 //   @override
 //   Widget build(BuildContext context) {
 //     print("Detail Screen");
@@ -693,4 +699,3 @@ class _DetailScreenState extends State<DetailScreen>
 // floatingActionButton: Container(color: Colors.amber,width: double.infinity, height: 20,),
 //     );
 //   }
-}
