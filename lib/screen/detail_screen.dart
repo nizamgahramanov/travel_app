@@ -14,7 +14,7 @@ import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:travel_app/widgets/detail_info.dart';
 import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
-import '../model/circle_tab_indicator.dart';
+import '../model/underlined_tab_indicator.dart';
 import '../model/destination.dart';
 import 'package:provider/provider.dart';
 import '../providers/destinations.dart';
@@ -247,28 +247,30 @@ class _DetailScreenState extends State<DetailScreen>
           },
         ),
       ),
-      floatingActionButton: CustomButton(
-        borderRadius: 25,
-        buttonText: "View on Map",
-        onTap: showDestinationOnMap,
-        margin: 20,
-      ),
-      // floatingActionButton: Container(
-      //   decoration:
-      //       BoxDecoration(color: Colors., boxShadow: [
-      //     BoxShadow(
-      //       color: Colors.black.withOpacity(0.2),
-      //       spreadRadius: 4,
-      //       blurRadius: 10,
-      //       // offset: Offset(0,1),
-      //     )
-      //   ]),
-      //   // margin: EdgeInsets.,
-      //   // color: Colors.redAccent,
-      //   height: 80,
-      //   width: double.infinity,
-      //   child: Text("Button"),
+      // floatingActionButton: CustomButton(
+      //   borderRadius: 25,
+      //   buttonText: "View on Map",
+      //   onTap: showDestinationOnMap,
+      //   margin: 20,
       // ),
+      floatingActionButton: Container(
+        height: 80,
+        width: double.infinity,
+        child: Text("Button"),
+        color: Colors.white,
+        foregroundDecoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Colors.white,
+              Colors.white.withOpacity(0.7),
+              Colors.white.withOpacity(0.2),
+              Colors.white.withOpacity(0),
+            ],
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

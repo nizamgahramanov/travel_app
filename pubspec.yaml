@@ -86,7 +86,6 @@ flutter:
     - assets/images/profile_screen.jpg
     - assets/images/destination_search.svg
     - assets/images/search.jpg
-    - assets/images/search2.jpg
     - assets/images/google-color-icon.svg
     - assets/svg/search_screen.svg
     - assets/svg/favorite_screen.svg

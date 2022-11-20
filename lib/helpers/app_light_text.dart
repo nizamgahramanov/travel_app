@@ -32,6 +32,7 @@ class AppLightText extends StatelessWidget {
         child: Wrap(alignment: WrapAlignment.center, spacing: spacing, children: [
           if (isShowIcon) icon!,
           Text(
+            overflow: TextOverflow.fade,
             text,
             style: TextStyle(
               color: color,
