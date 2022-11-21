@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/custom_underline_tab_indicator.dart';
+import 'package:travel_app/helpers/custom_tab_indicator.dart';
 import 'package:travel_app/widgets/carousel_item.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/widgets/staggered_grid_item.dart';
@@ -53,24 +53,28 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TabBar(
-                      labelPadding: EdgeInsets.only(right: 22),
-                      labelColor: AppColors.textColor1,
+                      labelPadding: const EdgeInsets.only(right: 22),
+                      unselectedLabelColor: Colors.grey,
+                      labelColor: Colors.black,
                       controller: _tabController,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicator: CustomUnderlineTabIndicator(
-                          color: AppColors.buttonBackgroundColor),
+                      indicator: CustomTabIndicator(
+                        color: AppColors.buttonBackgroundColor,
+                        isCircle: false,
+                      ),
                       // unselectedLabelColor:
                       //     AppColors.mainTextColor.withOpacity(0.8),
                       tabs: tabNames
                           .map(
                             (e) => Tab(
-                              child: AppLightText(
-                                spacing: 16,
-                                text: e.values.first,
-                                size: 14,
-                                color: AppColors.buttonBackgroundColor,
-                                padding: EdgeInsets.zero,
+                              child: Text(
+                                e.values.first,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat',
+                                ),
                               ),
                             ),
                           )

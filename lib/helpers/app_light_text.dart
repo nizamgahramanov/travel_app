@@ -10,6 +10,7 @@ class AppLightText extends StatelessWidget {
   final Alignment alignment;
   final EdgeInsets padding;
   final double spacing;
+  final FontWeight? fontWeight;
   AppLightText({
     Key? key,
     this.size = 16,
@@ -20,6 +21,7 @@ class AppLightText extends StatelessWidget {
     this.alignment = Alignment.centerLeft,
     required this.padding,
     required this.spacing,
+    this.fontWeight = FontWeight.normal
   }) : super(key: key);
 
   @override
@@ -29,20 +31,24 @@ class AppLightText extends StatelessWidget {
       // color: Colors.amberAccent,
       child: Align(
         alignment: alignment,
-        child: Wrap(alignment: WrapAlignment.center, spacing: spacing, children: [
-          if (isShowIcon) icon!,
-          Text(
-            overflow: TextOverflow.fade,
-            text,
-            style: TextStyle(
-              color: color,
-              fontSize: size,
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Montserrat',
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          spacing: spacing,
+          children: [
+            if (isShowIcon) icon!,
+            Text(
+              overflow: TextOverflow.fade,
+              text,
+              style: TextStyle(
+                color: color,
+                fontSize: size,
+                fontWeight: fontWeight,
+                fontFamily: 'Montserrat',
+              ),
+              // textAlign: textAlign,
             ),
-            // textAlign: textAlign,
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }
