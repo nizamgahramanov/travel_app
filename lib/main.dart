@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
         );
       case Wrapper.routeName:
         return CustomPageRoute(
-          child: Wrapper(isLogin: false, bottomNavIndex: 3),
+          child: Wrapper(isLogin: false, bottomNavIndex: 1),
           settings: settings,
         );
     }

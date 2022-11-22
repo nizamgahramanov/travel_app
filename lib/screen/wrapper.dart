@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_colors.dart';
+import '../helpers/custom_buttom_navigation_bar.dart';
 import '../helpers/custom_tab_indicator.dart';
 import 'algolia_search_screen.dart';
 import 'favorite_screen.dart';
@@ -11,6 +11,7 @@ import 'login_signup_screen.dart';
 class Wrapper extends StatefulWidget {
   final bool isLogin;
   int bottomNavIndex;
+
   static const routeName = '/wrapper';
   Wrapper({
     Key? key,
@@ -23,22 +24,32 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
+  ValueNotifier<int> _currentPageNotifier = ValueNotifier(0);
   void _onItemTapped(int index) {
     setState(() {
       widget.bottomNavIndex = index;
     });
   }
 
-  late TabController _tabController;
+  // set currentPage(int thePage) {
+  //   widget.bottomNavIndex = thePage;
+  //   _currentPageNotifier.value = thePage;
+  // }
+  // late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(vsync: this, length: 4);
+    // _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
   Widget build(BuildContext context) {
+    // _currentPageNotifier.addListener(() {
+    //   print("DASD");
+    //   print(_currentPageNotifier.value);
+    //
+    // });
     List<Widget> _icons = [
       const Icon(Icons.home_filled),
       const Icon(Icons.search),
@@ -54,90 +65,69 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: SafeArea(bottom: false, child: screens[widget.bottomNavIndex]!),
-      bottomNavigationBar: Container(
-        height: 100,
-        padding: const EdgeInsets.all(15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            color: Colors.black.withOpacity(0.8),
-            child: TabBar(
-              onTap: _onItemTapped,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white.withOpacity(0.4),
-              indicator: const CustomTabIndicator(
-                color: Colors.white,
-                isCircle: true,
-                radius: 3,
-              ),
-              tabs: _icons
-                  .map(
-                    (icon) => Tab(
-                      child: icon,
-                    ),
-                  )
-                  .toList(),
-              controller: _tabController,
+      bottomNavigationBar: BottomNavigationBar(
+
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: widget.bottomNavIndex == 0 ? const Icon(
+              Icons.home,
+            ) : const Icon(
+              Icons.home_outlined,
             ),
+            label: 'Home',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: widget.bottomNavIndex == 1
+                ? const Icon(
+                    Icons.saved_search_outlined,
+                  )
+                : const Icon(
+                    Icons.search,
+                  ),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: widget.bottomNavIndex == 2
+                ? const Icon(
+                    Icons.favorite_rounded,
+                  )
+                : const Icon(
+                    Icons.favorite_border_outlined,
+                  ),
+            label: 'Favorite',
+          ),
+          BottomNavigationBarItem(
+            icon: widget.isLogin
+                ? widget.bottomNavIndex == 3
+                    ? const Icon(
+                        Icons.person,
+                      )
+                    : const Icon(
+                        Icons.person_outline_rounded,
+                      )
+                : widget.bottomNavIndex == 3
+                    ? const Icon(
+                        Icons.login,
+                      )
+                    : const Icon(
+                        Icons.login_outlined,
+                      ),
+            label: widget.isLogin ? "Profile" : "Login",
+          ),
+        ],
+        onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: widget.bottomNavIndex,
+        selectedFontSize: 13,
+        unselectedFontSize: 13,
+        selectedItemColor: AppColors.buttonBackgroundColor,
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
+        // selectedLabelStyle: TextStyle(color: Colors.black),
+        // unselectedIconTheme: IconThemeData(color: Colors.black),
+        // elevation: 10,
+        unselectedItemColor: AppColors.buttonBackgroundColor.withOpacity(0.6),
       ),
-      // bottomNavigationBar: GNav(
-      //   tabs: [
-      //     GButton(icon: Icons.home, text: "Home",),
-      //     GButton(icon: Icons.search, text: "Search",),
-      //     GButton(
-      //       icon: Icons.favorite_border, text: "Favorite",
-      //     ),
-      //     GButton(
-      //       icon: widget.isLogin ? Icons.person : Icons.login,
-      //       text: widget.isLogin ? "Profile": "Log in",
-      //     )
-      //   ],
-      // ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   items: <BottomNavigationBarItem>[
-      //     const BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.home,
-      //       ),
-      //       label: 'Home',
-      //     ),
-      //     const BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.search,
-      //       ),
-      //       label: 'Search',
-      //     ),
-      //     const BottomNavigationBarItem(
-      //       icon: Icon(
-      //         Icons.favorite_border,
-      //       ),
-      //       label: 'Favorite',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: widget.isLogin
-      //           ? const Icon(
-      //               Icons.person,
-      //             )
-      //           : const Icon(
-      //               Icons.login,
-      //             ),
-      //       label: widget.isLogin ? "Profile" : "Login",
-      //     ),
-      //   ],
-      //   onTap: _onItemTapped,
-      //   type: BottomNavigationBarType.fixed,
-      //   currentIndex: widget.bottomNavIndex,
-      //   selectedFontSize: 0,
-      //   unselectedFontSize: 0,
-      //   selectedItemColor: AppColors.buttonBackgroundColor,
-      //   showUnselectedLabels: false,
-      //   showSelectedLabels: true,
-      //   // selectedIconTheme:IconThemeData() ,
-      //   elevation: 0,
-      //   unselectedItemColor: AppColors.buttonBackgroundColor.withOpacity(0.6),
-      // ),
     );
   }
 }
