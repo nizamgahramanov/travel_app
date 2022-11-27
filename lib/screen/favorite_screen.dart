@@ -8,6 +8,8 @@ import 'package:travel_app/services/firebase_firestore_service.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_large_text.dart';
 import '../model/destination.dart';
+import '../widgets/staggered_grid_item.dart';
+import 'detail_screen.dart';
 import 'no_favorite_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -19,97 +21,136 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _firebaseAuth == null ? const NoFavoriteScreen():StreamBuilder<List<Destination>>(
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.connectionState == ConnectionState.active ||
-            snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return const Text('Error');
-          } else {
-            print(_firebaseAuth);
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 12,
+    return _firebaseAuth == null
+        ? const NoFavoriteScreen()
+        : SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
                 vertical: 0,
               ),
-              child: MasonryGridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 12,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return Stack(
-                          children: [
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                                child: Image.network(
-                                  snapshot.data![index].photoUrl[0],
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+              child: StreamBuilder<List<Destination>>(
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.connectionState ==
+                          ConnectionState.active ||
+                      snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return const Text('Error');
+                    } else {
+                      print(_firebaseAuth);
+                      return MasonryGridView.count(
+                        crossAxisCount: 2,
+                        itemCount: snapshot.data!.length,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                DetailScreen.routeName,
+                                arguments: Destination(
+                                    id: snapshot.data![index].id,
+                                    name: snapshot.data![index].name,
+                                    overview: snapshot.data![index].overview,
+                                    region: snapshot.data![index].region,
+                                    type: snapshot.data![index].type,
+                                    photoUrl: snapshot.data![index].photoUrl,
+                                    geoPoint: snapshot.data![index].geoPoint),
+                              );
+                            },
+                            child: StaggeredGridItem(
+                              name: snapshot.data![index].name,
+                              region: snapshot.data![index].region,
+                              photo: snapshot.data![index].photoUrl[0],
                             ),
-                            Positioned(
-                              left: 15,
-                              bottom: 15,
-                              right: 30,
-                              child: Container(
-                                height: 70,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: AppColors.inputColor.withOpacity(0.7),
-                                ),
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: AppLargeText(
-                                        text: snapshot.data![index].name,
-                                        size: 21,
-                                        color: AppColors.mainTextColor,
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: AppLargeText(
-                                        text: snapshot.data![index].region,
-                                        size: 10,
-                                        color: AppColors.buttonBackgroundColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-            );
-          }
-        } else {
-          return const Center(
-            child: Text("SOMETHING UNKNOWN"),
+                          );
+                        },
+                      );
+                      // return Container(
+                      //   margin: const EdgeInsets.symmetric(
+                      //     horizontal: 12,
+                      //     vertical: 0,
+                      //   ),
+                      // child: MasonryGridView.count(
+                      //         crossAxisCount: 2,
+                      //         crossAxisSpacing: 10,
+                      //         mainAxisSpacing: 12,
+                      //         itemCount: snapshot.data!.length,
+                      //         itemBuilder: (context, index) {
+                      //           return Stack(
+                      //             children: [
+                      //               Container(
+                      //                 decoration: const BoxDecoration(
+                      //                   color: Colors.transparent,
+                      //                   borderRadius: BorderRadius.all(
+                      //                     Radius.circular(15),
+                      //                   ),
+                      //                 ),
+                      //                 child: ClipRRect(
+                      //                   borderRadius: const BorderRadius.all(
+                      //                     Radius.circular(15),
+                      //                   ),
+                      //                   child: Image.network(
+                      //                     snapshot.data![index].photoUrl[0],
+                      //                     fit: BoxFit.cover,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               Positioned(
+                      //                 left: 15,
+                      //                 bottom: 15,
+                      //                 right: 30,
+                      //                 child: Container(
+                      //                   height: 70,
+                      //                   decoration: BoxDecoration(
+                      //                     borderRadius: BorderRadius.circular(25),
+                      //                     color: AppColors.inputColor.withOpacity(0.7),
+                      //                   ),
+                      //                   padding: const EdgeInsets.only(left: 10),
+                      //                   child: Column(
+                      //                     crossAxisAlignment: CrossAxisAlignment.start,
+                      //                     mainAxisAlignment: MainAxisAlignment.center,
+                      //                     children: [
+                      //                       Align(
+                      //                         alignment: Alignment.centerLeft,
+                      //                         child: AppLargeText(
+                      //                           text: snapshot.data![index].name,
+                      //                           size: 21,
+                      //                           color: AppColors.mainTextColor,
+                      //                         ),
+                      //                       ),
+                      //                       Align(
+                      //                         alignment: Alignment.centerLeft,
+                      //                         child: AppLargeText(
+                      //                           text: snapshot.data![index].region,
+                      //                           size: 10,
+                      //                           color: AppColors.buttonBackgroundColor,
+                      //                         ),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           );
+                      //         },
+                      //       ),
+                      // );
+                    }
+                  } else {
+                    return const Center(
+                      child: Text("SOMETHING UNKNOWN"),
+                    );
+                  }
+                },
+                stream: FireStoreService().getFavoriteList(),
+              ),
+            ),
           );
-        }
-      },
-      stream: FireStoreService().getFavoriteList(),
-    );
   }
   // @override
   // Widget build(BuildContext context) {
