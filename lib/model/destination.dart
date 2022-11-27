@@ -11,9 +11,7 @@ class Destination {
   final String region;
   final String type;
   final GeoPoint geoPoint;
-  List<String> photoUrl;
-
-  // final List<Review> reviews;
+  List<dynamic> photoUrl;
 
   Destination({
     required this.id,
