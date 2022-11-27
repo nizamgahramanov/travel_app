@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
+import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
 import 'package:travel_app/screen/main_screen.dart';
@@ -28,9 +29,11 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
+  ScrollController _scrollController = ScrollController();
   bool isSelecting = false;
   var user = FirebaseAuth.instance.currentUser;
-
+  bool _innerListIsScrolled = false;
+  Key _key = const PageStorageKey({});
   void toggleFavorite(Destination destination) {
     if (user != null) {
       // store destination in firestore database
@@ -58,6 +61,34 @@ class _DetailScreenState extends State<DetailScreen>
     }
   }
 
+  void _updateScrollPosition() {
+    if (!_innerListIsScrolled &&
+        _scrollController.position.extentAfter == 0.0) {
+      setState(() {
+        _innerListIsScrolled = true;
+      });
+    } else if (_innerListIsScrolled &&
+        _scrollController.position.extentAfter > 0.0) {
+      setState(() {
+        _innerListIsScrolled = false;
+        // Reset scroll positions of the TabBarView pages
+        _key = new PageStorageKey({});
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _scrollController.addListener(_updateScrollPosition);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_updateScrollPosition);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final clickedDestination =
@@ -73,33 +104,72 @@ class _DetailScreenState extends State<DetailScreen>
           .pushNamed(MapScreen.routeName, arguments: mapArgument);
     }
 
+    final FlexibleSpaceBarSettings? settings =
+        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    print(settings);
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
+        controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          print("_innerListIsScrolled");
+          print(_innerListIsScrolled);
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
+                // titleSpacing: 20,
                 centerTitle: true,
-                titleSpacing: 0,
-                backgroundColor: AppColors.buttonBackgroundColor,
-                // automaticallyImplyLeading: false,
-                leading: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: EdgeInsets.zero,
-                    primary: AppColors.buttonBackgroundColor,
-                  ),
-                  child: Icon(
-                    Icons.arrow_back_rounded,
-                    size: 30,
-                    color: AppColors.backgroundColorOfApp,
+
+                leadingWidth: 75,
+                // title: Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: <Widget>[
+                //     IconButton(
+                //       onPressed: () => Navigator.pop(context),
+                //       icon: Icon(Icons.arrow_back, color: Colors.white),
+                //     ),
+                //   ],
+                // ),
+                // titleSpacing: 0,
+                backgroundColor: _innerListIsScrolled
+                    ? AppColors.buttonBackgroundColor
+                    : AppColors.backgroundColorOfApp,
+                automaticallyImplyLeading: true,
+                // leading: Container(margin: EdgeInsets.only(left: 20),
+                //   color: Colors.redAccent,
+                //   child: ClipOval(
+                //     child: Material(
+                //       color: Colors.blue, // Button color
+                //       child: InkWell(
+                //         splashColor: Colors.red, // Splash color
+                //         onTap: () {},
+                //         child: SizedBox(width: 30, height: 30, child: Icon(Icons.menu)),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                leading: Container(
+                  margin: const EdgeInsets.only(left: 15, right:5, top: 5,bottom: 5),
+                  // width: 60,
+                  // color: Colors.redAccent,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: EdgeInsets.zero,
+                      primary: AppColors.buttonBackgroundColor,
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_rounded,
+                      color: AppColors.backgroundColorOfApp,
+                    ),
                   ),
                 ),
+                titleTextStyle: const TextStyle(color: Colors.redAccent),
                 actions: [
                   StreamBuilder<QuerySnapshot>(
                       stream: user == null
@@ -110,24 +180,29 @@ class _DetailScreenState extends State<DetailScreen>
                         if (snapshot.connectionState == ConnectionState.none ||
                             snapshot.connectionState ==
                                 ConnectionState.active) {
-                          return TextButton(
-                            onPressed: () => toggleFavorite(clickedDestination),
-                            style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                              padding: const EdgeInsets.all(10),
-                              primary: AppColors.buttonBackgroundColor,
+                          return Container(
+                            // color: Colors.redAccent,
+                            width: 50,
+                            margin: const EdgeInsets.only(right:15, left:5, top: 5, bottom: 5),
+                            child: TextButton(
+                              onPressed: () =>
+                                  toggleFavorite(clickedDestination),
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                padding: EdgeInsets.zero,
+                                primary: AppColors.buttonBackgroundColor,
+                              ),
+                              child: !snapshot.hasData ||
+                                      snapshot.data!.docs.isEmpty
+                                  ? Icon(
+                                      Icons.favorite_border_outlined,
+                                      color: AppColors.backgroundColorOfApp,
+                                    )
+                                  : Icon(
+                                      Icons.favorite,
+                                      color: AppColors.backgroundColorOfApp,
+                                    ),
                             ),
-                            child:
-                                !snapshot.hasData || snapshot.data!.docs.isEmpty
-                                    ? Icon(
-                                        Icons.favorite_border_outlined,
-                                        color: AppColors.backgroundColorOfApp,
-                                        size: 30,
-                                      )
-                                    : Icon(
-                                        Icons.favorite,
-                                        color: AppColors.backgroundColorOfApp,
-                                      ),
                           );
                         } else {
                           return const Center(
@@ -137,37 +212,37 @@ class _DetailScreenState extends State<DetailScreen>
                       }),
                 ],
                 expandedHeight: MediaQuery.of(context).size.height * .6,
-                floating: false,
+                floating: true,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
+                  // titlePadding: EdgeInsets.zero,
                   expandedTitleScale: 1.7,
-                  // titlePadding:
-                  //     const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  collapseMode: CollapseMode.parallax,
+                  titlePadding: _innerListIsScrolled
+                      ? const EdgeInsets.symmetric(vertical: 10, horizontal: 70)
+                      : const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   centerTitle: false,
                   title: Container(
                     // color: Colors.redAccent,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         AppLargeText(
                           text: clickedDestination.name,
-                          size: 18,
+                          size: 16,
                           color: AppColors.backgroundColorOfApp,
                         ),
-                        AppLightText(
-                          spacing: 2,
-                          padding: EdgeInsets.zero,
-                          text: clickedDestination.region,
-                          size: 11,
-                          color: Colors.white,
-                          isShowIcon: true,
-                          icon: Icon(
-                            size: 15,
-                            Icons.place,
-                            color: Colors.white,
-                          ),
-                        )
+                        CustomIconText(
+                            text: clickedDestination.region,
+                            size: 12,
+                            color: AppColors.backgroundColorOfApp,
+                            icon: Icon(
+                              Icons.location_on_outlined,
+                              size: 12,
+                              color: AppColors.backgroundColorOfApp,
+                            ),
+                            spacing: 3)
                       ],
                     ),
                   ),
@@ -247,16 +322,10 @@ class _DetailScreenState extends State<DetailScreen>
           },
         ),
       ),
-      // floatingActionButton: CustomButton(
-      //   borderRadius: 25,
-      //   buttonText: "View on Map",
-      //   onTap: showDestinationOnMap,
-      //   margin: 20,
-      // ),
       floatingActionButton: Container(
         height: 80,
         width: double.infinity,
-        child: Text("Button"),
+        child:  Text("Button"),
         color: Colors.white,
         foregroundDecoration: BoxDecoration(
           gradient: LinearGradient(
@@ -301,9 +370,7 @@ class _MyBackgroundState extends State<MyBackground> {
     if (settings != null) {
       print(settings.currentExtent);
       print(settings.maxExtent);
-      print(settings.minExtent);
-      print(settings.isScrolledUnder);
-      print(settings.toolbarOpacity);
+      print(kToolbarHeight);
     }
     return Stack(
       fit: StackFit.expand,
@@ -312,10 +379,7 @@ class _MyBackgroundState extends State<MyBackground> {
           height: settings!.maxExtent,
           width: MediaQuery.of(context).size.width,
           child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.zero,
-              bottomRight: Radius.zero,
-            ),
+            borderRadius: BorderRadius.circular(30),
             child: Image.network(
               widget.clickedDestination.photoUrl[showImageIndex],
               fit: BoxFit.cover,

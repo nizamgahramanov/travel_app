@@ -20,7 +20,7 @@ class StaggeredGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
+      // padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
           Radius.circular(15),

@@ -97,7 +97,7 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                         return MasonryGridView.count(
                           crossAxisCount: 2,
                           itemCount: destinationIterable.length,
-                          crossAxisSpacing: 10,
+                          crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () {

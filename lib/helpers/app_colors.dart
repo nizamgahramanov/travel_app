@@ -7,5 +7,5 @@ class AppColors {
   static final Color mainTextColor = Color(0xFF000000);
   static final Color buttonBackgroundColor = Color(0xFF7A6767);
   static final Color inputColor = Color(0xFFFAF7EE);
-  static final Color backgroundColorOfApp = Color(0xFFEFEEEE);
+  static final Color backgroundColorOfApp = Color(0xFFF5F5F5);
 }

@@ -37,6 +37,7 @@ class AppLightText extends StatelessWidget {
           children: [
             if (isShowIcon) icon!,
             Text(
+              textAlign: TextAlign.justify,
               overflow: TextOverflow.fade,
               text,
               style: TextStyle(
@@ -45,7 +46,6 @@ class AppLightText extends StatelessWidget {
                 fontWeight: fontWeight,
                 fontFamily: 'Montserrat',
               ),
-              // textAlign: textAlign,
             ),
           ],
         ),
