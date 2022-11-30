@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-
 import '../helpers/app_colors.dart';
-import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 
-class ChangeNameScreen extends StatefulWidget {
-  const ChangeNameScreen({Key? key}) : super(key: key);
-  static const routeName = '/change-name';
+class ChangeFirstnameScreen extends StatefulWidget {
+  const ChangeFirstnameScreen({Key? key}) : super(key: key);
+  static const routeName = '/change-firstname';
   @override
-  State<ChangeNameScreen> createState() => _ChangeNameScreenState();
+  State<ChangeFirstnameScreen> createState() => _ChangeFirstnameScreenState();
 }
 
-class _ChangeNameScreenState extends State<ChangeNameScreen> {
+class _ChangeFirstnameScreenState extends State<ChangeFirstnameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.mainColor,
+      backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
@@ -35,11 +33,11 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                 pinned: true,
                 //floating: true,
                 stretch: true,
-                expandedHeight: 100.0,
+                expandedHeight: 120.0,
                 flexibleSpace: const FlexibleSpaceBar(
                   centerTitle: true,
                   title: Text(
-                    "Change Name",
+                    "Change Firstname",
                     // "Great time to discover",
                     style: TextStyle(color: Colors.black),
                   ),
@@ -61,20 +59,20 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                   child: Container(
                     margin:
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    color: AppColors.mainColor,
+                    // color: AppColors.bu,
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: Column(
                       children: [
                         const SizedBox(
                           height: 20,
                         ),
-                        AppLightText(
-                          spacing: 16,
-                          text:
-                              "Enter your new first name  and or last name with your password. A confirmation link will be sent to your email address.",
-                          size: 14,
-                          padding: EdgeInsets.zero,
-                        ),
+                        // AppLightText(
+                        //   spacing: 16,
+                        //   text:
+                        //       "Enter your new first name with your password. A confirmation link will be sent to your email address.",
+                        //   size: 14,
+                        //   padding: EdgeInsets.zero,
+                        // ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -158,12 +156,12 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 130,
-                    color: AppColors.mainColor,
-                  ),
-                ),
+                // SliverToBoxAdapter(
+                //   child: Container(
+                //     height: 130,
+                //     color: AppColors.backgroundColorOfApp,
+                //   ),
+                // ),
               ],
             );
           },

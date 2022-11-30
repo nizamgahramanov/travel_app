@@ -64,6 +64,7 @@ class StaggeredGridItem extends StatelessWidget {
                 size: 13,
                 color: AppColors.buttonBackgroundColor,
               ),
+              isIconFirst: true,
             ),
           ),
           const SizedBox(

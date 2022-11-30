@@ -6,6 +6,8 @@ class CustomIconText extends StatelessWidget {
   final Color color;
   final Widget icon;
   final double spacing;
+  final bool isIconFirst;
+  final MainAxisAlignment? mainAxisAlignment;
   CustomIconText({
     Key? key,
     this.size = 16,
@@ -13,18 +15,23 @@ class CustomIconText extends StatelessWidget {
     this.color = Colors.black38,
     required this.icon,
     required this.spacing,
+    required this.isIconFirst,
+    this.mainAxisAlignment
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      // mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: mainAxisAlignment==null?MainAxisAlignment.start:mainAxisAlignment! ,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        icon,
-        SizedBox(
-          width: spacing,
-        ),
+        if(isIconFirst)
+          icon,
+        if(isIconFirst)
+          SizedBox(
+            width: spacing,
+          ),
         Text(
           text,
           style: TextStyle(
@@ -34,6 +41,12 @@ class CustomIconText extends StatelessWidget {
             fontFamily: 'Montserrat',
           ),
         ),
+        if(!isIconFirst)
+        SizedBox(
+          width: spacing,
+        ),
+        if(!isIconFirst)
+        icon,
       ],
     );
     // return RichText(

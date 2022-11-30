@@ -3,8 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
-import 'package:travel_app/screen/change_name.dart';
+import 'package:travel_app/helpers/custom_icon_text.dart';
+import 'package:travel_app/helpers/customized_switch.dart';
+import 'package:travel_app/model/firestore_user.dart';
+import 'package:travel_app/screen/change_firstname.dart';
 import 'package:travel_app/services/auth_service.dart';
+import 'package:travel_app/services/firebase_firestore_service.dart';
 
 import '../helpers/app_large_text.dart';
 import '../helpers/custom_switch.dart';
@@ -18,8 +22,7 @@ class ProfileScreen extends StatefulWidget {
   static const routeName = '/profile';
   final List titleList = const [
     "Name",
-    "Email Address",
-    "Change Password",
+    "Email",
   ];
   bool _enable = false;
   @override
@@ -29,7 +32,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   void listTileOnTap(int index) {
     if (index == 0) {
-      Navigator.of(context).pushNamed(ChangeNameScreen.routeName);
+      Navigator.of(context).pushNamed(ChangeFirstnameScreen.routeName);
     } else if (index == 1) {
       Navigator.of(context).pushNamed(ChangeEmailScreen.routeName);
     } else {
@@ -37,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  bool _isSelected = false;
   void logoutAction() {
     Navigator.of(context).pop();
     AuthService().signOut();
@@ -49,6 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       var provider = result.providerData;
       print(")))))))))))))))))))))");
       print(provider[0].providerId);
+      result.uid;
     }
     return Container(
       width: double.maxFinite,
@@ -58,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             color: Colors.yellow,
             width: double.maxFinite,
-            height: MediaQuery.of(context).size.height * 0.38,
+            height: MediaQuery.of(context).size.height * 0.47,
             child: Stack(
               children: [
                 Positioned(
@@ -66,8 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(35),
-                      bottomRight: Radius.circular(35),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(0),
                     ),
                     child: Image.asset(
                       "assets/images/profile_screen.jpg",
@@ -84,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.white,
                     size: 32,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -94,131 +99,118 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                Flexible(
-                  flex: 6,
-                  child: Container(
-                    color: Colors.white,
-                    child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        final data = widget.titleList[index];
-                        return ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 16),
-                          visualDensity:
-                              const VisualDensity(horizontal: 0, vertical: -3),
-                          trailing: const Icon(Icons.edit_outlined),
-                          title: AppLightText(
-                            spacing: 16,
-                            text: data,
-                            size: 16,
-                            color: Colors.black,
-                            padding: EdgeInsets.zero,
-                          ),
-                          subtitle: AppLightText(
-                            spacing: 16,
-                            text: result!.email!,
-                            size: 14,
-                            padding: EdgeInsets.zero,
-                          ),
-                          onTap: () => listTileOnTap(index),
+                FutureBuilder<FirestoreUser>(
+                    future: FireStoreService().getUserBuUID(result!.uid),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<FirestoreUser> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                      separatorBuilder: (_, __) => Divider(
-                        color: AppColors.buttonBackgroundColor,
-                      ),
-                      itemCount: widget.titleList.length,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    color: Colors.white,
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 12.0, left: 16.0, bottom: 0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppLightText(
-                                spacing: 16,
-                                text: "Language",
-                                size: 20,
-                                color: Colors.black,
-                                padding: EdgeInsets.zero,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              CustomSwitch(
-                                value: widget._enable,
-                                onChanged: (bool val) {
-                                  setState(() {
-                                    widget._enable = val;
-                                  });
+                      } else if (snapshot.connectionState ==
+                              ConnectionState.active ||
+                          snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        } else {
+                          return Expanded(
+                            // color: Colors.white,
+                            // width: double.maxFinite,
+                            child: Container(
+                              color: Colors.white,
+                              child: ListView.separated(
+                                padding: EdgeInsets.only(bottom: 0.0),
+                                shrinkWrap: false,
+                                itemBuilder: (context, index) {
+                                  final data = widget.titleList[index];
+                                  return ListTile(
+                                    trailing: const Icon(Icons.edit_outlined),
+                                    title: AppLightText(
+                                      spacing: 16,
+                                      text: data,
+                                      size: 16,
+                                      color: Colors.black,
+                                      padding: EdgeInsets.zero,
+                                    ),
+                                    subtitle: index == 0
+                                        ? AppLightText(
+                                            spacing: 16,
+                                            text:
+                                                '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
+                                            size: 14,
+                                            padding: EdgeInsets.zero,
+                                          )
+                                        : AppLightText(
+                                            spacing: 16,
+                                            text: snapshot.data!.email,
+                                            size: 14,
+                                            padding: EdgeInsets.zero,
+                                          ),
+                                    onTap: () => listTileOnTap(index),
+                                  );
                                 },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Flexible(
-                  child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.only(left: 6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Utility.getInstance().showAlertDialog(
-                                context: context,
-                                alertTitle: "Do want to log out?",
-                                popButtonColor: Colors.red,
-                                popButtonText: "Cancel",
-                                onPopTap: () => Navigator.of(context).pop(),
-                                isShowActionButton: true,
-                                actionButtonText: "Log out",
-                                onTapAction: logoutAction,
-                                actionButtonColor: Colors.red);
-                            // AuthService().signOut();
-                          },
-                          child: AppLightText(
-                            spacing: 16,
-                            text: "Log out",
-                            size: 18,
-                            color: Colors.red,
-                            isShowIcon: true,
-                            icon: Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(math.pi),
-                              child: const Icon(
-                                Icons.logout_rounded,
-                                size: 28,
-                                color: Colors.red,
+                                separatorBuilder: (_, __) => Divider(
+                                  color: AppColors.buttonBackgroundColor,
+                                ),
+                                itemCount: widget.titleList.length,
                               ),
                             ),
-                            padding: EdgeInsets.zero,
-                          ),
-                        ),
-                      ],
+                          );
+                        }
+                      } else {
+                        return const Center(
+                          child: Text("SOMETHING UNKNOWN"),
+                        );
+                      }
+                    }),
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  color: Colors.white,
+                  child: CustomizedSwitch(
+                      label: "Language",
+                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                      value: true,
+                      onChanged: (bool newValue) {
+                        setState(() {
+                          _isSelected = newValue;
+                        });
+                      },
+                  subtitle: 'Azerbaycan'),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Utility.getInstance().showAlertDialog(
+                        context: context,
+                        alertTitle: "Do want to log out?",
+                        popButtonColor: Colors.red,
+                        popButtonText: "Cancel",
+                        onPopTap: () => Navigator.of(context).pop(),
+                        isShowActionButton: true,
+                        actionButtonText: "Log out",
+                        onTapAction: logoutAction,
+                        actionButtonColor: Colors.red);
+                    // AuthService().signOut();
+                  },
+                  child: Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(15),
+                    child: CustomIconText(
+                      text: 'Log out',
+                      color: Colors.redAccent,
+                      spacing: 0,
+                      size: 18,
+                      isIconFirst: false,
+                      icon: const Icon(
+                        Icons.logout_rounded,
+                        size: 28,
+                        color: Colors.red,
+                      ),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
                   ),
                 )

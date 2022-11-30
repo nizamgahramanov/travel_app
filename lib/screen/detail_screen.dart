@@ -120,38 +120,14 @@ class _DetailScreenState extends State<DetailScreen>
               sliver: SliverAppBar(
                 // titleSpacing: 20,
                 centerTitle: true,
-
                 leadingWidth: 75,
-                // title: Row(
-                //   mainAxisAlignment: MainAxisAlignment.start,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: <Widget>[
-                //     IconButton(
-                //       onPressed: () => Navigator.pop(context),
-                //       icon: Icon(Icons.arrow_back, color: Colors.white),
-                //     ),
-                //   ],
-                // ),
-                // titleSpacing: 0,
                 backgroundColor: _innerListIsScrolled
                     ? AppColors.buttonBackgroundColor
                     : AppColors.backgroundColorOfApp,
                 automaticallyImplyLeading: true,
-                // leading: Container(margin: EdgeInsets.only(left: 20),
-                //   color: Colors.redAccent,
-                //   child: ClipOval(
-                //     child: Material(
-                //       color: Colors.blue, // Button color
-                //       child: InkWell(
-                //         splashColor: Colors.red, // Splash color
-                //         onTap: () {},
-                //         child: SizedBox(width: 30, height: 30, child: Icon(Icons.menu)),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 leading: Container(
-                  margin: const EdgeInsets.only(left: 15, right:5, top: 5,bottom: 5),
+                  margin: const EdgeInsets.only(
+                      left: 15, right: 5, top: 5, bottom: 5),
                   // width: 60,
                   // color: Colors.redAccent,
                   child: TextButton(
@@ -183,7 +159,8 @@ class _DetailScreenState extends State<DetailScreen>
                           return Container(
                             // color: Colors.redAccent,
                             width: 50,
-                            margin: const EdgeInsets.only(right:15, left:5, top: 5, bottom: 5),
+                            margin: const EdgeInsets.only(
+                                right: 15, left: 5, top: 5, bottom: 5),
                             child: TextButton(
                               onPressed: () =>
                                   toggleFavorite(clickedDestination),
@@ -220,7 +197,8 @@ class _DetailScreenState extends State<DetailScreen>
                   collapseMode: CollapseMode.parallax,
                   titlePadding: _innerListIsScrolled
                       ? const EdgeInsets.symmetric(vertical: 10, horizontal: 70)
-                      : const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      : const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
                   centerTitle: false,
                   title: Container(
                     // color: Colors.redAccent,
@@ -234,15 +212,17 @@ class _DetailScreenState extends State<DetailScreen>
                           color: AppColors.backgroundColorOfApp,
                         ),
                         CustomIconText(
-                            text: clickedDestination.region,
+                          text: clickedDestination.region,
+                          size: 12,
+                          color: AppColors.backgroundColorOfApp,
+                          icon: Icon(
+                            Icons.location_on_outlined,
                             size: 12,
                             color: AppColors.backgroundColorOfApp,
-                            icon: Icon(
-                              Icons.location_on_outlined,
-                              size: 12,
-                              color: AppColors.backgroundColorOfApp,
-                            ),
-                            spacing: 3)
+                          ),
+                          spacing: 3,
+                          isIconFirst: true,
+                        )
                       ],
                     ),
                   ),
@@ -325,7 +305,7 @@ class _DetailScreenState extends State<DetailScreen>
       floatingActionButton: Container(
         height: 80,
         width: double.infinity,
-        child:  Text("Button"),
+        child: Text("Button"),
         color: Colors.white,
         foregroundDecoration: BoxDecoration(
           gradient: LinearGradient(

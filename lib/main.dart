@@ -4,7 +4,7 @@ import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/add_destination_screen.dart';
 import 'package:travel_app/screen/change_email_screen.dart';
-import 'package:travel_app/screen/change_name.dart';
+import 'package:travel_app/screen/change_firstname.dart';
 import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
@@ -78,9 +78,9 @@ class _MyAppState extends State<MyApp> {
           child: const ChangeEmailScreen(),
           settings: settings,
         );
-      case ChangeNameScreen.routeName:
+      case ChangeFirstnameScreen.routeName:
         return CustomPageRoute(
-          child: const ChangeNameScreen(),
+          child: const ChangeFirstnameScreen(),
           settings: settings,
         );
       case AddDestinationScreen.routeName:

@@ -111,6 +111,15 @@ class FireStoreService {
   //   return _db.collection('Products').document(productId).delete();
   // }
 
+  Future<FirestoreUser> getUserBuUID(String uid){
+    // return _db
+    //     .collection("users")
+    //     .where("uid", isEqualTo: uid)
+    //     .snapshots()
+    //     .map((event) =>
+    // event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).first);
+  return _db.collection("users").doc(uid).get().then((value) => FirestoreUser.fromFirestore(value.data()!));
+  }
   Future<List<dynamic>> getUserByUid(String uid) {
     return _db.collection("users").doc(uid).get().then((value) {
       print("value");
