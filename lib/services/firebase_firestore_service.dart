@@ -149,4 +149,14 @@ class FireStoreService {
             .toList());
     return favoriteList;
   }
+
+  updateUserName(String? firstName, String? lastName, String? uid){
+    print("updateUserName");
+    if(uid != null){
+      DocumentReference docRef = _db.collection('users').doc(uid);
+      var batch = _db.batch();
+      batch.update(docRef, {'firstName':firstName, 'lastName':lastName});
+      batch.commit();
+    }
+  }
 }

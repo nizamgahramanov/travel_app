@@ -50,13 +50,15 @@ class _DetailScreenState extends State<DetailScreen>
         alertMessage: "It is required to sign up before make favorite",
         actionButtonText: "Sign up",
         actionButtonColor: AppColors.buttonBackgroundColor,
-        onTapAction: () => Navigator.of(context).pushNamed(Wrapper.routeName
-            // MaterialPageRoute(
-            //     builder: (context) => Wrapper(
-            //           isLogin: false,
-            //           bottomNavIndex: 3,
-            //         )),
+        onTapAction: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Wrapper(
+              isLogin: false,
+              bottomNavIndex: 1,
             ),
+          ),
+        ),
       );
     }
   }
@@ -196,9 +198,14 @@ class _DetailScreenState extends State<DetailScreen>
                   expandedTitleScale: 1.7,
                   collapseMode: CollapseMode.parallax,
                   titlePadding: _innerListIsScrolled
-                      ? const EdgeInsets.symmetric(vertical: 10, horizontal: 70)
+                      ? const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 70,
+                        )
                       : const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 20),
+                          vertical: 20,
+                          horizontal: 20,
+                        ),
                   centerTitle: false,
                   title: Container(
                     // color: Colors.redAccent,
@@ -229,7 +236,8 @@ class _DetailScreenState extends State<DetailScreen>
                   background: Builder(
                     builder: (BuildContext context) {
                       return MyBackground(
-                          clickedDestination: clickedDestination);
+                        clickedDestination: clickedDestination,
+                      );
                     },
                   ),
                 ),

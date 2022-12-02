@@ -6,7 +6,8 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/helpers/customized_switch.dart';
 import 'package:travel_app/model/firestore_user.dart';
-import 'package:travel_app/screen/change_firstname.dart';
+import 'package:travel_app/reusable/custom_page_route.dart';
+import 'package:travel_app/screen/change_name.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 
@@ -30,9 +31,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void listTileOnTap(int index) {
+  User? result = FirebaseAuth.instance.currentUser;
+  void listTileOnTap(int index, Map<String, String> map) {
     if (index == 0) {
-      Navigator.of(context).pushNamed(ChangeFirstnameScreen.routeName);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChangeNameScreen(
+                  firstName: map.values.first,
+                  lastName: map.values.last,
+                  uid: result?.uid,
+                )),
+      );
     } else if (index == 1) {
       Navigator.of(context).pushNamed(ChangeEmailScreen.routeName);
     } else {
@@ -48,13 +58,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User? result = FirebaseAuth.instance.currentUser;
-    if (result != null) {
-      var provider = result.providerData;
-      print(")))))))))))))))))))))");
-      print(provider[0].providerId);
-      result.uid;
-    }
+
+    // if (result != null) {
+    //   var provider = result!.providerData;
+    //   print(")))))))))))))))))))))");
+    //   print(provider[0].providerId);
+    //   result!.uid;
+    // }
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
@@ -146,7 +156,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             size: 14,
                                             padding: EdgeInsets.zero,
                                           ),
-                                    onTap: () => listTileOnTap(index),
+                                    onTap: () => listTileOnTap(index, {
+                                      'firstname': snapshot.data!.firstName!,
+                                      'lastname': snapshot.data!.lastName!
+                                    }),
                                   );
                                 },
                                 separatorBuilder: (_, __) => Divider(
@@ -170,14 +183,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: Colors.white,
                   child: CustomizedSwitch(
                       label: "Language",
-                      padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       value: true,
                       onChanged: (bool newValue) {
                         setState(() {
                           _isSelected = newValue;
                         });
                       },
-                  subtitle: 'Azerbaycan'),
+                      subtitle: 'Azerbaycan'),
                 ),
                 const SizedBox(
                   height: 8,

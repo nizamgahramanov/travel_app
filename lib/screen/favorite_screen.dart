@@ -4,9 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
-
-import '../helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
 import '../model/destination.dart';
 import '../widgets/staggered_grid_item.dart';
 import 'detail_screen.dart';
