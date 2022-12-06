@@ -74,7 +74,7 @@ class _DetailScreenState extends State<DetailScreen>
       setState(() {
         _innerListIsScrolled = false;
         // Reset scroll positions of the TabBarView pages
-        _key = new PageStorageKey({});
+        _key = const PageStorageKey({});
       });
     }
   }

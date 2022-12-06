@@ -24,7 +24,6 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
-  ValueNotifier<int> _currentPageNotifier = ValueNotifier(0);
   void _onItemTapped(int index) {
     setState(() {
       widget.bottomNavIndex = index;

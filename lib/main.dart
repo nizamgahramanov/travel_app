@@ -73,11 +73,11 @@ class _MyAppState extends State<MyApp> {
           child: const ChangePasswordScreen(),
           settings: settings,
         );
-      case ChangeEmailScreen.routeName:
-        return CustomPageRoute(
-          child: const ChangeEmailScreen(),
-          settings: settings,
-        );
+      // case ChangeEmailScreen.routeName:
+      //   return CustomPageRoute(
+      //     child: const ChangeEmailScreen(),
+      //     settings: settings,
+      //   );
       // case ChangeNameScreen.routeName:
       //   return CustomPageRoute(
       //     child: const ChangeNameScreen(),

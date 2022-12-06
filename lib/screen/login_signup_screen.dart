@@ -8,6 +8,8 @@ import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
+import '../helpers/utility.dart';
+import '../services/firebase_firestore_service.dart';
 import 'login_with_password_screen.dart';
 
 class LoginSignupScreen extends StatefulWidget {
@@ -122,31 +124,57 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   void checkEmailIsRegistered(value) async {
-    List<String> isExistList;
+    List<String> isEmailExistList;
     print("value");
     print(value);
     bool provider = false;
-    isExistList = await _auth.fetchSignInMethodsForEmail(value);
+    isEmailExistList = await _auth.fetchSignInMethodsForEmail(value.trim());
+    final String? base16Encrypted =
+        await FireStoreService().getUserPasswordFromFirestore(value);
     Map<String, dynamic> arguments = {"provider": provider, "email": value};
-    print(isExistList);
-    if (isExistList.isEmpty) {
-      //  go to password page
-      Navigator.pushNamed(
-        context,
-        PasswordScreen.routeName,
-        arguments: arguments,
+    print(isEmailExistList);
+    print(base16Encrypted);
+    if (isEmailExistList.isNotEmpty && base16Encrypted == null) {
+      Utility.getInstance().showAlertDialog(
+        popButtonColor: Colors.red,
+        context: context,
+        alertTitle: "Discrepancy on email",
+        alertMessage:
+            "There is a discrepancy on email. Please, contact support",
+        popButtonText: "Ok",
+        onPopTap: () => Navigator.of(context).pop(),
       );
     } else {
-      provider = true;
-      //  send auth cde to email address
-      if (isExistList[0] == "google.com") {
-        AuthService().signInWithGoogle();
-      } else {
+      if (isEmailExistList.isEmpty) {
+        //  go to password page
         Navigator.pushNamed(
           context,
-          LoginWithPasswordScreen.routeName,
+          PasswordScreen.routeName,
           arguments: arguments,
         );
+      } else {
+        provider = true;
+        //  send auth cde to email address
+        if (isEmailExistList[0] == "google.com") {
+          AuthService().signInWithGoogle();
+        } else {
+          // if (base16Encrypted == null) {
+          //   Utility.getInstance().showAlertDialog(
+          //     popButtonColor: Colors.red,
+          //     context: context,
+          //     alertTitle: "Discrepancy on email",
+          //     alertMessage:
+          //         "There is a discrepancy on email. Please contact support",
+          //     popButtonText: "Ok",
+          //     onPopTap: () => Navigator.of(context).pop(),
+          //   );
+          // } else {
+          Navigator.pushNamed(
+            context,
+            LoginWithPasswordScreen.routeName,
+            arguments: arguments,
+          );
+        }
       }
     }
   }

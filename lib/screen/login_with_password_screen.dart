@@ -35,35 +35,37 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     _login_with_password_form.currentState!.save();
   }
 
-  void isPasswordCorrect(password, context) async {
+  void checkPasswordCorrect(enteredPassword, context) async {
     //    1. Daxil olan userin emailinə vasitəsi ilə firestoredan məlumatlarını çəkirik
     //    2. Melumatlarda encrypt olunmuş passvordu decrypt edib userin daxil etiyi passvordla yoxlayiriq
     //    3. userin daxil etdiyi passvord dogrudursa home page yoneldirik
     //    4. dogru deyilse dialog gosteririk
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final String base16Encrypted =
+    final String? base16Encrypted =
         await FireStoreService().getUserPasswordFromFirestore(args['email']);
-    final String decryptedPassword =
-        EnDeCryption().decryptWithAES(Encrypted.fromBase16(base16Encrypted));
-    print(decryptedPassword);
-    if (decryptedPassword == password) {
+    // final String decryptedPassword =
+    //     EnDeCryption().decryptWithAES(Encrypted.fromBase16(base16Encrypted!));
+    bool isPasswordCorrect = EnDeCryption().isPasswordCorrect(enteredPassword, base16Encrypted!);
+    // print(decryptedPassword);
+    if (isPasswordCorrect) {
       AuthService().loginUser(
         context: context,
         email: args['email'],
-        password: password,
+        password: enteredPassword,
       );
       // I think this approach is not correct
       Navigator.pushNamedAndRemoveUntil(
           context, MainScreen.routeName, (route) => false);
     } else {
       Utility.getInstance().showAlertDialog(
-          popButtonColor: Colors.red,
-          context: context,
-          alertTitle: "Password is correct",
-          alertMessage: "Please check and try again",
-          popButtonText: "Ok",
-          onPopTap: () => Navigator.of(context).pop());
+        popButtonColor: Colors.red,
+        context: context,
+        alertTitle: "Password is correct",
+        alertMessage: "Please check and try again",
+        popButtonText: "Ok",
+        onPopTap: () => Navigator.of(context).pop(),
+      );
     }
   }
 
@@ -109,7 +111,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                       // initSearchDestination(enteredText);
                     },
                     onSaved: (value) {
-                      isPasswordCorrect(value, context);
+                      checkPasswordCorrect(value, context);
                     },
                     decoration: InputDecoration(
                       filled: true,

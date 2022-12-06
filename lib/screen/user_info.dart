@@ -3,6 +3,7 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
+import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
@@ -19,9 +20,61 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   final _form = GlobalKey<FormState>();
+  // String firstName = "";
+  // String lastName = "";
+  final _lastnameFocusNode = FocusNode();
+  final _firstnameFocusNode = FocusNode();
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _firstnameController = TextEditingController();
+  final TextEditingController _lastnameController = TextEditingController();
+  bool _innerListIsScrolled = false;
+  Key _key = const PageStorageKey({});
+  bool isShowSaveButton = false;
+  void _updateScrollPosition() {
+    if (!_innerListIsScrolled &&
+        _scrollController.position.extentAfter == 0.0) {
+      setState(() {
+        _innerListIsScrolled = true;
+      });
+    } else if (_innerListIsScrolled &&
+        _scrollController.position.extentAfter > 0.0) {
+      setState(() {
+        _innerListIsScrolled = false;
+        // Reset scroll positions of the TabBarView pages
+        _key = PageStorageKey({});
+      });
+    }
+  }
+  void checkIfNameChanged(String text) {
+    print("checkIfNameChanged");
+    if (_firstnameController.text != '' && _lastnameController.text != '') {
+      setState(() {
+        print("isShow");
+        print(isShowSaveButton);
+        isShowSaveButton = true;
+      });
+    } else {
+      setState(() {
+        print("isShow");
+        print(isShowSaveButton);
+        isShowSaveButton = false;
+      });
+    }
+  }
 
-  String firstName = "";
-  String lastName = "";
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_updateScrollPosition);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_updateScrollPosition);
+    _firstnameController.dispose();
+    _lastnameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,35 +84,65 @@ class _UserInfoState extends State<UserInfo> {
     void registerUser() async {
       AuthService().registerUser(
         context: context,
-        firstName: firstName,
-        lastName: lastName,
+        firstName: _firstnameController.text,
+        lastName: _lastnameController.text,
         email: args.email,
         password: args.password,
       );
       // I think this approach is not correct
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainScreen.routeName, (route) => false);
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
       //check in firebase email is registered or not
+      print("SSAVE FORRM");
       FocusScope.of(context).unfocus();
-      _form.currentState!.save();
-      registerUser();
+      // _form.currentState!.save();
+      if(isShowSaveButton){
+        registerUser();
+      }
     }
 
     return Scaffold(
-      backgroundColor: AppColors.mainColor,
+      backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
+        controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: AppSliverAppBar(
-                image_path:
-                    'https://i.picsum.photos/id/877/200/300.jpg?hmac=kxnqPHdYgfVGqD41ArUXpM0IuUCD2GYefTwBboMDVeA',
-                title_text: "Great time to discover",
-                innerBoxIsScrolled: innerBoxIsScrolled,
+              sliver: SliverAppBar(
+                leading: InkWell(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+                backgroundColor: Colors.white,
+                pinned: true,
+                stretch: true,
+                expandedHeight: 120.0,
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
+                  centerTitle: false,
+                  title: _innerListIsScrolled
+                      ? const Text(
+                          "LET'S GET KNOW",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                          ),
+                        )
+                      : null,
+                  background: MyBackground(),
+                ),
               ),
             ),
           ];
@@ -85,71 +168,105 @@ class _UserInfoState extends State<UserInfo> {
                         const SizedBox(
                           height: 20,
                         ),
-                        // Column(
-                        //   children: widget.body_header
-                        //       .map((e) => AppLightText(text: e))
-                        //       .toList(),
-                        // ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "You made the right decision",
-                          padding: EdgeInsets.zero,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "How shall we call you?",
-                          padding: EdgeInsets.zero,
-                        ),
                         Form(
                           key: _form,
                           child: Column(
                             children: [
-                              TextFormField(
-                                enableSuggestions: true,
-                                autocorrect: true,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.buttonBackgroundColor,
-                                    ),
-                                  ),
-                                  labelText: "First Name",
-                                  labelStyle: const TextStyle(
+                              Column(
+                                children: [
+                                  AppLargeText(
+                                    text: "First name",
+                                    size: 18,
                                     color: Colors.black,
                                   ),
-                                ),
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) {
-                                  saveForm();
-                                },
-                                onSaved: (value) {
-                                  firstName = value!;
-                                },
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Focus(
+                                    autofocus: true,
+                                    onFocusChange: (bool inFocus) {
+                                      if (inFocus) {
+                                        FocusScope.of(context)
+                                            .requestFocus(_firstnameFocusNode);
+                                      }
+                                    },
+                                    child: TextFormField(
+                                      controller: _firstnameController,
+                                      textInputAction: TextInputAction.next,
+                                      keyboardType: TextInputType.name,
+                                      focusNode: _firstnameFocusNode,
+                                      enableSuggestions: true,
+                                      autocorrect: true,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(15.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                            AppColors.buttonBackgroundColor,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        prefixIconColor:
+                                        AppColors.buttonBackgroundColor,
+                                      ),
+                                      onChanged: (value) =>
+                                          checkIfNameChanged(value),
+                                      onFieldSubmitted: (_) {
+                                        FocusScope.of(context)
+                                            .requestFocus(_lastnameFocusNode);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
-                                height: 20,
+                                height: 25,
                               ),
-                              TextFormField(
-                                enableSuggestions: true,
-                                autocorrect: true,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.buttonBackgroundColor,
-                                    ),
-                                  ),
-                                  labelText: "Last Name",
-                                  labelStyle: const TextStyle(
+                              Column(
+                                children: [
+                                  AppLargeText(
+                                    text: "Last name",
+                                    size: 18,
                                     color: Colors.black,
                                   ),
-                                ),
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) {
-                                  saveForm();
-                                },
-                                onSaved: (value) {
-                                  lastName = value!;
-                                },
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    controller: _lastnameController,
+                                    textInputAction: TextInputAction.done,
+                                    keyboardType: TextInputType.name,
+                                    focusNode: _lastnameFocusNode,
+                                    enableSuggestions: true,
+                                    autocorrect: true,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(15.0),
+                                        // borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color:
+                                          AppColors.buttonBackgroundColor,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      prefixIconColor:
+                                      AppColors.buttonBackgroundColor,
+                                    ),
+                                    onChanged: (value) =>
+                                        checkIfNameChanged(value),
+                                    onFieldSubmitted: (_) {
+                                      saveForm();
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -158,24 +275,49 @@ class _UserInfoState extends State<UserInfo> {
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: 100,
-                    color: AppColors.mainColor,
-                  ),
-                )
               ],
             );
           },
         ),
       ),
-      floatingActionButton: CustomButton(
+      floatingActionButton: isShowSaveButton ?CustomButton(
         buttonText: "Done",
         borderRadius: 15,
         margin: 20,
         onTap: saveForm,
-      ),
+      ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+
+class MyBackground extends StatefulWidget {
+  @override
+  State<MyBackground> createState() => _MyBackgroundState();
+}
+
+class _MyBackgroundState extends State<MyBackground> {
+  @override
+  Widget build(BuildContext context) {
+    final FlexibleSpaceBarSettings? settings =
+        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    if (settings != null) {
+      print(settings.currentExtent);
+      print(settings.maxExtent);
+      print(kToolbarHeight);
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          AppLargeText(
+            text: "LET'S GET TO KNOW",
+            size: 28,
+            color: Colors.black,
+          )
+        ],
+      ),
     );
   }
 }

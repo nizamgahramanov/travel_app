@@ -32,39 +32,54 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   User? result = FirebaseAuth.instance.currentUser;
-  void listTileOnTap(int index, Map<String, String> map) {
+
+  void listTileOnTap(int index, String firstName, String lastName, String email,
+      String? password) {
+    print(result);
     if (index == 0) {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ChangeNameScreen(
-                  firstName: map.values.first,
-                  lastName: map.values.last,
-                  uid: result?.uid,
-                )),
+          builder: (context) => ChangeNameScreen(
+            firstName: firstName,
+            lastName: lastName,
+            uid: result?.uid,
+          ),
+        ),
       );
     } else if (index == 1) {
-      Navigator.of(context).pushNamed(ChangeEmailScreen.routeName);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChangeEmailScreen(
+            email: email,
+            password: password,
+            uid: result?.uid,
+          ),
+        ),
+      );
     } else {
       Navigator.of(context).pushNamed(ChangePasswordScreen.routeName);
     }
   }
 
   bool _isSelected = false;
-  void logoutAction() {
+  void logout() {
+    print('Logout');
     Navigator.of(context).pop();
     AuthService().signOut();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // if (result != null) {
     //   var provider = result!.providerData;
     //   print(")))))))))))))))))))))");
     //   print(provider[0].providerId);
     //   result!.uid;
     // }
+    print('AUTH USER');
+    print(result);
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
@@ -110,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 8,
                 ),
                 FutureBuilder<FirestoreUser>(
-                    future: FireStoreService().getUserBuUID(result!.uid),
+                    future: FireStoreService().getUserByUID(result!.uid),
                     builder: (BuildContext context,
                         AsyncSnapshot<FirestoreUser> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -156,10 +171,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             size: 14,
                                             padding: EdgeInsets.zero,
                                           ),
-                                    onTap: () => listTileOnTap(index, {
-                                      'firstname': snapshot.data!.firstName!,
-                                      'lastname': snapshot.data!.lastName!
-                                    }),
+                                    onTap: () => listTileOnTap(
+                                      index,
+                                      snapshot.data!.firstName!,
+                                      snapshot.data!.lastName!,
+                                      snapshot.data!.email,
+                                      snapshot.data!.password,
+                                    ),
                                   );
                                 },
                                 separatorBuilder: (_, __) => Divider(
@@ -206,7 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPopTap: () => Navigator.of(context).pop(),
                         isShowActionButton: true,
                         actionButtonText: "Log out",
-                        onTapAction: logoutAction,
+                        onTapAction: logout,
                         actionButtonColor: Colors.red);
                     // AuthService().signOut();
                   },

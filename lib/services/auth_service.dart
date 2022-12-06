@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -37,6 +35,7 @@ class AuthService {
   }
 
   Stream<User?>? get user {
+    print("USER AUTH");
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
@@ -136,6 +135,42 @@ class AuthService {
         style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
+  }
+
+  Future<bool> updateUserName(String? firstName, String? lastName) async {
+    try {
+      await _firebaseAuth.currentUser!
+          .updateDisplayName('$firstName $lastName');
+      return true;
+    } on auth.FirebaseAuthException catch (authError) {
+      throw CustomAuthException(authError.code, authError.message!);
+    } catch (e) {
+      throw CustomException(errorMessage: e.toString());
+    }
+  }
+
+  Future<bool?> updateUserEmail(String? email, String? password) async {
+    var userer = _firebaseAuth.currentUser;
+    print(userer);
+    print("WMIL");
+    print(email);
+    print(email);
+
+    if (email != null && password != null) {
+      try {
+        await _firebaseAuth.currentUser!.reauthenticateWithCredential(
+          auth.EmailAuthProvider.credential(
+              email: userer!.email!, password: password),
+        );
+        _firebaseAuth.currentUser!.updateEmail(email);
+        return true;
+      } on auth.FirebaseAuthException catch (authError) {
+        throw CustomAuthException(authError.code, authError.message!);
+      } catch (e) {
+        throw CustomException(errorMessage: e.toString());
+      }
+    }
+    return null;
   }
 
   signOut() {

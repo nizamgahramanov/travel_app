@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/screen/wrapper.dart';
+import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
 
 class ChangeNameScreen extends StatefulWidget {
-  const ChangeNameScreen(
-      {required this.firstName, required this.lastName, required this.uid ,Key? key})
-      : super(key: key);
+  const ChangeNameScreen({
+    required this.firstName,
+    required this.lastName,
+    required this.uid,
+    Key? key,
+  }) : super(key: key);
   final String firstName;
   final String lastName;
   final String? uid;
@@ -17,33 +21,69 @@ class ChangeNameScreen extends StatefulWidget {
   State<ChangeNameScreen> createState() => _ChangeNameScreenState();
 }
 
-class _ChangeNameScreenState extends State<ChangeNameScreen> {
+class _ChangeNameScreenState extends State<ChangeNameScreen>
+    with TickerProviderStateMixin {
+  final _lastnameFocusNode = FocusNode();
+  final _firstnameFocusNode = FocusNode();
+  final ScrollController _scrollController = ScrollController();
   TextEditingController? _firstnameController;
   TextEditingController? _lastnameController;
-
+  bool _innerListIsScrolled = false;
+  Key _key = const PageStorageKey({});
   bool isShowSaveButton = false;
   final _form = GlobalKey<FormState>();
+
+  void _updateScrollPosition() {
+    if (!_innerListIsScrolled &&
+        _scrollController.position.extentAfter == 0.0) {
+      setState(() {
+        _innerListIsScrolled = true;
+      });
+    } else if (_innerListIsScrolled &&
+        _scrollController.position.extentAfter > 0.0) {
+      print('_scrollController.position.extentAfter');
+      print(_scrollController.position.extentAfter);
+
+      setState(() {
+        _innerListIsScrolled = false;
+        // Reset scroll positions of the TabBarView pages
+        _key = PageStorageKey({});
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    // FocusScope.of(context).requestFocus(FocusNode());
+    _scrollController.addListener(_updateScrollPosition);
     _firstnameController = TextEditingController(text: widget.firstName);
     _lastnameController = TextEditingController(text: widget.lastName);
   }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_updateScrollPosition);
     _firstnameController?.dispose();
     _lastnameController?.dispose();
     super.dispose();
   }
 
-  void saveNameChange(){
+  void saveNameChange() async {
+    FocusScope.of(context).unfocus();
     String? changedFirstName = _firstnameController?.text;
     String? changedLastName = _lastnameController?.text;
-    FireStoreService().updateUserName(changedFirstName, changedLastName, widget.uid);
+    await AuthService()
+        .updateUserName(changedFirstName, changedLastName)
+        .then((value) {
+      if (value) {
+        FireStoreService()
+            .updateUserName(changedFirstName, changedLastName, widget.uid);
+      }
+    });
     print(changedFirstName);
     print(changedLastName);
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -53,46 +93,49 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
         ),
       ),
     );
-
   }
+
+  void checkIfNameChanged(String text) {
+    print("checkIfNameChanged");
+    if ((widget.firstName != _firstnameController?.text ||
+            widget.lastName != _lastnameController?.text) &&
+        (_firstnameController?.text != '' && _lastnameController?.text != '')) {
+      setState(() {
+        print("isShow");
+        print(isShowSaveButton);
+        isShowSaveButton = true;
+      });
+    } else {
+      setState(() {
+        print("isShow");
+        print(isShowSaveButton);
+        isShowSaveButton = false;
+      });
+    }
+  }
+
+  void saveForm() {
+    print("SAVE FORM");
+    FocusScope.of(context).unfocus();
+    // _form.currentState!.save();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final name =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-
-    void saveForm() {
-      FocusScope.of(context).unfocus();
-      // _form.currentState!.save();
-    }
-
-    void checkIfNameChanged(String text) {
-      print("checkIfNameChanged");
-      if ((widget.firstName != _firstnameController?.text ||
-          widget.lastName != _lastnameController?.text) && (_firstnameController?.text!='' && _lastnameController?.text!='')) {
-        setState(() {
-          print("isShow");
-          print(isShowSaveButton);
-          isShowSaveButton = true;
-        });
-      } else {
-        setState(() {
-          print("isShow");
-          print(isShowSaveButton);
-          isShowSaveButton = false;
-        });
-      }
-    }
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
+        controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
+          print("_innerListIsScrolled");
+          print(_innerListIsScrolled);
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
                 leading: InkWell(
                   onTap: () {
+                    FocusScope.of(context).unfocus();
                     Navigator.of(context).pop();
                   },
                   child: const Icon(
@@ -104,13 +147,21 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                 pinned: true,
                 stretch: true,
                 expandedHeight: 120.0,
-                flexibleSpace: const FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text(
-                    "Change Name",
-                    // "Great time to discover",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
+                  centerTitle: false,
+                  title: _innerListIsScrolled
+                      ? Text(
+                          "CHANGE NAME",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                          ),
+                        )
+                      : null,
+                  background: MyBackground(),
                 ),
               ),
             ),
@@ -136,11 +187,8 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        // const SizedBox(
-                        //   height: 20,
-                        // ),
                         Form(
-                          // key: _form,
+                          key: _form,
                           child: Column(
                             children: [
                               Column(
@@ -153,39 +201,47 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  TextFormField(
-                                    controller: _firstnameController,
-                                    textInputAction: TextInputAction.done,
-                                    keyboardType: TextInputType.name,
-                                    enableSuggestions: true,
-                                    autocorrect: true,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                        // borderSide: BorderSide.none,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              AppColors.buttonBackgroundColor,
-                                          width: 2,
+                                  Focus(
+                                    autofocus: true,
+                                    onFocusChange: (bool inFocus) {
+                                      if (inFocus) {
+                                        FocusScope.of(context)
+                                            .requestFocus(_firstnameFocusNode);
+                                      }
+                                    },
+                                    child: TextFormField(
+                                      controller: _firstnameController,
+                                      textInputAction: TextInputAction.next,
+                                      keyboardType: TextInputType.name,
+                                      focusNode: _firstnameFocusNode,
+                                      enableSuggestions: true,
+                                      autocorrect: true,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15.0),
                                         ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                AppColors.buttonBackgroundColor,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        prefixIconColor:
+                                            AppColors.buttonBackgroundColor,
                                       ),
-                                      // hintText: "First name",
-                                      prefixIconColor:
-                                          AppColors.buttonBackgroundColor,
+                                      onChanged: (value) =>
+                                          checkIfNameChanged(value),
+                                      onFieldSubmitted: (_) {
+                                        FocusScope.of(context)
+                                            .requestFocus(_lastnameFocusNode);
+                                      },
+                                      onSaved: (value) {
+                                        // checkEmailIsRegistered(value);
+                                      },
                                     ),
-                                    // initialValue: name.values.first,
-                                    onChanged: (value) =>
-                                        checkIfNameChanged(value),
-                                    onFieldSubmitted: (_) {
-                                      saveForm();
-                                    },
-                                    onSaved: (value) {
-                                      // checkEmailIsRegistered(value);
-                                    },
                                   ),
                                 ],
                               ),
@@ -206,6 +262,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                                     controller: _lastnameController,
                                     textInputAction: TextInputAction.done,
                                     keyboardType: TextInputType.name,
+                                    focusNode: _lastnameFocusNode,
                                     enableSuggestions: true,
                                     autocorrect: true,
                                     decoration: InputDecoration(
@@ -222,7 +279,6 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                                           width: 2,
                                         ),
                                       ),
-                                      // hintText: "Surname",
                                       prefixIconColor:
                                           AppColors.buttonBackgroundColor,
                                     ),
@@ -231,8 +287,8 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                                     onFieldSubmitted: (_) {
                                       saveForm();
                                     },
-                                    onSaved: (value) {
-                                      // checkEmailIsRegistered(value);
+                                    onSaved: (_) {
+                                      saveForm();
                                     },
                                   ),
                                 ],
@@ -244,12 +300,6 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                     ),
                   ),
                 ),
-                // SliverToBoxAdapter(
-                //   child: Container(
-                //     height: 130,
-                //     color: AppColors.backgroundColorOfApp,
-                //   ),
-                // ),
               ],
             );
           },
@@ -260,10 +310,69 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
               buttonText: "DONE",
               borderRadius: 15,
               margin: 20,
-              onTap: () =>saveNameChange(),
+              onTap: () => saveNameChange(),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+class MyBackground extends StatefulWidget {
+  @override
+  State<MyBackground> createState() => _MyBackgroundState();
+}
+
+class _MyBackgroundState extends State<MyBackground> {
+  @override
+  Widget build(BuildContext context) {
+    final FlexibleSpaceBarSettings? settings =
+        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
+    if (settings != null) {
+      print(settings.currentExtent);
+      print(settings.maxExtent);
+      print(kToolbarHeight);
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          AppLargeText(
+            text: "CHANGE NAME",
+            size: 28,
+            color: Colors.black,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+// class NoScalingAnimation extends FloatingActionButtonAnimator {
+//   double? _x;
+//   double? _y;
+//   @override
+//   Offset getOffset(
+//       {required Offset begin, required Offset end, required double progress}) {
+//     _x = begin.dx + (end.dx - begin.dx) * progress;
+//     _y = begin.dy + (end.dy - begin.dy) * progress;
+//     print('x offset');
+//     print(_x);
+//     print('y offset');
+//     print(_y);
+//     return end;
+//   }
+//
+//   @override
+//   Animation<double> getRotationAnimation({required Animation<double> parent}) {
+//     print('getRotationAnimation');
+//     return Tween<double>(begin: 0.5, end: 1.0).animate(parent);
+//   }
+//
+//   @override
+//   Animation<double> getScaleAnimation({required Animation<double> parent}) {
+//     print('getScaleAnimation');
+//     return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+//   }
+// }

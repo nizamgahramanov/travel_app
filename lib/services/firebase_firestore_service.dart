@@ -97,10 +97,15 @@ class FireStoreService {
             event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).first);
   }
 
-  Future<String> getUserPasswordFromFirestore(String email) async {
+  Future<String?> getUserPasswordFromFirestore(String email) async {
     final snapshot =
         await _db.collection("users").where("email", isEqualTo: email).get();
-    return snapshot.docs.first['password'];
+    print(snapshot.docs.isEmpty);
+    if (snapshot.docs.isEmpty){
+      return null;
+    } else {
+      return snapshot.docs.first['password'];
+    }
   }
   // Future<Fir estoreUser> getUserByEmailField(String email) async {
   //   return await _db.collection("users").where("email", isEqualTo: email).snapshots().map(
@@ -111,7 +116,7 @@ class FireStoreService {
   //   return _db.collection('Products').document(productId).delete();
   // }
 
-  Future<FirestoreUser> getUserBuUID(String uid){
+  Future<FirestoreUser> getUserByUID(String uid){
     // return _db
     //     .collection("users")
     //     .where("uid", isEqualTo: uid)
@@ -156,6 +161,15 @@ class FireStoreService {
       DocumentReference docRef = _db.collection('users').doc(uid);
       var batch = _db.batch();
       batch.update(docRef, {'firstName':firstName, 'lastName':lastName});
+      batch.commit();
+    }
+  }
+  updateUserEmail(String? email, String? uid){
+    print("updateUserName");
+    if(uid != null){
+      DocumentReference docRef = _db.collection('users').doc(uid);
+      var batch = _db.batch();
+      batch.update(docRef, {'email':email});
       batch.commit();
     }
   }
