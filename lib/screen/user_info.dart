@@ -20,8 +20,6 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   final _form = GlobalKey<FormState>();
-  // String firstName = "";
-  // String lastName = "";
   final _lastnameFocusNode = FocusNode();
   final _firstnameFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
@@ -29,7 +27,7 @@ class _UserInfoState extends State<UserInfo> {
   final TextEditingController _lastnameController = TextEditingController();
   bool _innerListIsScrolled = false;
   Key _key = const PageStorageKey({});
-  bool isShowSaveButton = false;
+  bool _isShowSaveButton = false;
   void _updateScrollPosition() {
     if (!_innerListIsScrolled &&
         _scrollController.position.extentAfter == 0.0) {
@@ -50,14 +48,14 @@ class _UserInfoState extends State<UserInfo> {
     if (_firstnameController.text != '' && _lastnameController.text != '') {
       setState(() {
         print("isShow");
-        print(isShowSaveButton);
-        isShowSaveButton = true;
+        print(_isShowSaveButton);
+        _isShowSaveButton = true;
       });
     } else {
       setState(() {
         print("isShow");
-        print(isShowSaveButton);
-        isShowSaveButton = false;
+        print(_isShowSaveButton);
+        _isShowSaveButton = false;
       });
     }
   }
@@ -82,26 +80,24 @@ class _UserInfoState extends State<UserInfo> {
     print(args.email);
     print("KLKLKRE");
     void registerUser() async {
-      AuthService().registerUser(
-        context: context,
-        firstName: _firstnameController.text,
-        lastName: _lastnameController.text,
-        email: args.email,
-        password: args.password,
-      );
+      if(_isShowSaveButton){
+        AuthService().registerUser(
+          context: context,
+          firstName: _firstnameController.text,
+          lastName: _lastnameController.text,
+          email: args.email,
+          password: args.password,
+        );
+      }
       // I think this approach is not correct
       // Navigator.pushNamedAndRemoveUntil(
       //     context, MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
-      //check in firebase email is registered or not
       print("SSAVE FORRM");
       FocusScope.of(context).unfocus();
-      // _form.currentState!.save();
-      if(isShowSaveButton){
-        registerUser();
-      }
+      _form.currentState!.save();
     }
 
     return Scaffold(
@@ -265,6 +261,9 @@ class _UserInfoState extends State<UserInfo> {
                                     onFieldSubmitted: (_) {
                                       saveForm();
                                     },
+                                    onSaved: (_){
+                                      registerUser();
+                                    },
                                   ),
                                 ],
                               ),
@@ -280,7 +279,7 @@ class _UserInfoState extends State<UserInfo> {
           },
         ),
       ),
-      floatingActionButton: isShowSaveButton ?CustomButton(
+      floatingActionButton: _isShowSaveButton ?CustomButton(
         buttonText: "Done",
         borderRadius: 15,
         margin: 20,

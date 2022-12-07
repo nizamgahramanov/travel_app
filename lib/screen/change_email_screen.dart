@@ -304,12 +304,12 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                                         ),
                                       ),
                                       suffixIcon: GestureDetector(
-                                          onTap: () => toggleObscure(),
-                                          child: _isObscure
-                                              ? const Icon(
-                                                  Icons.remove_red_eye_outlined)
-                                              : const Icon(
-                                                  Icons.remove_red_eye)),
+                                        onTap: () => toggleObscure(),
+                                        child: _isObscure
+                                            ? const Icon(
+                                                Icons.remove_red_eye_outlined)
+                                            : const Icon(Icons.remove_red_eye),
+                                      ),
                                       suffixIconColor:
                                           AppColors.buttonBackgroundColor,
                                       // focusColor: AppColors.buttonBackgroundColor

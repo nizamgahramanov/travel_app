@@ -97,6 +97,8 @@ class AuthService {
           email,
           password,
         );
+       var a = await userCredential.user!.sendEmailVerification();
+       // print(a);
       }
 
       return _userFromFirebase(userCredential.user);

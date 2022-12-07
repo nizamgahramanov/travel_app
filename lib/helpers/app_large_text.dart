@@ -5,13 +5,14 @@ class AppLargeText extends StatelessWidget {
   final String text;
   final Color color;
   final TextAlign textAlign;
-
+  final Alignment alignment;
   AppLargeText({
     Key? key,
     this.size = 30,
     required this.text,
     this.color = Colors.white,
     this.textAlign = TextAlign.center,
+    this.alignment = Alignment.centerLeft
   }) : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class AppLargeText extends StatelessWidget {
     return Container(
       padding: EdgeInsets.zero,
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: alignment,
         child: Text(
           text,
           style: TextStyle(

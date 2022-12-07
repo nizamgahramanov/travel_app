@@ -14,6 +14,7 @@ class CustomAlertDialog extends StatefulWidget {
     this.actionButtonText,
     this.onTapAction,
     this.actionButtonColor,
+    this.popButtonTextColor,
   });
 
   final String title, popButtonText;
@@ -23,6 +24,8 @@ class CustomAlertDialog extends StatefulWidget {
   final bool? isShowActionButton;
   final Color? actionButtonColor;
   final Color popButtonColor;
+  final Color? popButtonTextColor;
+
   @override
   _CustomAlertDialogState createState() => _CustomAlertDialogState();
 }
@@ -37,18 +40,22 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       },
       child: Dialog(
         elevation: 0,
-        backgroundColor: const Color(0xffffffff),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          // mainAxisAlignment:MainAxisAlignment.center ,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             AppLargeText(
               text: widget.title,
               color: Colors.black,
               size: 20,
+              textAlign: TextAlign.center,
+              alignment: Alignment.center,
             ),
             const SizedBox(
               height: 8,
@@ -61,24 +68,25 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                 padding: EdgeInsets.zero,
               ),
 
-            const SizedBox(height: 25),
+            const SizedBox(height: 15),
             if (widget.isShowActionButton != null)
               CustomButton(
                 onTap: widget.onTapAction!,
                 buttonText: widget.actionButtonText!,
                 borderRadius: 25,
-                margin: 30,
+                margin: 25,
                 buttonColor: widget.actionButtonColor,
               ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             CustomButton(
               onTap: widget.onPopTap,
               buttonText: widget.popButtonText,
               borderRadius: 25,
-              margin: 30,
+              margin: 25,
               buttonColor: widget.popButtonColor,
+              textColor: widget.popButtonTextColor,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             // Container(
             //   width: MediaQuery
             //       .of(context)

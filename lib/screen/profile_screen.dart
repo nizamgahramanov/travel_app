@@ -218,14 +218,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     Utility.getInstance().showAlertDialog(
                         context: context,
-                        alertTitle: "Do want to log out?",
-                        popButtonColor: Colors.red,
+                        alertTitle: "Log out?",
+                        popButtonColor: AppColors.backgroundColorOfApp,
                         popButtonText: "Cancel",
                         onPopTap: () => Navigator.of(context).pop(),
                         isShowActionButton: true,
                         actionButtonText: "Log out",
                         onTapAction: logout,
-                        actionButtonColor: Colors.red);
+                        actionButtonColor: Colors.redAccent,
+                        popButtonTextColor: Colors.black
+                    );
                     // AuthService().signOut();
                   },
                   child: Container(
@@ -233,14 +235,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     padding: const EdgeInsets.all(15),
                     child: CustomIconText(
                       text: 'Log out',
-                      color: Colors.redAccent,
+                      color: Colors.black,
                       spacing: 0,
                       size: 18,
                       isIconFirst: false,
                       icon: const Icon(
                         Icons.logout_rounded,
                         size: 28,
-                        color: Colors.red,
+                        color: Colors.grey,
                       ),
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),

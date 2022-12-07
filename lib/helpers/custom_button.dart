@@ -31,27 +31,20 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: margin),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          color: buttonColor ?? AppColors.buttonBackgroundColor,
-          border: borderColor == null
-              ? Border.all(color: AppColors.inputColor)
-              : Border.all(color: Colors.black),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 10,
-              blurRadius: 10,
-              offset: Offset(0,1),
-            )
-          ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) icon!,
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
+        borderRadius: BorderRadius.circular(borderRadius),
+        color: buttonColor ?? AppColors.buttonBackgroundColor,
+        border: borderColor == null
+            ? Border.all(color: AppColors.inputColor)
+            : Border.all(color: Colors.black),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) icon!,
+            Material(
+              color: Colors.transparent,
               child: Container(
                 // padding: const EdgeInsets.all(10),
                 child: Center(
@@ -63,8 +56,8 @@ class CustomButton extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

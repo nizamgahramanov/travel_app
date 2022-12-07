@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/model/user_credentials.dart';
-import 'package:travel_app/reusable/sliver_app_bar.dart';
 import 'package:travel_app/screen/user_info.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_large_text.dart';
@@ -28,12 +26,18 @@ class _PasswordScreenState extends State<PasswordScreen> {
   bool _atLeastOneNumber = false;
   bool _atLeastOneLowerCase = false;
   bool _atLeastOneUpperCase = false;
+  bool _isObscure = true;
 
   Key _key = const PageStorageKey({});
   void saveForm() {
     //check in firebase email is registered or not
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
+  }
+  void toggleObscure() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
   }
 
   @override
@@ -227,7 +231,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                 focusNode: _passwordFocusNode,
                                 enableSuggestions: false,
                                 autocorrect: false,
-                                obscureText: true,
+                                obscureText: _isObscure,
                                 decoration: InputDecoration(
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -239,9 +243,16 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                       width: 2,
                                     ),
                                   ),
-                                  prefixIconColor:
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => toggleObscure(),
+                                    child: _isObscure
+                                        ? const Icon(Icons.remove_red_eye_outlined)
+                                        : const Icon(Icons.remove_red_eye),
+                                  ),
+                                  suffixIconColor:
                                       AppColors.buttonBackgroundColor,
                                 ),
+
                                 onChanged: (value) =>
                                     checkPasswordValidations(value),
                                 onFieldSubmitted: (_) {
@@ -250,6 +261,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                 onSaved: (value) {
                                   goNextScreen(value);
                                 },
+
                               ),
                             ),
                           ],
