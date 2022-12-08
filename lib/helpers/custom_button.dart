@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 
 class CustomButton extends StatelessWidget {
   VoidCallback onTap;
@@ -8,7 +8,8 @@ class CustomButton extends StatelessWidget {
   Color? buttonColor;
   double borderRadius;
   Color? borderColor;
-  double margin;
+  double horizontalMargin;
+  double verticalMargin;
   Color? textColor;
   Widget? icon;
 
@@ -19,7 +20,8 @@ class CustomButton extends StatelessWidget {
       this.buttonColor,
       required this.borderRadius,
       this.borderColor,
-      this.margin = 0.0,
+      this.horizontalMargin = 0.0,
+      this.verticalMargin = 0.0,
       this.textColor,
       this.icon})
       : super(key: key);
@@ -29,7 +31,7 @@ class CustomButton extends StatelessWidget {
     return Container(
       height: 60,
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: margin),
+      margin: EdgeInsets.symmetric(horizontal: horizontalMargin,vertical: verticalMargin),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
         color: buttonColor ?? AppColors.buttonBackgroundColor,
@@ -48,10 +50,13 @@ class CustomButton extends StatelessWidget {
               child: Container(
                 // padding: const EdgeInsets.all(10),
                 child: Center(
-                  child: AppLargeText(
+                  child: AppLightText(
+                    spacing: 2,
                     text: buttonText,
                     size: 18,
                     color: textColor == null ? Colors.white : textColor!,
+                    padding: EdgeInsets.zero,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

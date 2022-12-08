@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 
 class DetailInfo extends StatelessWidget {
@@ -30,10 +29,13 @@ class DetailInfo extends StatelessWidget {
               size: 18,
               padding: EdgeInsets.zero,
             ),
-            AppLargeText(
+            AppLightText(
               text: info,
               size: 22,
               color: AppColors.buttonBackgroundColor,
+              fontWeight: FontWeight.bold,
+              spacing: 2,
+              padding: EdgeInsets.zero,
             ),
           ],
         ),

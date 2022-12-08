@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/screen/user_info.dart';
+
 import '../helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
-import '../reusable/custom_page_route.dart';
 
 class PasswordScreen extends StatefulWidget {
   static const routeName = '/password';
@@ -208,10 +207,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         key: _form,
                         child: Column(
                           children: [
-                            AppLargeText(
+                            AppLightText(
                               text: "Password",
                               size: 18,
                               color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              spacing: 2,
+                              padding: EdgeInsets.zero,
                             ),
                             const SizedBox(
                               height: 10,
@@ -363,7 +365,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
           ? CustomButton(
               buttonText: "Continue",
               borderRadius: 15,
-              margin: 20,
+              horizontalMargin: 20,
               onTap: saveForm,
             )
           : null,
@@ -392,10 +394,13 @@ class _MyBackgroundState extends State<MyBackground> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          AppLargeText(
+          AppLightText(
             text: "PLEASE SET A PASSWORD",
             size: 24,
             color: Colors.black,
+            fontWeight: FontWeight.bold,
+            spacing: 2,
+            padding: EdgeInsets.zero,
           )
         ],
       ),

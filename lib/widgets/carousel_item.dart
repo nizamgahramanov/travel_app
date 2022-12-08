@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 
 class CarouselItem extends StatelessWidget {
   final String name;
@@ -47,18 +47,24 @@ class CarouselItem extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: AppLargeText(
+                  child: AppLightText(
                     text: name,
                     size: 21,
                     color: AppColors.mainTextColor,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: AppLargeText(
+                  child: AppLightText(
                     text: region,
                     size: 10,
                     color: AppColors.buttonBackgroundColor,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
                   ),
                 ),
               ],

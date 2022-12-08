@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import '../helpers/utility.dart';
 
 class CustomAuthException extends FirebaseAuthException {
   CustomAuthException(String code, String message)
       : super(code: code, message: message) {
     switch (code) {
-      case "user-not-found":
-        throw CustomException.userNotFound(message);
-      case "wrong-password":
-        throw CustomException.wrongPassword(message);
+      // case "user-not-found":
+      //   throw CustomException.userNotFound(message);
+      // case "wrong-password":
+      //   throw CustomException.wrongPassword(message);
       case "user-disabled":
         throw CustomException(errorMessage: message);
       case "invalid-email":
@@ -38,23 +40,41 @@ class CustomAuthException extends FirebaseAuthException {
   }
 }
 
-class CustomException {
+class CustomException extends StatelessWidget {
   final String? errorMessage;
-  CustomException({this.errorMessage});
-  factory CustomException.userNotFound(String message) = UserNotFoundException;
-  factory CustomException.wrongPassword(String message) =
-  WrongPasswordException;
+  const CustomException({this.errorMessage});
+
+  @override
+  Widget build(BuildContext context) {
+    print("build");
+    return Utility.getInstance().showAlertDialog(
+      context: context,
+      alertTitle: 'Error',
+      alertMessage: errorMessage,
+      popButtonText: 'Ok',
+      popButtonColor: Colors.redAccent,
+      onPopTap:()=> Navigator.of(context).pop(),
+    );
+  }
 }
+
+// class CustomException {
+//   final String? errorMessage;
+//   CustomException({this.errorMessage});
+//   // factory CustomException.userNotFound(String message) = UserNotFoundException;
+//   // factory CustomException.wrongPassword(String message) =
+//   // WrongPasswordException;
+// }
 class UserNotFoundException extends CustomException {
   UserNotFoundException(
-      this.message,
-      ) : super(errorMessage: message);
+    this.message,
+  ) : super(errorMessage: message);
   final String? message;
 }
 
 class WrongPasswordException extends CustomException {
   WrongPasswordException(
-      this.message,
-      ) : super(errorMessage: message);
+    this.message,
+  ) : super(errorMessage: message);
   final String? message;
 }

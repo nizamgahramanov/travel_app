@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/reusable/sliver_app_bar.dart';
-import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
-import '../helpers/app_large_text.dart';
+
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
@@ -170,10 +168,13 @@ class _UserInfoState extends State<UserInfo> {
                             children: [
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
                                     text: "First name",
                                     size: 18,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    spacing: 2,
+                                    padding: EdgeInsets.zero,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -224,10 +225,13 @@ class _UserInfoState extends State<UserInfo> {
                               ),
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
                                     text: "Last name",
                                     size: 18,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    spacing: 2,
+                                    padding: EdgeInsets.zero,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -282,7 +286,8 @@ class _UserInfoState extends State<UserInfo> {
       floatingActionButton: _isShowSaveButton ?CustomButton(
         buttonText: "Done",
         borderRadius: 15,
-        margin: 20,
+        horizontalMargin: 20,
+        verticalMargin: 20,
         onTap: saveForm,
       ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -310,10 +315,13 @@ class _MyBackgroundState extends State<MyBackground> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          AppLargeText(
+          AppLightText(
             text: "LET'S GET TO KNOW",
             size: 28,
             color: Colors.black,
+            fontWeight: FontWeight.bold,
+            spacing: 2,
+            padding: EdgeInsets.zero,
           )
         ],
       ),

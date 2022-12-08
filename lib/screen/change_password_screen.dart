@@ -196,7 +196,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       floatingActionButton: CustomButton(
         buttonText: "SAVE",
         borderRadius: 15,
-        margin: 20,
+        horizontalMargin: 20,
         onTap: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

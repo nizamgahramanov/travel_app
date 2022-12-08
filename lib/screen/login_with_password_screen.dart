@@ -1,16 +1,9 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:encrypt/encrypt.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/utility.dart';
-import 'package:travel_app/model/firestore_user.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
-
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
 import 'main_screen.dart';
@@ -88,12 +81,13 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
             context, MainScreen.routeName, (route) => false);
       } else {
         Utility.getInstance().showAlertDialog(
-          popButtonColor: Colors.red,
+          popButtonColor: AppColors.backgroundColorOfApp,
           context: context,
-          alertTitle: "Password is correct",
-          alertMessage: "Please check and try again",
-          popButtonText: "Ok",
+          alertTitle: "Password Is Not Correct",
+          alertMessage: "Please, check and try again",
+          popButtonText: "Back",
           onPopTap: () => Navigator.of(context).pop(),
+          popButtonTextColor: Colors.black,
         );
       }
     }
@@ -104,10 +98,13 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AppLargeText(
-          text: "Welcome Back",
+        title: AppLightText(
+          text: "WELCOME BACK",
           size: 20,
           color: Colors.black,
+          fontWeight: FontWeight.bold,
+          spacing: 2,
+          padding: EdgeInsets.zero,
         ),
         backgroundColor: AppColors.backgroundColorOfApp,
         elevation: 0.0,
@@ -136,10 +133,13 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                   key: _login_with_password_form,
                   child: Column(
                     children: [
-                      AppLargeText(
+                      AppLightText(
                         text: "Current Password",
                         size: 18,
                         color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
                       ),
                       const SizedBox(
                         height: 10,
@@ -218,7 +218,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
           ? CustomButton(
               buttonText: "Done",
               borderRadius: 15,
-              margin: 20,
+              horizontalMargin: 20,
               onTap: saveForm,
             )
           : null,

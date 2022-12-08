@@ -11,6 +11,7 @@ class AppLightText extends StatelessWidget {
   final EdgeInsets padding;
   final double spacing;
   final FontWeight? fontWeight;
+  final TextAlign textAlign;
   AppLightText({
     Key? key,
     this.size = 16,
@@ -21,7 +22,8 @@ class AppLightText extends StatelessWidget {
     this.alignment = Alignment.centerLeft,
     required this.padding,
     required this.spacing,
-    this.fontWeight = FontWeight.normal
+    this.fontWeight = FontWeight.normal,
+    this.textAlign = TextAlign.center
   }) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class AppLightText extends StatelessWidget {
           children: [
             if (isShowIcon) icon!,
             Text(
-              textAlign: TextAlign.justify,
+              textAlign: textAlign,
               overflow: TextOverflow.fade,
               text,
               style: TextStyle(

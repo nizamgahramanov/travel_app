@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -193,10 +193,13 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                             children: [
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
                                     text: "First name",
                                     size: 18,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    spacing: 2,
+                                    padding: EdgeInsets.zero,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -250,10 +253,13 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                               ),
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
                                     text: "Last name",
                                     size: 18,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    spacing: 2,
+                                    padding: EdgeInsets.zero,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -307,9 +313,10 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
       ),
       floatingActionButton: isShowSaveButton
           ? CustomButton(
-              buttonText: "DONE",
+              buttonText: "Done",
               borderRadius: 15,
-              margin: 20,
+              horizontalMargin: 20,
+              verticalMargin: 5,
               onTap: () => saveNameChange(),
             )
           : null,
@@ -338,10 +345,13 @@ class _MyBackgroundState extends State<MyBackground> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          AppLargeText(
+          AppLightText(
             text: "CHANGE NAME",
             size: 28,
             color: Colors.black,
+            fontWeight: FontWeight.bold,
+            spacing: 2,
+            padding: EdgeInsets.zero,
           )
         ],
       ),

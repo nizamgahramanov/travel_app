@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
@@ -15,14 +17,40 @@ class FireStoreService {
         .set(destination.createMap());
   }
 
-  void saveFavorites(String userId, Destination destination) {
-    // print(destination);
-    _db
+  // StreamSubscription<QuerySnapshot> listen(void onData(QuerySnapshot event)?,String destinationId,
+  //     {Function? onError, void onDone()?, bool? cancelOnError}){
+  //   var a = isDestinationFavorite()
+  //   return
+  // };
+
+  Future<bool> isDestinationFavoriteFuture(String destinationId) async {
+    final snapshot = await _db
         .collection("favorites")
-        .doc(userId)
-        .collection("items")
-        .doc(destination.id)
-        .set(destination.createMap());
+        .doc(_firebaseAuth!.uid)
+        .collection('items')
+        .where("id", isEqualTo: destinationId)
+        .get();
+    return snapshot.docs.isEmpty;
+  }
+
+  void toggleFavorites(String uid, Destination destination) async {
+    bool isFavorite = await isDestinationFavoriteFuture(destination.id!);
+    if (isFavorite) {
+      _db
+          .collection("favorites")
+          .doc(uid)
+          .collection("items")
+          .doc(destination.id)
+          .set(destination.createMap());
+    } else {
+      _db
+          .collection("favorites")
+          .doc(uid)
+          .collection("items")
+          .doc(destination.id)
+          .delete();
+    }
+
     // return _db.collection("favorites").doc(userId).update({
     //   "favorites": FieldValue.arrayUnion([destinationId])
     // });
@@ -55,7 +83,7 @@ class FireStoreService {
       String? lastName, String email, String? password) async {
     //Encrypts password before store in firestore
     String? encryptedPassword;
-    if(password!=null){
+    if (password != null) {
       encryptedPassword = EnDeCryption().encryptWithAES(password).base16;
     }
 
@@ -79,16 +107,6 @@ class FireStoreService {
   }
 
   Stream<FirestoreUser> getUserByEmail(String email) {
-    // return _db
-    //     .collection("users")
-    //     .where('email', isEqualTo: email).get().then((value) {
-    //
-    //       if (value.docs.isNotEmpty){
-    //         print(value.docs.single.data());
-    //         value.docs.single.data();
-    //       }
-    //
-    // });
     return _db
         .collection("users")
         .where("email", isEqualTo: email)
@@ -101,30 +119,21 @@ class FireStoreService {
     final snapshot =
         await _db.collection("users").where("email", isEqualTo: email).get();
     print(snapshot.docs.isEmpty);
-    if (snapshot.docs.isEmpty){
+    if (snapshot.docs.isEmpty) {
       return null;
     } else {
       return snapshot.docs.first['password'];
     }
   }
-  // Future<Fir estoreUser> getUserByEmailField(String email) async {
-  //   return await _db.collection("users").where("email", isEqualTo: email).snapshots().map(
-  //       (event) =>
-  //           event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).single);
-  // }
-// Future<void> removeItem(String productId) {
-  //   return _db.collection('Products').document(productId).delete();
-  // }
 
-  Future<FirestoreUser> getUserByUID(String uid){
-    // return _db
-    //     .collection("users")
-    //     .where("uid", isEqualTo: uid)
-    //     .snapshots()
-    //     .map((event) =>
-    // event.docs.map((e) => FirestoreUser.fromFirestore(e.data())).first);
-  return _db.collection("users").doc(uid).get().then((value) => FirestoreUser.fromFirestore(value.data()!));
+  Future<FirestoreUser> getUserByUID(String uid) {
+    return _db
+        .collection("users")
+        .doc(uid)
+        .get()
+        .then((value) => FirestoreUser.fromFirestore(value.data()!));
   }
+
   Future<List<dynamic>> getUserByUid(String uid) {
     return _db.collection("users").doc(uid).get().then((value) {
       print("value");
@@ -155,21 +164,22 @@ class FireStoreService {
     return favoriteList;
   }
 
-  updateUserName(String? firstName, String? lastName, String? uid){
+  updateUserName(String? firstName, String? lastName, String? uid) {
     print("updateUserName");
-    if(uid != null){
+    if (uid != null) {
       DocumentReference docRef = _db.collection('users').doc(uid);
       var batch = _db.batch();
-      batch.update(docRef, {'firstName':firstName, 'lastName':lastName});
+      batch.update(docRef, {'firstName': firstName, 'lastName': lastName});
       batch.commit();
     }
   }
-  updateUserEmail(String? email, String? uid){
+
+  updateUserEmail(String? email, String? uid) {
     print("updateUserName");
-    if(uid != null){
+    if (uid != null) {
       DocumentReference docRef = _db.collection('users').doc(uid);
       var batch = _db.batch();
-      batch.update(docRef, {'email':email});
+      batch.update(docRef, {'email': email});
       batch.commit();
     }
   }

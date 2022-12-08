@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:travel_app/helpers/app_button.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/main_screen.dart';
-import 'package:travel_app/services/auth_service.dart';
 
-import '../helpers/app_large_text.dart';
 import '../helpers/custom_button.dart';
 
 class StartScreen extends StatefulWidget {
@@ -67,10 +65,14 @@ class _StartScreenState extends State<StartScreen> {
                 margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 alignment: Alignment.topCenter,
                 height: MediaQuery.of(context).size.height * 0.1,
-                child: AppLargeText(
+                child: AppLightText(
                   text: 'Discover the land of fire',
                   color: Colors.white,
                   size: 32,
+                  fontWeight: FontWeight.bold,
+                  spacing: 0,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.center,
                 ),
               ),
               const SizedBox(
@@ -80,12 +82,9 @@ class _StartScreenState extends State<StartScreen> {
               CustomButton(
                 buttonText: "Get Started",
                 onTap: goToMainScreen,
-                borderRadius: 20,
-                margin: 20,
-
-              ),
-              const SizedBox(
-                height: 30,
+                borderRadius: 15,
+                horizontalMargin: 20,
+                verticalMargin: 20,
               ),
             ],
           ),

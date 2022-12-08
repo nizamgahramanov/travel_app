@@ -6,17 +6,13 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/helpers/customized_switch.dart';
 import 'package:travel_app/model/firestore_user.dart';
-import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/change_name.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 
-import '../helpers/app_large_text.dart';
-import '../helpers/custom_switch.dart';
 import '../helpers/utility.dart';
 import 'change_email_screen.dart';
 import 'change_password_screen.dart';
-import 'dart:math' as math;
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -109,10 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   bottom: 50,
                   left: 20,
                   right: 20,
-                  child: AppLargeText(
+                  child: AppLightText(
                     text: 'YOUR SETTINGS IN SEYR ET',
                     color: Colors.white,
                     size: 32,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
                   ),
                 ),
               ],
@@ -220,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         context: context,
                         alertTitle: "Log out?",
                         popButtonColor: AppColors.backgroundColorOfApp,
-                        popButtonText: "Cancel",
+                        popButtonText: "Back",
                         onPopTap: () => Navigator.of(context).pop(),
                         isShowActionButton: true,
                         actionButtonText: "Log out",

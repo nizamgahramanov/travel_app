@@ -5,7 +5,6 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import '../helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
 import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../services/firebase_firestore_service.dart';
@@ -26,9 +25,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   void checkIfEmailChanged(String character) {
     print("checkIfNameChanged");
-    if (_emailController.text != '' &&
-        RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-            .hasMatch(_emailController.text)) {
+    // if (_emailController.text != '' &&
+    //     RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+    //         .hasMatch(_emailController.text)) {
+    if(_emailController.text != ''){
       setState(() {
         print("isShow");
         print(_isShowSaveButton);
@@ -55,10 +55,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               key: _form,
               child: Column(
                 children: [
-                  AppLargeText(
+                  AppLightText(
                     text: "Email",
                     size: 18,
                     color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
                   ),
                   const SizedBox(
                     height: 10,
@@ -215,17 +218,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           if (isEmailExistList[0] == "google.com") {
             AuthService().signInWithGoogle();
           } else {
-            // if (base16Encrypted == null) {
-            //   Utility.getInstance().showAlertDialog(
-            //     popButtonColor: Colors.red,
-            //     context: context,
-            //     alertTitle: "Discrepancy on email",
-            //     alertMessage:
-            //         "There is a discrepancy on email. Please contact support",
-            //     popButtonText: "Ok",
-            //     onPopTap: () => Navigator.of(context).pop(),
-            //   );
-            // } else {
             Navigator.pushNamed(
               context,
               LoginWithPasswordScreen.routeName,

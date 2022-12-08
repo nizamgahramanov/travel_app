@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 
@@ -50,22 +49,31 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 25),
-            AppLargeText(
+            AppLightText(
               text: widget.title,
               color: Colors.black,
-              size: 20,
+              size: 18,
               textAlign: TextAlign.center,
               alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 0,
+              ),
+              spacing: 0,
+              fontWeight: FontWeight.bold,
             ),
             const SizedBox(
               height: 8,
             ),
             if (widget.description != null)
               AppLightText(
-                spacing: 16,
+                size: 14,
+                spacing: 0,
                 text: widget.description!,
                 alignment: Alignment.center,
-                padding: EdgeInsets.zero,
+                textAlign: TextAlign.center,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
               ),
 
             const SizedBox(height: 15),
@@ -74,7 +82,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                 onTap: widget.onTapAction!,
                 buttonText: widget.actionButtonText!,
                 borderRadius: 25,
-                margin: 25,
+                horizontalMargin: 25,
                 buttonColor: widget.actionButtonColor,
               ),
             const SizedBox(height: 10),
@@ -82,7 +90,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               onTap: widget.onPopTap,
               buttonText: widget.popButtonText,
               borderRadius: 25,
-              margin: 25,
+              horizontalMargin: 25,
               buttonColor: widget.popButtonColor,
               textColor: widget.popButtonTextColor,
             ),

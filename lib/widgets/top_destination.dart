@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
 import '../helpers/app_light_text.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
@@ -27,10 +26,13 @@ class TopDestination extends StatelessWidget {
             vertical: 0,
             horizontal: 20,
           ),
-          child: AppLargeText(
+          child: AppLightText(
             text: "Top Destinations",
             size: 22,
             color: AppColors.mainTextColor,
+            fontWeight: FontWeight.bold,
+            spacing: 2,
+            padding: EdgeInsets.zero,
           ),
         ),
         const SizedBox(

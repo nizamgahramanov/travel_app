@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/widgets/staggered_grid_view.dart';
-import '../widgets/top_destination.dart';
+
 import 'add_destination_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,9 +32,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppLargeText(
+                AppLightText(
                   text: 'Discover',
                   color: AppColors.mainTextColor,
+                  fontWeight: FontWeight.bold,
+                  spacing: 2,
+                  padding: EdgeInsets.zero,
                 ),
                 ElevatedButton.icon(
                   onPressed: goToAddDestinationScreen,

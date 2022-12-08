@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 
@@ -43,10 +42,13 @@ class StaggeredGridItem extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.centerLeft,
-            child: AppLargeText(
+            child: AppLightText(
               text: name,
               size: 15,
               color: AppColors.mainTextColor,
+              fontWeight: FontWeight.bold,
+              spacing: 2,
+              padding: EdgeInsets.zero,
             ),
           ),
           const SizedBox(

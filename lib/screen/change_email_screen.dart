@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import '../helpers/app_colors.dart';
-import '../helpers/app_large_text.dart';
 import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../services/auth_service.dart';
@@ -128,7 +128,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
       Utility.getInstance().showAlertDialog(
         popButtonColor: Colors.red,
         context: context,
-        alertTitle: "Password is correct",
+        alertTitle: "Password is incorrect",
         alertMessage: "Please check and try again",
         popButtonText: "Ok",
         onPopTap: () => Navigator.of(context).pop(),
@@ -215,10 +215,13 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                             children: [
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
+                                    spacing: 2,
                                     text: "Email",
                                     size: 18,
                                     color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    padding: EdgeInsets.zero,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -273,10 +276,13 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                               ),
                               Column(
                                 children: [
-                                  AppLargeText(
+                                  AppLightText(
                                     text: "Current Password",
                                     size: 18,
                                     color: Colors.black,
+                                    spacing: 2,
+                                    padding: EdgeInsets.zero,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -339,9 +345,10 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
       ),
       floatingActionButton: isShowSaveButton
           ? CustomButton(
-              buttonText: "DONE",
+              buttonText: "Done",
               borderRadius: 15,
-              margin: 20,
+              horizontalMargin: 20,
+              verticalMargin: 5,
               onTap: () => saveEmailChange(),
             )
           : null,
@@ -370,10 +377,13 @@ class _MyBackgroundState extends State<MyBackground> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          AppLargeText(
+          AppLightText(
             text: "CHANGE EMAIL",
             size: 28,
             color: Colors.black,
+            padding: EdgeInsets.zero,
+            spacing: 2,
+            fontWeight: FontWeight.bold,
           )
         ],
       ),
