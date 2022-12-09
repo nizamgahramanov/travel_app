@@ -74,7 +74,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
     String? changedFirstName = _firstnameController?.text;
     String? changedLastName = _lastnameController?.text;
     await AuthService()
-        .updateUserName(changedFirstName, changedLastName)
+        .updateUserName(context,changedFirstName, changedLastName)
         .then((value) {
       if (value) {
         FireStoreService()

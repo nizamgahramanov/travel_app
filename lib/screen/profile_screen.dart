@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void logout() {
     print('Logout');
     Navigator.of(context).pop();
-    AuthService().signOut();
+    AuthService().signOut(context);
   }
 
   @override
@@ -201,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: CustomizedSwitch(
                       label: "Language",
                       padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       value: true,
                       onChanged: (bool newValue) {
                         setState(() {

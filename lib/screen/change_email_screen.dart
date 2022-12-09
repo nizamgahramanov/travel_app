@@ -99,7 +99,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
         EnDeCryption().isPasswordCorrect(enteredPassword!, widget.password!);
     if (isPasswordCorrect) {
       await AuthService()
-          .updateUserEmail(enteredEmail, enteredPassword)
+          .updateUserEmail(context,enteredEmail, enteredPassword)
           .then((value) {
         if (value != null) {
           FireStoreService().updateUserEmail(enteredEmail, widget.uid);

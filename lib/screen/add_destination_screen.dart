@@ -78,11 +78,13 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
       }
     } catch (error) {
       Utility.getInstance().showAlertDialog(
-          context: context,
-          alertTitle: "Something went wrong",
-          popButtonText: "Ok",
-          popButtonColor: Colors.redAccent,
-          onPopTap: () => Navigator.of(context).pop());
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
     }
 
     setState(() {

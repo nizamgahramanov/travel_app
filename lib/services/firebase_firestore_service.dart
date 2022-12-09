@@ -9,19 +9,12 @@ import '../model/firestore_user.dart';
 class FireStoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final User? _firebaseAuth = FirebaseAuth.instance.currentUser;
-  // FirebaseFirestore.instance.collection("favorites").doc(FirebaseAuth.instance.currentUser!.uid).collection("items").where("id", isEqualTo: clickedDestination.id).snapshots()
   Future<void> saveDestination(Destination destination) {
     return _db
         .collection('destinations')
         .doc((destination.id).toString())
         .set(destination.createMap());
   }
-
-  // StreamSubscription<QuerySnapshot> listen(void onData(QuerySnapshot event)?,String destinationId,
-  //     {Function? onError, void onDone()?, bool? cancelOnError}){
-  //   var a = isDestinationFavorite()
-  //   return
-  // };
 
   Future<bool> isDestinationFavoriteFuture(String destinationId) async {
     final snapshot = await _db
@@ -50,24 +43,17 @@ class FireStoreService {
           .doc(destination.id)
           .delete();
     }
-
-    // return _db.collection("favorites").doc(userId).update({
-    //   "favorites": FieldValue.arrayUnion([destinationId])
-    // });
   }
 
   Stream<List<Destination>> getDestinations() {
-    final a = _db.collection('destinations').snapshots().map((snapshot) =>
-        snapshot.docs
-            .map((document) => Destination.fromFirestore(document.data()))
-            .toList());
-    return a;
+    return _db.collection('destinations').snapshots().map((snapshot) => snapshot
+        .docs
+        .map((document) => Destination.fromFirestore(document.data()))
+        .toList());
   }
 
   Stream<List<Destination>> getDestinationsBySearchText(String enteredText) {
-    print("ENTERED TEXT");
-    print(enteredText);
-    final a = _db
+    return _db
         .collection('destinations')
         .where("name", isGreaterThanOrEqualTo: enteredText)
         .where("name", isLessThan: "${enteredText}z")
@@ -75,7 +61,6 @@ class FireStoreService {
         .map((snapshot) => snapshot.docs
             .map((document) => Destination.fromFirestore(document.data()))
             .toList());
-    return a;
   }
 
   //This method is used to create the user in firestore
@@ -86,7 +71,6 @@ class FireStoreService {
     if (password != null) {
       encryptedPassword = EnDeCryption().encryptWithAES(password).base16;
     }
-
     print("encrypted");
     print(encryptedPassword);
     var firestoreUserItem = FirestoreUser(
@@ -97,12 +81,6 @@ class FireStoreService {
     );
     //Creates the user doc named whatever the user uid is in the collection "users"
     //and adds the user data
-    // await _db.collection("users").doc(uid).set({
-    //   'email': email,
-    //   'firstName': firstName,
-    //   'lastName': lastName,
-    //   'password': encrypted.base16
-    // });
     await _db.collection("users").doc(uid).set(firestoreUserItem.createMap());
   }
 
@@ -136,9 +114,6 @@ class FireStoreService {
 
   Future<List<dynamic>> getUserByUid(String uid) {
     return _db.collection("users").doc(uid).get().then((value) {
-      print("value");
-      print(value.exists);
-      print(value);
       return value.data()!['favorites'];
     });
   }
@@ -153,7 +128,7 @@ class FireStoreService {
   }
 
   Stream<List<Destination>> getFavoriteList() {
-    final favoriteList = _db
+    return _db
         .collection('favorites')
         .doc(_firebaseAuth!.uid)
         .collection("items")
@@ -161,7 +136,6 @@ class FireStoreService {
         .map((snapshot) => snapshot.docs
             .map((document) => Destination.fromFirestore(document.data()))
             .toList());
-    return favoriteList;
   }
 
   updateUserName(String? firstName, String? lastName, String? uid) {

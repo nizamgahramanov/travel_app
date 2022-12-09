@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
 import 'package:crypto/crypto.dart';
 import '../exception/custom_auth_exception.dart';
@@ -8,22 +10,6 @@ import 'firebase_firestore_service.dart';
 
 class AuthService {
   final _firebaseAuth = auth.FirebaseAuth.instance;
-  // Stream<User?> handleAuthState() async{
-  //   print("ASDASDASDA");
-  //   return StreamBuilder(
-  //       stream: await FirebaseAuth.instance.authStateChanges(),
-  //       builder: (BuildContext context, snapshot) {
-  //         print("SNAPSHOW");
-  //         print(snapshot);
-  //         if (snapshot.hasData) {
-  //           print("DATAAAA ");
-  //           print(snapshot.data);
-  //           return snapshot.;
-  //         } else {
-  //           return ;
-  //         }
-  //       });
-  // }
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
       return null;
@@ -39,7 +25,7 @@ class AuthService {
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
-  Future<auth.UserCredential?> signInWithGoogle() async {
+  Future<auth.UserCredential?> signInWithGoogle(BuildContext context) async {
     try {
       print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
@@ -70,9 +56,25 @@ class AuthService {
 
       return result;
     } on auth.FirebaseAuthException catch (authError) {
-      throw CustomAuthException(authError.code, authError.message!);
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: authError.message,
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
-      throw CustomException(errorMessage: "Unknown Error");
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomException(ctx: context, errorMessage: "Unknown Error");
     }
   }
 
@@ -85,10 +87,12 @@ class AuthService {
   }) async {
     try {
       print("signInWithEmailAndPassword");
-      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          )
+          .whenComplete(() => null);
       if (userCredential.user != null) {
         FireStoreService().createUserInFirestore(
           userCredential.user!.uid,
@@ -97,15 +101,29 @@ class AuthService {
           email,
           password,
         );
-       var a = await userCredential.user!.sendEmailVerification();
-       // print(a);
       }
 
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
-      throw CustomAuthException(authError.code, authError.message!);
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: authError.message,
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
-      throw CustomException(errorMessage: e.toString());
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomException(ctx: context, errorMessage: e.toString());
     }
   }
 
@@ -123,9 +141,25 @@ class AuthService {
       );
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
-      throw CustomAuthException(authError.code, authError.message!);
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: authError.message,
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
-      throw CustomException(errorMessage: "Unknown Error");
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomException(ctx: context, errorMessage: "Unknown Error");
     }
   }
 
@@ -139,19 +173,37 @@ class AuthService {
     );
   }
 
-  Future<bool> updateUserName(String? firstName, String? lastName) async {
+  Future<bool> updateUserName(
+      BuildContext context, String? firstName, String? lastName) async {
     try {
       await _firebaseAuth.currentUser!
           .updateDisplayName('$firstName $lastName');
       return true;
     } on auth.FirebaseAuthException catch (authError) {
-      throw CustomAuthException(authError.code, authError.message!);
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: authError.message,
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
-      throw CustomException(errorMessage: e.toString());
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomException(ctx: context, errorMessage: e.toString());
     }
   }
 
-  Future<bool?> updateUserEmail(String? email, String? password) async {
+  Future<bool?> updateUserEmail(
+      BuildContext context, String? email, String? password) async {
     var userer = _firebaseAuth.currentUser;
     print(userer);
     print("WMIL");
@@ -167,17 +219,55 @@ class AuthService {
         _firebaseAuth.currentUser!.updateEmail(email);
         return true;
       } on auth.FirebaseAuthException catch (authError) {
-        throw CustomAuthException(authError.code, authError.message!);
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'Oops!',
+          alertMessage: authError.message,
+          popButtonText: 'Ok',
+          popButtonColor: Colors.redAccent,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
+        throw CustomAuthException(context, authError.code, authError.message!);
       } catch (e) {
-        throw CustomException(errorMessage: e.toString());
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'Oops!',
+          alertMessage: 'Unknown error occurred while processing your request',
+          popButtonText: 'Ok',
+          popButtonColor: Colors.redAccent,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
+        throw CustomException(ctx: context, errorMessage: e.toString());
       }
     }
     return null;
   }
 
-  signOut() {
+  signOut(BuildContext context) {
     print("SIGN OUT");
-    _firebaseAuth.signOut();
+    try {
+      _firebaseAuth.signOut();
+    } on auth.FirebaseAuthException catch (authError) {
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: authError.message,
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
+    } catch (e) {
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'Oops!',
+        alertMessage: 'Unknown error occurred while processing your request',
+        popButtonText: 'Ok',
+        popButtonColor: Colors.redAccent,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomException(ctx: context, errorMessage: e.toString());
+    }
   }
 
   splitGoogleFullName(String? fullName) {

@@ -25,10 +25,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   void checkIfEmailChanged(String character) {
     print("checkIfNameChanged");
-    // if (_emailController.text != '' &&
-    //     RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-    //         .hasMatch(_emailController.text)) {
-    if(_emailController.text != ''){
+    if (_emailController.text != '' &&
+        RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+            .hasMatch(_emailController.text)) {
+    // if(_emailController.text != ''){
       setState(() {
         print("isShow");
         print(_isShowSaveButton);
@@ -155,7 +155,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     buttonText: "Continue with Google",
                     borderColor: Colors.black,
                     onTap: () {
-                      AuthService().signInWithGoogle();
+                      AuthService().signInWithGoogle(context);
                     },
                     borderRadius: 20,
                     buttonColor: Colors.transparent,
@@ -216,7 +216,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           provider = true;
           //  send auth cde to email address
           if (isEmailExistList[0] == "google.com") {
-            AuthService().signInWithGoogle();
+            AuthService().signInWithGoogle(context);
           } else {
             Navigator.pushNamed(
               context,

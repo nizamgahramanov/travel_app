@@ -18,12 +18,13 @@ class NoFavoriteScreen extends StatelessWidget {
                 children: [
                   SvgPicture.asset("assets/svg/favorite_screen.svg"),
                   AppLightText(
-                    spacing: 16,
+                    spacing: 0,
                     text: "No Favorites yet",
                     size: 18,
                     color: Colors.black54,
                     alignment: Alignment.center,
                     padding: EdgeInsets.zero,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),

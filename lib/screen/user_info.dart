@@ -287,7 +287,7 @@ class _UserInfoState extends State<UserInfo> {
         buttonText: "Done",
         borderRadius: 15,
         horizontalMargin: 20,
-        verticalMargin: 20,
+        verticalMargin: 5,
         onTap: saveForm,
       ) : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
