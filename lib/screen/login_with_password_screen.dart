@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/utility.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -20,7 +21,7 @@ class LoginWithPasswordScreen extends StatefulWidget {
 }
 
 class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
-  final _login_with_password_form = GlobalKey<FormState>();
+  final _loginWithPasswordForm = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
   bool _isObscure = true;
@@ -29,7 +30,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   void saveForm() {
     //check in firebase email is registered or not
     FocusScope.of(context).unfocus();
-    _login_with_password_form.currentState!.save();
+    _loginWithPasswordForm.currentState!.save();
   }
 
   void checkIfPasswordChanged(String text) {
@@ -60,15 +61,15 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     //    2. Melumatlarda encrypt olunmuş passvordu decrypt edib userin daxil etiyi passvordla yoxlayiriq
     //    3. userin daxil etdiyi passvord dogrudursa home page yoneldirik
     //    4. dogru deyilse dialog gosteririk
-    if(_isShowDoneButton){
+    if (_isShowDoneButton) {
       final args =
-      ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final String? base16Encrypted =
-      await FireStoreService().getUserPasswordFromFirestore(args['email']);
+          await FireStoreService().getUserPasswordFromFirestore(args['email']);
       // final String decryptedPassword =
       //     EnDeCryption().decryptWithAES(Encrypted.fromBase16(base16Encrypted!));
       bool isPasswordCorrect =
-      EnDeCryption().isPasswordCorrect(enteredPassword, base16Encrypted!);
+          EnDeCryption().isPasswordCorrect(enteredPassword, base16Encrypted!);
       // print(decryptedPassword);
       if (isPasswordCorrect) {
         AuthService().loginUser(
@@ -91,7 +92,6 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
         );
       }
     }
-
   }
 
   @override
@@ -128,9 +128,9 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                 height: 15.0,
               ),
               Container(
-                height: 130,
+                height:130,
                 child: Form(
-                  key: _login_with_password_form,
+                  key: _loginWithPasswordForm,
                   child: Column(
                     children: [
                       AppLightText(
@@ -144,70 +144,25 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      TextFormField(
+                      CustomTextFormField(
                         controller: _passwordController,
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.text,
                         focusNode: _passwordFocusNode,
-                        enableSuggestions: false,
-                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
                         obscureText: _isObscure,
-                        decoration: InputDecoration(
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            // borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.buttonBackgroundColor,
-                              width: 2,
-                            ),
-                          ),
-                          suffixIcon: GestureDetector(
-                            onTap: () => toggleObscure(),
-                            child: _isObscure
-                                ? const Icon(Icons.remove_red_eye_outlined)
-                                : const Icon(Icons.remove_red_eye),
-                          ),
-                          suffixIconColor: AppColors.buttonBackgroundColor,
-                          // focusColor: AppColors.buttonBackgroundColor
+                        suffixIcon: GestureDetector(
+                          onTap: () => toggleObscure(),
+                          child: _isObscure
+                              ? const Icon(Icons.remove_red_eye_outlined)
+                              : const Icon(Icons.remove_red_eye),
                         ),
                         onChanged: (value) => checkIfPasswordChanged(value),
-                        onFieldSubmitted: (_) {
-                          saveForm();
-                        },
-                        onSaved: (value) {
-                          checkPasswordCorrect(value, context);
-                        },
-                      ),
+                        onFieldSubmitted: (_) => saveForm(),
+                        onSaved: (value) =>
+                            checkPasswordCorrect(value, context),
+                      )
                     ],
                   ),
-
-                  // child: TextFormField(
-                  //   obscureText: true,
-                  //   enableSuggestions: false,
-                  //   autocorrect: false,
-                  //   onChanged: (enteredText) {
-                  //     setState(() {
-                  //       widget.password = enteredText;
-                  //     });
-                  //     // initSearchDestination(enteredText);
-                  //   },
-                  //   onSaved: (value) {
-                  //     checkPasswordCorrect(value, context);
-                  //   },
-                  //   decoration: InputDecoration(
-                  //     filled: true,
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8.0),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //     hintText: "Password",
-                  //     suffixIcon: const Icon(Icons.remove_red_eye_rounded),
-                  //     suffixIconColor: AppColors.buttonBackgroundColor,
-                  //   ),
-                  // ),
                 ),
               )
             ],

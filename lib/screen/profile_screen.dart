@@ -27,11 +27,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  User? result = FirebaseAuth.instance.currentUser;
 
   void listTileOnTap(int index, String firstName, String lastName, String email,
       String? password) {
-    print(result);
     if (index == 0) {
       Navigator.push(
         context,
@@ -39,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           builder: (context) => ChangeNameScreen(
             firstName: firstName,
             lastName: lastName,
-            uid: result?.uid,
           ),
         ),
       );
@@ -50,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           builder: (context) => ChangeEmailScreen(
             email: email,
             password: password,
-            uid: result?.uid,
           ),
         ),
       );
@@ -68,14 +64,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if (result != null) {
-    //   var provider = result!.providerData;
-    //   print(")))))))))))))))))))))");
-    //   print(provider[0].providerId);
-    //   result!.uid;
-    // }
-    print('AUTH USER');
-    print(result);
+    User? result = FirebaseAuth.instance.currentUser;
+
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
@@ -123,8 +113,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 8,
                 ),
-                FutureBuilder<FirestoreUser>(
-                    future: FireStoreService().getUserByUID(result!.uid),
+                StreamBuilder<FirestoreUser>(
+                    stream: FireStoreService().getUserDataByUID(result!.uid),
                     builder: (BuildContext context,
                         AsyncSnapshot<FirestoreUser> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -143,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Container(
                               color: Colors.white,
                               child: ListView.separated(
-                                padding: EdgeInsets.only(bottom: 0.0),
+                                padding: const EdgeInsets.only(bottom: 0.0),
                                 shrinkWrap: false,
                                 itemBuilder: (context, index) {
                                   final data = widget.titleList[index];
@@ -159,8 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     subtitle: index == 0
                                         ? AppLightText(
                                             spacing: 16,
-                                            text:
-                                                '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
+                                            text: '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
                                             size: 14,
                                             padding: EdgeInsets.zero,
                                           )

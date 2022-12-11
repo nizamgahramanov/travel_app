@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/model/destination.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 import '../model/debouncer.dart';
@@ -36,8 +37,8 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
 
     AlgoliaQuery query = algolia.instance.index('destinations');
     query = query.query(_searchTextController.text);
-
     _results = (await query.getObjects()).hits;
+
     print("RESULT");
     print(_results);
     // print(Map<String, dynamic>.from(_results[0].data));
@@ -45,7 +46,10 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
     setState(() {
       _searching = false;
     });
+
     if (_searchTextController.text.length < 2) {
+      print('Length');
+      print(_searchTextController.text.length);
       setState(() {
         _isShowClearIcon = false;
       });
@@ -83,50 +87,91 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
+                CustomTextFormField(
                   controller: _searchTextController,
-                  textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.name,
-                  enableSuggestions: true,
-                  autocorrect: true,
-                  decoration: InputDecoration(
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AppColors.buttonBackgroundColor,
-                        width: 2,
-                      ),
-                    ),
-                    suffixIcon: _isShowClearIcon
-                        ? IconButton(
-                            onPressed: () {
-                              _searchTextController.clear();
-                              setState(() {
-                                _isShowClearIcon = false;
-                                if (_results != null) {
-                                  _results=null;
-                                }
-                              });
-                            },
-                            icon: Icon(Icons.clear),
-                          )
-                        : null,
-                    prefixIconColor: AppColors.buttonBackgroundColor,
-                  ),
+                  textInputAction: TextInputAction.done,
+                  suffixIcon: _isShowClearIcon
+                      ? IconButton(
+                          onPressed: () {
+                            _searchTextController.clear();
+                            setState(() {
+                              _isShowClearIcon = false;
+                              if (_results != null) {
+                                _results = null;
+                              }
+                            });
+                          },
+                          icon: Icon(Icons.clear),
+                        )
+                      : null,
                   onChanged: (_) {
                     if (_searchTextController.text.length >= 2) {
                       _debouncer.run(() {
                         _search();
                       });
+                    } else {
+                      setState(() {
+                        if (_results != null) {
+                          _results = null;
+                        }
+                        _isShowClearIcon = false;
+                      });
                     }
                   },
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
+                  onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+                )
+                // TextFormField(
+                //   controller: _searchTextController,
+                //   textInputAction: TextInputAction.done,
+                //   keyboardType: TextInputType.name,
+                //   enableSuggestions: true,
+                //   autocorrect: true,
+                //   decoration: InputDecoration(
+                //     filled: true,
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(15.0),
+                //     ),
+                //     focusedBorder: OutlineInputBorder(
+                //       borderSide: BorderSide(
+                //         color: AppColors.buttonBackgroundColor,
+                //         width: 2,
+                //       ),
+                //     ),
+                //     suffixIcon: _isShowClearIcon
+                //         ? IconButton(
+                //             onPressed: () {
+                //               _searchTextController.clear();
+                //               setState(() {
+                //                 _isShowClearIcon = false;
+                //                 if (_results != null) {
+                //                   _results = null;
+                //                 }
+                //               });
+                //             },
+                //             icon: Icon(Icons.clear),
+                //           )
+                //         : null,
+                //     prefixIconColor: AppColors.buttonBackgroundColor,
+                //   ),
+                //   onChanged: (_) {
+                //     if (_searchTextController.text.length >= 2) {
+                //       _debouncer.run(() {
+                //         _search();
+                //       });
+                //     } else {
+                //       setState(() {
+                //         if (_results != null) {
+                //           _results = null;
+                //         }
+                //         _isShowClearIcon=false;
+                //       });
+                //     }
+                //   },
+                //   onFieldSubmitted: (_) {
+                //     FocusScope.of(context).unfocus();
+                //   },
+                // ),
               ],
             ),
             const SizedBox(
@@ -142,33 +187,33 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                     ))
                   : _results == null
                       ? Center(
-                          child: SvgPicture.asset('assets/svg/search_screen.svg'),
+                          child:
+                              SvgPicture.asset('assets/svg/search_screen.svg'),
                         )
                       : _results!.isEmpty
                           ? SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  height: 330,
-                                  // color: Colors.blue,
-                                  child: SvgPicture.asset(
-                                      'assets/svg/no_result_found.svg'),
-                                ),
-                                AppLightText(
-                                  text: 'No Result Found',
-                                  padding: EdgeInsets.zero,
-                                  spacing: 0,
-                                  fontWeight: FontWeight.bold,
-                                  textAlign: TextAlign.center,
-                                  alignment: Alignment.center,
-                                  color: Colors.black54,
-                                  size: 18,
-
-                                ),
-                              ],
-                            ),
-                          )
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    height: 330,
+                                    // color: Colors.blue,
+                                    child: SvgPicture.asset(
+                                        'assets/svg/no_result_found.svg'),
+                                  ),
+                                  AppLightText(
+                                    text: 'No Result Found',
+                                    padding: EdgeInsets.zero,
+                                    spacing: 0,
+                                    fontWeight: FontWeight.bold,
+                                    textAlign: TextAlign.center,
+                                    alignment: Alignment.center,
+                                    color: Colors.black54,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            )
                           : MasonryGridView.count(
                               crossAxisCount: 2,
                               itemCount: _results!.length,

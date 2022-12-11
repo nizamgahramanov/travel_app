@@ -28,6 +28,5 @@ class EnDeCryption {
     } else {
       return false;
     }
-    return true;
   }
 }

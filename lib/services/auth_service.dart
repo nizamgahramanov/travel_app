@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
-import 'package:crypto/crypto.dart';
 import '../exception/custom_auth_exception.dart';
 import 'firebase_firestore_service.dart';
 
@@ -173,12 +171,26 @@ class AuthService {
     );
   }
 
-  Future<bool> updateUserName(
+  void updateUserName(
       BuildContext context, String? firstName, String? lastName) async {
     try {
       await _firebaseAuth.currentUser!
-          .updateDisplayName('$firstName $lastName');
-      return true;
+          .updateDisplayName('$firstName $lastName')
+          .then((_) {
+        FireStoreService().updateUserName(
+            firstName, lastName, _firebaseAuth.currentUser!.uid);
+      }).catchError((authError) {
+        print("ERRROR HAPPPENENEDEDEDE");
+        print(authError.message);
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'Oops!',
+          alertMessage: authError.message,
+          popButtonText: 'Ok',
+          popButtonColor: Colors.redAccent,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
+      });
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
@@ -202,22 +214,33 @@ class AuthService {
     }
   }
 
-  Future<bool?> updateUserEmail(
+  void updateUserEmail(
       BuildContext context, String? email, String? password) async {
-    var userer = _firebaseAuth.currentUser;
-    print(userer);
-    print("WMIL");
-    print(email);
-    print(email);
-
     if (email != null && password != null) {
       try {
         await _firebaseAuth.currentUser!.reauthenticateWithCredential(
           auth.EmailAuthProvider.credential(
-              email: userer!.email!, password: password),
+              email: _firebaseAuth.currentUser!.email!, password: password),
         );
-        _firebaseAuth.currentUser!.updateEmail(email);
-        return true;
+        print("Update user eamil");
+        _firebaseAuth.currentUser!.updateEmail(email).then((_) {
+          print("THEN BLOCK FIREDS");
+          FireStoreService().updateUserEmail(
+            email,
+            _firebaseAuth.currentUser!.uid,
+          );
+        }).catchError((authError) {
+          print("ERRROR HAPPPENENEDEDEDE");
+          print(authError.message);
+          Utility.getInstance().showAlertDialog(
+            context: context,
+            alertTitle: 'Oops!',
+            alertMessage: authError.message,
+            popButtonText: 'Ok',
+            popButtonColor: Colors.redAccent,
+            onPopTap: () => Navigator.of(context).pop(),
+          );
+        });
       } on auth.FirebaseAuthException catch (authError) {
         Utility.getInstance().showAlertDialog(
           context: context,
@@ -240,7 +263,6 @@ class AuthService {
         throw CustomException(ctx: context, errorMessage: e.toString());
       }
     }
-    return null;
   }
 
   signOut(BuildContext context) {

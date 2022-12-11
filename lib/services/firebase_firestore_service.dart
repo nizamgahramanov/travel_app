@@ -104,12 +104,18 @@ class FireStoreService {
     }
   }
 
-  Future<FirestoreUser> getUserByUID(String uid) {
+  Stream<FirestoreUser> getUserDataByUID(String uid) {
     return _db
         .collection("users")
         .doc(uid)
-        .get()
-        .then((value) => FirestoreUser.fromFirestore(value.data()!));
+        .snapshots()
+        .map((event) => FirestoreUser.fromFirestore(event.data()!));
+    //specific case for getting user from uid
+    // return _db
+    //     .collection("users")
+    //     .doc(uid)
+    //     .get()
+    //     .then((value) => FirestoreUser.fromFirestore(value.data()!));
   }
 
   Future<List<dynamic>> getUserByUid(String uid) {

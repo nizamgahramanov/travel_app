@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import '../helpers/app_colors.dart';
@@ -28,7 +29,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     if (_emailController.text != '' &&
         RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
             .hasMatch(_emailController.text)) {
-    // if(_emailController.text != ''){
+      // if(_emailController.text != ''){
       setState(() {
         print("isShow");
         print(_isShowSaveButton);
@@ -36,8 +37,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       });
     } else {
       setState(() {
-        print("isShow");
-        _isShowSaveButton = false;
+        if (_isShowSaveButton) {
+          print("isShow false");
+          _isShowSaveButton = false;
+        }
       });
     }
   }
@@ -66,25 +69,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  TextFormField(
+                  CustomTextFormField(
                     controller: _emailController,
-                    textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.emailAddress,
-                    enableSuggestions: true,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        // borderSide: BorderSide.none,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.buttonBackgroundColor,
-                          width: 2,
-                        ),
-                      ),
-                    ),
+                    textInputAction: TextInputAction.done,
                     onChanged: (character) => checkIfEmailChanged(character),
                     onFieldSubmitted: (_) {
                       saveForm();
@@ -93,6 +81,33 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       checkEmailIsRegistered(value);
                     },
                   ),
+                  // TextFormField(
+                  //   controller: _emailController,
+                  //   textInputAction: TextInputAction.done,
+                  //   keyboardType: TextInputType.emailAddress,
+                  //   enableSuggestions: true,
+                  //   autocorrect: true,
+                  //   decoration: InputDecoration(
+                  //     filled: true,
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(15.0),
+                  //       // borderSide: BorderSide.none,
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderSide: BorderSide(
+                  //         color: AppColors.buttonBackgroundColor,
+                  //         width: 2,
+                  //       ),
+                  //     ),
+                  //   ),
+                  //   onChanged: (character) => checkIfEmailChanged(character),
+                  //   onFieldSubmitted: (_) {
+                  //     saveForm();
+                  //   },
+                  //   onSaved: (value) {
+                  //     checkEmailIsRegistered(value);
+                  //   },
+                  // ),
                   // TextFormField(
                   //   textInputAction: TextInputAction.done,
                   //   keyboardType: TextInputType.emailAddress,

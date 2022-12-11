@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/user_credentials.dart';
+import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/user_info.dart';
 
 import '../helpers/app_colors.dart';
@@ -33,6 +35,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
+
   void toggleObscure() {
     setState(() {
       _isObscure = !_isObscure;
@@ -104,10 +107,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
         _atLeastOneNumber &&
         _atLeastOneLowerCase &&
         _atLeastOneUpperCase) {
-      _isShowContinueButton=true;
+      _isShowContinueButton = true;
     } else {
-      _isShowContinueButton=false;
-
+      _isShowContinueButton = false;
     }
   }
 
@@ -133,234 +135,323 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
-      body: NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                centerTitle: false,
-                leading: InkWell(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back,
+      body: CustomNestedScrollView(
+        title: "PLEASE SET A PASSWORD",
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            AppLightText(
+              spacing: 16,
+              text: "Welcome ${args['email']}",
+              padding: EdgeInsets.zero,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Form(
+              key: _form,
+              child: Column(
+                children: [
+                  AppLightText(
+                    text: "Password",
+                    size: 18,
                     color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
                   ),
-                ),
-                backgroundColor: Colors.white,
-                pinned: true,
-                stretch: true,
-                expandedHeight: 120.0,
-                flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.pin,
-                  centerTitle: false,
-                  title: _innerListIsScrolled
-                      ? const Text(
-                          "PLEASE SET A PASSWORD",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat',
-                          ),
-                        )
-                      : null,
-                  background: MyBackground(),
-                ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Focus(
+                    autofocus: true,
+                    onFocusChange: (bool inFocus) {
+                      if (inFocus) {
+                        FocusScope.of(context).requestFocus(_passwordFocusNode);
+                      }
+                    },
+                    child: CustomTextFormField(
+                      controller: _passwordController,
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.done,
+                      focusNode: _passwordFocusNode,
+                      onChanged: (value) => checkPasswordValidations(value),
+                      onSaved: (value) => goNextScreen(value),
+                      onFieldSubmitted: (_) => saveForm(),
+                      obscureText: _isObscure,
+                      suffixIcon: GestureDetector(
+                        onTap: () => toggleObscure(),
+                        child: _isObscure
+                            ? const Icon(Icons.remove_red_eye_outlined)
+                            : const Icon(Icons.remove_red_eye),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ];
-        },
-        body: Builder(builder: (BuildContext context) {
-          return CustomScrollView(
-            slivers: [
-              SliverOverlapInjector(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                  context,
+            const SizedBox(
+              height: 20,
+            ),
+            AppLightText(
+              spacing: 16,
+              text: "Minimum of 6 characters",
+              isShowIcon: true,
+              icon: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.only(right: 5),
+                child: Icon(
+                  Icons.check,
+                  color:
+                      _minimumPasswordLength ? Colors.redAccent : Colors.black,
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  width: double.maxFinite,
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      AppLightText(
-                        spacing: 16,
-                        text: "Welcome ${args['email']}",
-                        padding: EdgeInsets.zero,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: _form,
-                        child: Column(
-                          children: [
-                            AppLightText(
-                              text: "Password",
-                              size: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              spacing: 2,
-                              padding: EdgeInsets.zero,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Focus(
-                              autofocus: true,
-                              onFocusChange: (bool inFocus) {
-                                if (inFocus) {
-                                  FocusScope.of(context)
-                                      .requestFocus(_passwordFocusNode);
-                                }
-                              },
-                              child: TextFormField(
-                                controller: _passwordController,
-                                textInputAction: TextInputAction.done,
-                                keyboardType: TextInputType.name,
-                                focusNode: _passwordFocusNode,
-                                enableSuggestions: false,
-                                autocorrect: false,
-                                obscureText: _isObscure,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.buttonBackgroundColor,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  suffixIcon: GestureDetector(
-                                    onTap: () => toggleObscure(),
-                                    child: _isObscure
-                                        ? const Icon(Icons.remove_red_eye_outlined)
-                                        : const Icon(Icons.remove_red_eye),
-                                  ),
-                                  suffixIconColor:
-                                      AppColors.buttonBackgroundColor,
-                                ),
-
-                                onChanged: (value) =>
-                                    checkPasswordValidations(value),
-                                onFieldSubmitted: (_) {
-                                  saveForm();
-                                },
-                                onSaved: (value) {
-                                  goNextScreen(value);
-                                },
-
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // const SizedBox(
-                      //   height: 30,
-                      // ),
-                      // Align(
-                      //   alignment: Alignment.topLeft,
-                      //   child: AppLightText(
-                      //     spacing: 16,
-                      //     size: 14,
-                      //     text:
-                      //         "Password must meet the following requirements:",
-                      //     padding: EdgeInsets.zero,
-                      //   ),
-                      // ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      AppLightText(
-                        spacing: 16,
-                        text: "Minimum of 6 characters",
-                        isShowIcon: true,
-                        icon: Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 5),
-                          child: Icon(
-                            Icons.check,
-                            color: _minimumPasswordLength
-                                ? Colors.redAccent
-                                : Colors.black,
-                          ),
-                        ),
-                        padding: EdgeInsets.zero,
-                      ),
-                      AppLightText(
-                        spacing: 16,
-                        text: "At least one lower case",
-                        isShowIcon: true,
-                        icon: Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 5),
-                          child: Icon(
-                            Icons.check,
-                            color: _atLeastOneLowerCase
-                                ? Colors.redAccent
-                                : Colors.black,
-                          ),
-                        ),
-                        padding: EdgeInsets.zero,
-                      ),
-                      AppLightText(
-                        spacing: 16,
-                        text: "At least one upper case",
-                        isShowIcon: true,
-                        icon: Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 5),
-                          child: Icon(
-                            Icons.check,
-                            color: _atLeastOneUpperCase
-                                ? Colors.redAccent
-                                : Colors.black,
-                          ),
-                        ),
-                        padding: EdgeInsets.zero,
-                      ),
-                      AppLightText(
-                        spacing: 16,
-                        text: "At least one number",
-                        isShowIcon: true,
-                        icon: Container(
-                          width: 10,
-                          height: 10,
-                          margin: const EdgeInsets.only(right: 5),
-                          child: Icon(
-                            Icons.check,
-                            color: _atLeastOneNumber
-                                ? Colors.redAccent
-                                : Colors.black,
-                          ),
-                        ),
-                        padding: EdgeInsets.zero,
-                      ),
-                    ],
-                  ),
+              padding: EdgeInsets.zero,
+            ),
+            AppLightText(
+              spacing: 16,
+              text: "At least one lower case",
+              isShowIcon: true,
+              icon: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.only(right: 5),
+                child: Icon(
+                  Icons.check,
+                  color: _atLeastOneLowerCase ? Colors.redAccent : Colors.black,
                 ),
               ),
-            ],
-          );
-        }),
+              padding: EdgeInsets.zero,
+            ),
+            AppLightText(
+              spacing: 16,
+              text: "At least one upper case",
+              isShowIcon: true,
+              icon: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.only(right: 5),
+                child: Icon(
+                  Icons.check,
+                  color: _atLeastOneUpperCase ? Colors.redAccent : Colors.black,
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            AppLightText(
+              spacing: 16,
+              text: "At least one number",
+              isShowIcon: true,
+              icon: Container(
+                width: 10,
+                height: 10,
+                margin: const EdgeInsets.only(right: 5),
+                child: Icon(
+                  Icons.check,
+                  color: _atLeastOneNumber ? Colors.redAccent : Colors.black,
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+          ],
+        ),
       ),
+      // body: NestedScrollView(
+      //   controller: _scrollController,
+      //   headerSliverBuilder: (context, innerBoxIsScrolled) {
+      //     return <Widget>[
+      //       SliverOverlapAbsorber(
+      //         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+      //         sliver: SliverAppBar(
+      //           centerTitle: false,
+      //           leading: InkWell(
+      //             onTap: () {
+      //               FocusScope.of(context).unfocus();
+      //               Navigator.of(context).pop();
+      //             },
+      //             child: const Icon(
+      //               Icons.arrow_back,
+      //               color: Colors.black,
+      //             ),
+      //           ),
+      //           backgroundColor: Colors.white,
+      //           pinned: true,
+      //           stretch: true,
+      //           expandedHeight: 120.0,
+      //           flexibleSpace: FlexibleSpaceBar(
+      //             collapseMode: CollapseMode.pin,
+      //             centerTitle: false,
+      //             title: _innerListIsScrolled
+      //                 ? const Text(
+      //                     "PLEASE SET A PASSWORD",
+      //                     style: TextStyle(
+      //                       color: Colors.black,
+      //                       fontSize: 20,
+      //                       fontWeight: FontWeight.bold,
+      //                       fontFamily: 'Montserrat',
+      //                     ),
+      //                   )
+      //                 : null,
+      //             background: MyBackground(),
+      //           ),
+      //         ),
+      //       ),
+      //     ];
+      //   },
+      //   body: Builder(builder: (BuildContext context) {
+      //     return CustomScrollView(
+      //       slivers: [
+      //         SliverOverlapInjector(
+      //           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+      //             context,
+      //           ),
+      //         ),
+      //         SliverToBoxAdapter(
+      //           child: Container(
+      //             alignment: Alignment.topLeft,
+      //             margin:
+      //                 const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+      //             width: double.maxFinite,
+      //             height: MediaQuery.of(context).size.height * 0.7,
+      //             child: Column(
+      //               children: [
+      //                 const SizedBox(
+      //                   height: 20,
+      //                 ),
+      //                 AppLightText(
+      //                   spacing: 16,
+      //                   text: "Welcome ${args['email']}",
+      //                   padding: EdgeInsets.zero,
+      //                 ),
+      //                 const SizedBox(
+      //                   height: 10,
+      //                 ),
+      //                 Form(
+      //                   key: _form,
+      //                   child: Column(
+      //                     children: [
+      //                       AppLightText(
+      //                         text: "Password",
+      //                         size: 18,
+      //                         color: Colors.black,
+      //                         fontWeight: FontWeight.bold,
+      //                         spacing: 2,
+      //                         padding: EdgeInsets.zero,
+      //                       ),
+      //                       const SizedBox(
+      //                         height: 10,
+      //                       ),
+      //                       Focus(
+      //                         autofocus: true,
+      //                         onFocusChange: (bool inFocus) {
+      //                           if (inFocus) {
+      //                             FocusScope.of(context)
+      //                                 .requestFocus(_passwordFocusNode);
+      //                           }
+      //                         },
+      //                         child: CustomTextFormField(
+      //                           controller: _passwordController,
+      //                           keyboardType: TextInputType.name,
+      //                           textInputAction: TextInputAction.done,
+      //                           focusNode: _passwordFocusNode,
+      //                           onChanged: (value) =>
+      //                               checkPasswordValidations(value),
+      //                           onSaved: (value) => goNextScreen(value),
+      //                           onFieldSubmitted: (_) => saveForm(),
+      //                           obscureText: _isObscure,
+      //                           suffixIcon: GestureDetector(
+      //                                   onTap: () => toggleObscure(),
+      //                                   child: _isObscure
+      //                                       ? const Icon(Icons.remove_red_eye_outlined)
+      //                                       : const Icon(Icons.remove_red_eye),
+      //                                 ),
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                 ),
+      //                 const SizedBox(
+      //                   height: 20,
+      //                 ),
+      //                 AppLightText(
+      //                   spacing: 16,
+      //                   text: "Minimum of 6 characters",
+      //                   isShowIcon: true,
+      //                   icon: Container(
+      //                     width: 10,
+      //                     height: 10,
+      //                     margin: const EdgeInsets.only(right: 5),
+      //                     child: Icon(
+      //                       Icons.check,
+      //                       color: _minimumPasswordLength
+      //                           ? Colors.redAccent
+      //                           : Colors.black,
+      //                     ),
+      //                   ),
+      //                   padding: EdgeInsets.zero,
+      //                 ),
+      //                 AppLightText(
+      //                   spacing: 16,
+      //                   text: "At least one lower case",
+      //                   isShowIcon: true,
+      //                   icon: Container(
+      //                     width: 10,
+      //                     height: 10,
+      //                     margin: const EdgeInsets.only(right: 5),
+      //                     child: Icon(
+      //                       Icons.check,
+      //                       color: _atLeastOneLowerCase
+      //                           ? Colors.redAccent
+      //                           : Colors.black,
+      //                     ),
+      //                   ),
+      //                   padding: EdgeInsets.zero,
+      //                 ),
+      //                 AppLightText(
+      //                   spacing: 16,
+      //                   text: "At least one upper case",
+      //                   isShowIcon: true,
+      //                   icon: Container(
+      //                     width: 10,
+      //                     height: 10,
+      //                     margin: const EdgeInsets.only(right: 5),
+      //                     child: Icon(
+      //                       Icons.check,
+      //                       color: _atLeastOneUpperCase
+      //                           ? Colors.redAccent
+      //                           : Colors.black,
+      //                     ),
+      //                   ),
+      //                   padding: EdgeInsets.zero,
+      //                 ),
+      //                 AppLightText(
+      //                   spacing: 16,
+      //                   text: "At least one number",
+      //                   isShowIcon: true,
+      //                   icon: Container(
+      //                     width: 10,
+      //                     height: 10,
+      //                     margin: const EdgeInsets.only(right: 5),
+      //                     child: Icon(
+      //                       Icons.check,
+      //                       color: _atLeastOneNumber
+      //                           ? Colors.redAccent
+      //                           : Colors.black,
+      //                     ),
+      //                   ),
+      //                   padding: EdgeInsets.zero,
+      //                 ),
+      //               ],
+      //             ),//get
+      //           ),
+      //         ),
+      //       ],
+      //     );
+      //   }),
+      // ),
       floatingActionButton: _isShowContinueButton
           ? CustomButton(
               buttonText: "Continue",
@@ -373,109 +464,3 @@ class _PasswordScreenState extends State<PasswordScreen> {
     );
   }
 }
-
-class MyBackground extends StatefulWidget {
-  @override
-  State<MyBackground> createState() => _MyBackgroundState();
-}
-
-class _MyBackgroundState extends State<MyBackground> {
-  @override
-  Widget build(BuildContext context) {
-    final FlexibleSpaceBarSettings? settings =
-        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-    if (settings != null) {
-      print(settings.currentExtent);
-      print(settings.maxExtent);
-      print(kToolbarHeight);
-    }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          AppLightText(
-            text: "PLEASE SET A PASSWORD",
-            size: 24,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            spacing: 2,
-            padding: EdgeInsets.zero,
-          )
-        ],
-      ),
-    );
-  }
-}
-// ),
-// SliverAppBar(
-//   pinned: _pinned,
-//   snap: _snap,
-//   floating: _floating,
-//   expandedHeight: 200,
-//   backgroundColor: AppColors.mainColor,
-//
-//   flexibleSpace: FlexibleSpaceBar(
-//     centerTitle: false,
-//     title: Align(
-//       alignment: Alignment.bottomLeft,
-//       child: Text(
-//         "PLEASE SET A PASSWORD TO SIGNUP",
-//         style: TextStyle(
-//           fontSize: 18,
-//           fontWeight: FontWeight.bold,
-//           fontFamily: 'Montserrat',
-//         ),
-//       ),
-//     ),
-//     background: Image.network(
-//       "https://i.picsum.photos/id/132/200/200.jpg?hmac=meVrCoOURNB7iKK3Mv-yuRrvxvXgv4h2vIRLM4sKwK4",
-//       fit: BoxFit.cover,
-//     ),
-//   ),
-// ),
-// SingleChildScrollView(
-//     child: Column(
-//   children: [
-//     Container(
-//       height: MediaQuery.of(context).size.height * 0.3,
-//       width: double.maxFinite,
-//       child: Stack(
-//         children: [
-//           Positioned(
-//             child: Image.network(
-//               "https://i.picsum.photos/id/454/200/200.jpg?hmac=N13wDge6Ku6Eg_LxRRsrfzC1A4ZkpCScOEp-hH-PwHg",
-//             ),
-//           ),
-//         ],
-//       ),
-//     ),
-//     Container(
-//       height: MediaQuery.of(context).size.height * 0.6,
-//       child: Form(
-//         key: _form,
-//         child: TextFormField(
-//           decoration: InputDecoration(
-//
-//             focusedBorder: UnderlineInputBorder(
-//               borderSide: BorderSide(
-//                 color: AppColors.buttonBackgroundColor,
-//               ),
-//             ),
-//             labelText: "Password",
-//             labelStyle: const TextStyle(
-//               color: Colors.black,
-//             ),
-//           ),
-//           textInputAction: TextInputAction.done,
-//           onFieldSubmitted: (_) {
-//             // saveForm();
-//           },
-//           onSaved: (value) {
-//             // checkEmailIsRegistered(value);
-//           },
-//         ),
-//       ),
-//     )
-//   ],
-// )),
