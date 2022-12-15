@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,7 +6,7 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
-import '../helpers/app_colors.dart';
+
 import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../services/firebase_firestore_service.dart';
@@ -59,7 +60,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: Column(
                 children: [
                   AppLightText(
-                    text: "Email",
+                    text: 'email_title'.tr(),
                     size: 18,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -81,61 +82,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       checkEmailIsRegistered(value);
                     },
                   ),
-                  // TextFormField(
-                  //   controller: _emailController,
-                  //   textInputAction: TextInputAction.done,
-                  //   keyboardType: TextInputType.emailAddress,
-                  //   enableSuggestions: true,
-                  //   autocorrect: true,
-                  //   decoration: InputDecoration(
-                  //     filled: true,
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(15.0),
-                  //       // borderSide: BorderSide.none,
-                  //     ),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderSide: BorderSide(
-                  //         color: AppColors.buttonBackgroundColor,
-                  //         width: 2,
-                  //       ),
-                  //     ),
-                  //   ),
-                  //   onChanged: (character) => checkIfEmailChanged(character),
-                  //   onFieldSubmitted: (_) {
-                  //     saveForm();
-                  //   },
-                  //   onSaved: (value) {
-                  //     checkEmailIsRegistered(value);
-                  //   },
-                  // ),
-                  // TextFormField(
-                  //   textInputAction: TextInputAction.done,
-                  //   keyboardType: TextInputType.emailAddress,
-                  //   enableSuggestions: true,
-                  //   autocorrect: true,
-                  //   decoration: InputDecoration(
-                  //     filled: true,
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(8.0),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //     hintText: "Enter your email",
-                  //     prefixIconColor: AppColors.buttonBackgroundColor,
-                  //   ),
-                  //   onFieldSubmitted: (_) {
-                  //     saveForm();
-                  //   },
-                  //   onSaved: (value) {
-                  //     checkEmailIsRegistered(value);
-                  //   },
-                  // ),
                   if (_isShowSaveButton)
                     const SizedBox(
                       height: 30,
                     ),
                   if (_isShowSaveButton)
                     CustomButton(
-                      buttonText: "Continue",
+                      buttonText: 'continue_btn'.tr(),
                       onTap: saveForm,
                       borderRadius: 20,
                     ),
@@ -151,7 +104,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       ),
                       AppLightText(
                         spacing: 16,
-                        text: "or",
+                        text: 'or_divider'.tr(),
                         size: 12,
                         color: Colors.black87,
                         padding: EdgeInsets.zero,
@@ -167,7 +120,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ],
                   ),
                   CustomButton(
-                    buttonText: "Continue with Google",
+                    buttonText: 'continue_with_google_btn'.tr(),
                     borderColor: Colors.black,
                     onTap: () {
                       AuthService().signInWithGoogle(context);
@@ -216,7 +169,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           alertTitle: "Discrepancy on email",
           alertMessage:
               "There is a discrepancy on email. Please, contact support",
-          popButtonText: "Ok",
+          popButtonText: 'back_btn'.tr(),
           onPopTap: () => Navigator.of(context).pop(),
         );
       } else {

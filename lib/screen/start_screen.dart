@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,7 +67,7 @@ class _StartScreenState extends State<StartScreen> {
                 alignment: Alignment.topCenter,
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: AppLightText(
-                  text: 'Discover the land of fire',
+                  text: 'discover_the_land_of_fire'.tr(),
                   color: Colors.white,
                   size: 32,
                   fontWeight: FontWeight.bold,
@@ -80,7 +81,7 @@ class _StartScreenState extends State<StartScreen> {
               ),
               Expanded(child: Container()),
               CustomButton(
-                buttonText: "Get Started",
+                buttonText: 'get_started_btn'.tr(),
                 onTap: goToMainScreen,
                 borderRadius: 15,
                 horizontalMargin: 20,

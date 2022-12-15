@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
+
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
 
@@ -89,7 +91,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title: "CHANGE NAME",
+        title: 'change_name_app_bar_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
@@ -102,7 +104,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                   Column(
                     children: [
                       AppLightText(
-                        text: "First name",
+                        text: 'first_name'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -138,7 +140,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                   Column(
                     children: [
                       AppLightText(
-                        text: "Last name",
+                        text: 'last_name'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -167,7 +169,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
       ),
       floatingActionButton: _isShowSaveButton
           ? CustomButton(
-              buttonText: "Done",
+              buttonText: 'done_btn'.tr(),
               borderRadius: 15,
               horizontalMargin: 20,
               verticalMargin: 5,

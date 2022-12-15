@@ -12,6 +12,7 @@ class Destinations with ChangeNotifier {
   var uuid = Uuid();
   final List<Destination> _destinationItems = [];
   Stream<List<Destination>> get destinationItemsAll {
+
     final allDestination = firestore_service.getDestinations();
     print("DESTINATIKON");
     print(allDestination.length);

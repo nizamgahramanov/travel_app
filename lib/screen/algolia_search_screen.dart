@@ -1,5 +1,6 @@
 import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -77,7 +78,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
             Column(
               children: [
                 AppLightText(
-                  text: "Search",
+                  text: 'search_title'.tr(),
                   size: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -121,57 +122,6 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                   },
                   onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
                 )
-                // TextFormField(
-                //   controller: _searchTextController,
-                //   textInputAction: TextInputAction.done,
-                //   keyboardType: TextInputType.name,
-                //   enableSuggestions: true,
-                //   autocorrect: true,
-                //   decoration: InputDecoration(
-                //     filled: true,
-                //     border: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(15.0),
-                //     ),
-                //     focusedBorder: OutlineInputBorder(
-                //       borderSide: BorderSide(
-                //         color: AppColors.buttonBackgroundColor,
-                //         width: 2,
-                //       ),
-                //     ),
-                //     suffixIcon: _isShowClearIcon
-                //         ? IconButton(
-                //             onPressed: () {
-                //               _searchTextController.clear();
-                //               setState(() {
-                //                 _isShowClearIcon = false;
-                //                 if (_results != null) {
-                //                   _results = null;
-                //                 }
-                //               });
-                //             },
-                //             icon: Icon(Icons.clear),
-                //           )
-                //         : null,
-                //     prefixIconColor: AppColors.buttonBackgroundColor,
-                //   ),
-                //   onChanged: (_) {
-                //     if (_searchTextController.text.length >= 2) {
-                //       _debouncer.run(() {
-                //         _search();
-                //       });
-                //     } else {
-                //       setState(() {
-                //         if (_results != null) {
-                //           _results = null;
-                //         }
-                //         _isShowClearIcon=false;
-                //       });
-                //     }
-                //   },
-                //   onFieldSubmitted: (_) {
-                //     FocusScope.of(context).unfocus();
-                //   },
-                // ),
               ],
             ),
             const SizedBox(
@@ -202,7 +152,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                         'assets/svg/no_result_found.svg'),
                                   ),
                                   AppLightText(
-                                    text: 'No Result Found',
+                                    text: 'no_result_found_info'.tr(),
                                     padding: EdgeInsets.zero,
                                     spacing: 0,
                                     fontWeight: FontWeight.bold,

@@ -1,15 +1,20 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/model/destination_location.dart';
+import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:uuid/uuid.dart';
+import '../helpers/app_light_text.dart';
 import '../helpers/utility.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
+import '../reusable/custom_text_form_field.dart';
 import '../widgets/destination_image_picker.dart';
 import '../widgets/location_input.dart';
 
@@ -28,13 +33,20 @@ class AddDestinationScreen extends StatefulWidget {
 }
 
 class _AddDestinationScreenState extends State<AddDestinationScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final overviewController = TextEditingController();
-  final regionController = TextEditingController();
-  final typeController = TextEditingController();
+  final _addDestinationForm = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _overviewController = TextEditingController();
+  final _overviewAzController = TextEditingController();
+  final _regionController = TextEditingController();
+  final _regionAzController = TextEditingController();
+  final _typeController = TextEditingController();
   final _imageUrlController = TextEditingController();
   final _imageUrlFocusNode = FocusNode();
+  final _nameFocusNode = FocusNode();
+  final _overviewFocusNode = FocusNode();
+  final _overviewAzFocusNode = FocusNode();
+  final _regionFocusNode = FocusNode();
+  final _regionAzFocusNode = FocusNode();
   List<File?> _destinationImageFile = [];
   DestinationLocation? _destinationLocation;
   var _isLoading = false;
@@ -45,14 +57,16 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     id: const Uuid().v4(),
     name: "",
     overview: "",
+    overviewAz: "",
     region: "",
+    regionAz: "",
     type: "",
     photoUrl: [],
     geoPoint: const GeoPoint(40.6079186, 49.5886951),
   );
 
   void _saveForm() async {
-    final isValid = _formKey.currentState!.validate();
+    final isValid = _addDestinationForm.currentState!.validate();
     setState(() {
       _isLoading = true;
     });
@@ -60,7 +74,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     if (!isValid) {
       return;
     }
-    _formKey.currentState!.save();
+    _addDestinationForm.currentState!.save();
     try {
       if (_destinationImageFile.isNotEmpty &&
           _destinationLocation?.latitude != null) {
@@ -108,87 +122,182 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 1,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+      // resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.backgroundColorOfApp,
+      body: CustomNestedScrollView(
+        title: 'add_destination'.tr(),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Form(
+              key: _addDestinationForm,
+              child: Column(
+                children: [
+                  Column(
                     children: [
+                      AppLightText(
+                        spacing: 2,
+                        text: 'name_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        padding: EdgeInsets.zero,
+                      ),
                       const SizedBox(
-                        height: 30,
+                        height: 10,
                       ),
-                      TextFormField(
-                        controller: nameController,
+                      Focus(
+                        autofocus: true,
+                        onFocusChange: (bool inFocus) {
+                          if (inFocus) {
+                            FocusScope.of(context).requestFocus(_nameFocusNode);
+                          }
+                        },
+                        child: CustomTextFormField(
+                          controller: _nameController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.emailAddress,
+                          focusNode: _nameFocusNode,
+                          onChanged: (_) {},
+                          onFieldSubmitted: (_) => FocusScope.of(context)
+                              .requestFocus(_overviewFocusNode),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'overview'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        controller: _overviewController,
                         textInputAction: TextInputAction.next,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Destination';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Destination Name',
-                        ),
-                        onSaved: (value) {
-                          destinationItem = Destination(
-                            id: destinationItem.id,
-                            name: value!,
-                            overview: destinationItem.overview,
-                            region: destinationItem.region,
-                            type: destinationItem.type,
-                            photoUrl: destinationItem.photoUrl,
-                            geoPoint: destinationItem.geoPoint,
-                          );
-                        },
+                        keyboardType: TextInputType.text,
+                        focusNode: _overviewFocusNode,
+                        onChanged: (value) {},
+                        onFieldSubmitted: (_) => FocusScope.of(context)
+                            .requestFocus(_overviewAzFocusNode),
+                        // onFieldSubmitted: (_) => saveForm(),
+                        // onSaved: (_) => saveEmailChange(),
                       ),
-                      TextFormField(
-                        controller: overviewController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Overview';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Destination Overview',
-                        ),
-                        onSaved: (value) {
-                          destinationItem = Destination(
-                              id: destinationItem.id,
-                              name: destinationItem.name,
-                              overview: value!,
-                              region: destinationItem.region,
-                              type: destinationItem.type,
-                              photoUrl: destinationItem.photoUrl,
-                              geoPoint: destinationItem.geoPoint);
-                        },
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'overview_az_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                        fontWeight: FontWeight.bold,
                       ),
-                      TextFormField(
-                        controller: regionController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please Enter Region';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Enter Destination Region',
-                        ),
-                        onSaved: (value) {
-                          destinationItem = Destination(
-                              id: destinationItem.id,
-                              name: destinationItem.name,
-                              overview: destinationItem.overview,
-                              region: value!,
-                              type: destinationItem.type,
-                              photoUrl: destinationItem.photoUrl,
-                              geoPoint: destinationItem.geoPoint);
-                        },
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        controller: _overviewAzController,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        focusNode: _overviewAzFocusNode,
+                        onChanged: (value) {},
+                        onFieldSubmitted: (_) => FocusScope.of(context)
+                            .requestFocus(_regionFocusNode),
+                        // onFieldSubmitted: (_) => saveForm(),
+                        // onSaved: (_) => saveEmailChange(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'region_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        controller: _regionController,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        focusNode: _regionFocusNode,
+                        onChanged: (value) {},
+                        onFieldSubmitted: (_) => FocusScope.of(context)
+                            .requestFocus(_regionAzFocusNode),
+                        // onFieldSubmitted: (_) => saveForm(),
+                        // onSaved: (_) => saveEmailChange(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'region_az_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        controller: _regionAzController,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        focusNode: _regionFocusNode,
+                        onChanged: (value) {},
+                        onFieldSubmitted: (_) => FocusScope.of(context)
+                            .requestFocus(_regionAzFocusNode),
+                        // onFieldSubmitted: (_) => saveForm(),
+                        // onSaved: (_) => saveEmailChange(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'type_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       DropdownButton<String>(
                         value: dropdownValue,
@@ -215,22 +324,144 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                           );
                         }).toList(),
                       ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      DestinationImagePicker(pickedImage),
-                      LocationInput(_selectPlace),
                     ],
                   ),
-                ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  DestinationImagePicker(pickedImage),
+                  LocationInput(_selectPlace),
+                ],
               ),
-            )),
-      ),
-      floatingActionButton: CustomButton(
-        onTap: _saveForm,
-        buttonText: "SAVE",
-        borderRadius: 25,
+            ),
+          ],
+        ),
       ),
     );
+    // return Scaffold(
+    //   body: Center(
+    //     child: Form(
+    //         key: _formKey,
+    //         child: SingleChildScrollView(
+    //           child: Padding(
+    //             padding: const EdgeInsets.all(10),
+    //             child: Container(
+    //               height: MediaQuery.of(context).size.height * 1,
+    //               child: Column(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 children: [
+    //                   const SizedBox(
+    //                     height: 30,
+    //                   ),
+    //                   TextFormField(
+    //                     controller: nameController,
+    //                     textInputAction: TextInputAction.next,
+    //                     validator: (value) {
+    //                       if (value!.isEmpty) {
+    //                         return 'Please Enter Destination';
+    //                       }
+    //                       return null;
+    //                     },
+    //                     decoration: const InputDecoration(
+    //                       hintText: 'Enter Destination Name',
+    //                     ),
+    //                     onSaved: (value) {
+    //                       destinationItem = Destination(
+    //                         id: destinationItem.id,
+    //                         name: value!,
+    //                         overview: destinationItem.overview,
+    //                         region: destinationItem.region,
+    //                         type: destinationItem.type,
+    //                         photoUrl: destinationItem.photoUrl,
+    //                         geoPoint: destinationItem.geoPoint,
+    //                       );
+    //                     },
+    //                   ),
+    //                   TextFormField(
+    //                     controller: overviewController,
+    //                     validator: (value) {
+    //                       if (value!.isEmpty) {
+    //                         return 'Please Enter Overview';
+    //                       }
+    //                       return null;
+    //                     },
+    //                     decoration: const InputDecoration(
+    //                       hintText: 'Enter Destination Overview',
+    //                     ),
+    //                     onSaved: (value) {
+    //                       destinationItem = Destination(
+    //                           id: destinationItem.id,
+    //                           name: destinationItem.name,
+    //                           overview: value!,
+    //                           region: destinationItem.region,
+    //                           type: destinationItem.type,
+    //                           photoUrl: destinationItem.photoUrl,
+    //                           geoPoint: destinationItem.geoPoint);
+    //                     },
+    //                   ),
+    //                   TextFormField(
+    //                     controller: regionController,
+    //                     validator: (value) {
+    //                       if (value!.isEmpty) {
+    //                         return 'Please Enter Region';
+    //                       }
+    //                       return null;
+    //                     },
+    //                     decoration: const InputDecoration(
+    //                       hintText: 'Enter Destination Region',
+    //                     ),
+    //                     onSaved: (value) {
+    //                       destinationItem = Destination(
+    //                           id: destinationItem.id,
+    //                           name: destinationItem.name,
+    //                           overview: destinationItem.overview,
+    //                           region: value!,
+    //                           type: destinationItem.type,
+    //                           photoUrl: destinationItem.photoUrl,
+    //                           geoPoint: destinationItem.geoPoint);
+    //                     },
+    //                   ),
+    //                   DropdownButton<String>(
+    //                     value: dropdownValue,
+    //                     icon: const Icon(Icons.arrow_downward),
+    //                     elevation: 16,
+    //                     style: const TextStyle(color: Colors.deepPurple),
+    //                     underline: Container(
+    //                       height: 2,
+    //                       color: Colors.deepPurpleAccent,
+    //                     ),
+    //                     onChanged: (String? value) {
+    //                       // This is called when the user selects an item.
+    //                       print("VALUE");
+    //                       print(value);
+    //                       setState(() {
+    //                         dropdownValue = value!;
+    //                       });
+    //                     },
+    //                     items: destinationType
+    //                         .map<DropdownMenuItem<String>>((String value) {
+    //                       return DropdownMenuItem<String>(
+    //                         value: value,
+    //                         child: Text(value),
+    //                       );
+    //                     }).toList(),
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 25,
+    //                   ),
+    //                   DestinationImagePicker(pickedImage),
+    //                   LocationInput(_selectPlace),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         )),
+    //   ),
+    //   floatingActionButton: CustomButton(
+    //     onTap: _saveForm,
+    //     buttonText: "SAVE",
+    //     borderRadius: 25,
+    //   ),
+    // );
   }
 }

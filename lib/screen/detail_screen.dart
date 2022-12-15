@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
@@ -33,14 +34,14 @@ class _DetailScreenState extends State<DetailScreen>
       // should be open dialog in order to make kindly force user to login
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: "Be Our Valuable Member",
-        popButtonText: "Back",
+        alertTitle: 'be_our_valuable_member_dialog_msg_title'.tr(),
+        popButtonText: 'back_btn'.tr(),
         onPopTap: () => Navigator.of(context).pop(),
         popButtonColor: AppColors.backgroundColorOfApp,
         popButtonTextColor: Colors.black,
         isShowActionButton: true,
-        alertMessage: "Please, sign up before make favorite",
-        actionButtonText: "Sign Up",
+        alertMessage: 'please_sign_up_before_make_favorite_dialog_msg_subtitle'.tr(),
+        actionButtonText: 'sign_up_btn'.tr(),
         actionButtonColor: AppColors.buttonBackgroundColor,
         onTapAction: () => Navigator.push(
           context,
@@ -268,7 +269,7 @@ class _DetailScreenState extends State<DetailScreen>
                                 height: 15,
                               ),
                               AppLightText(
-                                text: "Overview",
+                                text: 'overview'.tr(),
                                 color: Colors.black,
                                 size: 22,
                                 fontWeight: FontWeight.bold,
@@ -297,7 +298,7 @@ class _DetailScreenState extends State<DetailScreen>
         ),
       ),
       floatingActionButton:CustomButton(
-        buttonText: "View On Map",
+        buttonText: 'view_on_map_btn'.tr(),
         borderRadius: 15,
         horizontalMargin: 20,
         verticalMargin: 20,

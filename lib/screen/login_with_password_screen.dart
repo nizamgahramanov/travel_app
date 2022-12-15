@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/utility.dart';
@@ -84,9 +85,9 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
         Utility.getInstance().showAlertDialog(
           popButtonColor: AppColors.backgroundColorOfApp,
           context: context,
-          alertTitle: "Password Is Not Correct",
-          alertMessage: "Please, check and try again",
-          popButtonText: "Back",
+          alertTitle: 'password_is_not_correct_dialog_msg'.tr(),
+          alertMessage: 'please_check_and_try_again_dialog_msg'.tr(),
+          popButtonText: 'back_btn'.tr(),
           onPopTap: () => Navigator.of(context).pop(),
           popButtonTextColor: Colors.black,
         );
@@ -99,7 +100,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     return Scaffold(
       appBar: AppBar(
         title: AppLightText(
-          text: "WELCOME BACK",
+          text: 'welcome_back_title'.tr(),
           size: 20,
           color: Colors.black,
           fontWeight: FontWeight.bold,
@@ -134,7 +135,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                   child: Column(
                     children: [
                       AppLightText(
-                        text: "Current Password",
+                        text: 'current_password_title'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -171,7 +172,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
       ),
       floatingActionButton: _isShowDoneButton
           ? CustomButton(
-              buttonText: "Done",
+              buttonText: 'done_btn'.tr(),
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,

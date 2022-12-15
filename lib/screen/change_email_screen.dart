@@ -1,14 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
+
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../services/auth_service.dart';
-import '../services/firebase_firestore_service.dart';
 
 class ChangeEmailScreen extends StatefulWidget {
   const ChangeEmailScreen({
@@ -26,7 +27,7 @@ class ChangeEmailScreen extends StatefulWidget {
 class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
   final _changeEmailForm = GlobalKey<FormState>();
   TextEditingController? _emailController;
-  final TextEditingController _passwordController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isObscure = true;
   final _passwordFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
@@ -98,9 +99,9 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
         Utility.getInstance().showAlertDialog(
           popButtonColor: Colors.red,
           context: context,
-          alertTitle: "Password Is Not Correct",
-          alertMessage: "Please, check and try again",
-          popButtonText: "Ok",
+          alertTitle: 'password_is_not_correct_dialog_msg'.tr(),
+          alertMessage: 'please_check_and_try_again_dialog_msg'.tr(),
+          popButtonText: 'back_btn'.tr(),
           onPopTap: () => Navigator.of(context).pop(),
         );
       }
@@ -118,7 +119,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title: "CHANGE EMAIL",
+        title: 'change_email_app_bar_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
@@ -132,7 +133,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                     children: [
                       AppLightText(
                         spacing: 2,
-                        text: "Email",
+                        text: 'email_title'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -167,7 +168,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                   Column(
                     children: [
                       AppLightText(
-                        text: "Current Password",
+                        text: 'current_password_title'.tr(),
                         size: 18,
                         color: Colors.black,
                         spacing: 2,
@@ -203,7 +204,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
       ),
       floatingActionButton: _isShowSaveButton
           ? CustomButton(
-              buttonText: "Done",
+              buttonText: 'done_btn'.tr(),
               borderRadius: 15,
               horizontalMargin: 20,
               verticalMargin: 5,

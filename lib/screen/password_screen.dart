@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/user_info.dart';
-
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
@@ -136,7 +136,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title: "PLEASE SET A PASSWORD",
+        title: 'please_set_password_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
@@ -144,7 +144,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "Welcome ${args['email']}",
+              text: "'welcome_msg'.tr() ${args['email']}",
               padding: EdgeInsets.zero,
             ),
             const SizedBox(
@@ -155,7 +155,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               child: Column(
                 children: [
                   AppLightText(
-                    text: "Password",
+                    text: 'password_title'.tr(),
                     size: 18,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -197,7 +197,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "Minimum of 6 characters",
+              text: 'minimum_of_6_characters_validation'.tr(),
               isShowIcon: true,
               icon: Container(
                 width: 10,
@@ -213,7 +213,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "At least one lower case",
+              text: 'at_least_one_lower_case_validation'.tr(),
               isShowIcon: true,
               icon: Container(
                 width: 10,
@@ -228,7 +228,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "At least one upper case",
+              text: 'at_least_one_upper_case_validation'.tr(),
               isShowIcon: true,
               icon: Container(
                 width: 10,
@@ -243,7 +243,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "At least one number",
+              text: 'at_least_one_number_validation'.tr(),
               isShowIcon: true,
               icon: Container(
                 width: 10,
@@ -259,202 +259,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
           ],
         ),
       ),
-      // body: NestedScrollView(
-      //   controller: _scrollController,
-      //   headerSliverBuilder: (context, innerBoxIsScrolled) {
-      //     return <Widget>[
-      //       SliverOverlapAbsorber(
-      //         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-      //         sliver: SliverAppBar(
-      //           centerTitle: false,
-      //           leading: InkWell(
-      //             onTap: () {
-      //               FocusScope.of(context).unfocus();
-      //               Navigator.of(context).pop();
-      //             },
-      //             child: const Icon(
-      //               Icons.arrow_back,
-      //               color: Colors.black,
-      //             ),
-      //           ),
-      //           backgroundColor: Colors.white,
-      //           pinned: true,
-      //           stretch: true,
-      //           expandedHeight: 120.0,
-      //           flexibleSpace: FlexibleSpaceBar(
-      //             collapseMode: CollapseMode.pin,
-      //             centerTitle: false,
-      //             title: _innerListIsScrolled
-      //                 ? const Text(
-      //                     "PLEASE SET A PASSWORD",
-      //                     style: TextStyle(
-      //                       color: Colors.black,
-      //                       fontSize: 20,
-      //                       fontWeight: FontWeight.bold,
-      //                       fontFamily: 'Montserrat',
-      //                     ),
-      //                   )
-      //                 : null,
-      //             background: MyBackground(),
-      //           ),
-      //         ),
-      //       ),
-      //     ];
-      //   },
-      //   body: Builder(builder: (BuildContext context) {
-      //     return CustomScrollView(
-      //       slivers: [
-      //         SliverOverlapInjector(
-      //           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-      //             context,
-      //           ),
-      //         ),
-      //         SliverToBoxAdapter(
-      //           child: Container(
-      //             alignment: Alignment.topLeft,
-      //             margin:
-      //                 const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-      //             width: double.maxFinite,
-      //             height: MediaQuery.of(context).size.height * 0.7,
-      //             child: Column(
-      //               children: [
-      //                 const SizedBox(
-      //                   height: 20,
-      //                 ),
-      //                 AppLightText(
-      //                   spacing: 16,
-      //                   text: "Welcome ${args['email']}",
-      //                   padding: EdgeInsets.zero,
-      //                 ),
-      //                 const SizedBox(
-      //                   height: 10,
-      //                 ),
-      //                 Form(
-      //                   key: _form,
-      //                   child: Column(
-      //                     children: [
-      //                       AppLightText(
-      //                         text: "Password",
-      //                         size: 18,
-      //                         color: Colors.black,
-      //                         fontWeight: FontWeight.bold,
-      //                         spacing: 2,
-      //                         padding: EdgeInsets.zero,
-      //                       ),
-      //                       const SizedBox(
-      //                         height: 10,
-      //                       ),
-      //                       Focus(
-      //                         autofocus: true,
-      //                         onFocusChange: (bool inFocus) {
-      //                           if (inFocus) {
-      //                             FocusScope.of(context)
-      //                                 .requestFocus(_passwordFocusNode);
-      //                           }
-      //                         },
-      //                         child: CustomTextFormField(
-      //                           controller: _passwordController,
-      //                           keyboardType: TextInputType.name,
-      //                           textInputAction: TextInputAction.done,
-      //                           focusNode: _passwordFocusNode,
-      //                           onChanged: (value) =>
-      //                               checkPasswordValidations(value),
-      //                           onSaved: (value) => goNextScreen(value),
-      //                           onFieldSubmitted: (_) => saveForm(),
-      //                           obscureText: _isObscure,
-      //                           suffixIcon: GestureDetector(
-      //                                   onTap: () => toggleObscure(),
-      //                                   child: _isObscure
-      //                                       ? const Icon(Icons.remove_red_eye_outlined)
-      //                                       : const Icon(Icons.remove_red_eye),
-      //                                 ),
-      //                         ),
-      //                       ),
-      //                     ],
-      //                   ),
-      //                 ),
-      //                 const SizedBox(
-      //                   height: 20,
-      //                 ),
-      //                 AppLightText(
-      //                   spacing: 16,
-      //                   text: "Minimum of 6 characters",
-      //                   isShowIcon: true,
-      //                   icon: Container(
-      //                     width: 10,
-      //                     height: 10,
-      //                     margin: const EdgeInsets.only(right: 5),
-      //                     child: Icon(
-      //                       Icons.check,
-      //                       color: _minimumPasswordLength
-      //                           ? Colors.redAccent
-      //                           : Colors.black,
-      //                     ),
-      //                   ),
-      //                   padding: EdgeInsets.zero,
-      //                 ),
-      //                 AppLightText(
-      //                   spacing: 16,
-      //                   text: "At least one lower case",
-      //                   isShowIcon: true,
-      //                   icon: Container(
-      //                     width: 10,
-      //                     height: 10,
-      //                     margin: const EdgeInsets.only(right: 5),
-      //                     child: Icon(
-      //                       Icons.check,
-      //                       color: _atLeastOneLowerCase
-      //                           ? Colors.redAccent
-      //                           : Colors.black,
-      //                     ),
-      //                   ),
-      //                   padding: EdgeInsets.zero,
-      //                 ),
-      //                 AppLightText(
-      //                   spacing: 16,
-      //                   text: "At least one upper case",
-      //                   isShowIcon: true,
-      //                   icon: Container(
-      //                     width: 10,
-      //                     height: 10,
-      //                     margin: const EdgeInsets.only(right: 5),
-      //                     child: Icon(
-      //                       Icons.check,
-      //                       color: _atLeastOneUpperCase
-      //                           ? Colors.redAccent
-      //                           : Colors.black,
-      //                     ),
-      //                   ),
-      //                   padding: EdgeInsets.zero,
-      //                 ),
-      //                 AppLightText(
-      //                   spacing: 16,
-      //                   text: "At least one number",
-      //                   isShowIcon: true,
-      //                   icon: Container(
-      //                     width: 10,
-      //                     height: 10,
-      //                     margin: const EdgeInsets.only(right: 5),
-      //                     child: Icon(
-      //                       Icons.check,
-      //                       color: _atLeastOneNumber
-      //                           ? Colors.redAccent
-      //                           : Colors.black,
-      //                     ),
-      //                   ),
-      //                   padding: EdgeInsets.zero,
-      //                 ),
-      //               ],
-      //             ),//get
-      //           ),
-      //         ),
-      //       ],
-      //     );
-      //   }),
-      // ),
       floatingActionButton: _isShowContinueButton
           ? CustomButton(
-              buttonText: "Continue",
+              buttonText: 'continue_btn'.tr(),
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,

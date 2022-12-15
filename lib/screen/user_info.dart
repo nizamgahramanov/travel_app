@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
@@ -79,7 +80,7 @@ class _UserInfoState extends State<UserInfo> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title: "LET'S GET KNOW",
+        title:'let\'s_get_know_app_bar_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
@@ -92,7 +93,7 @@ class _UserInfoState extends State<UserInfo> {
                   Column(
                     children: [
                       AppLightText(
-                        text: "First name",
+                        text: 'first_name'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -128,7 +129,7 @@ class _UserInfoState extends State<UserInfo> {
                   Column(
                     children: [
                       AppLightText(
-                        text: "Last name",
+                        text: 'last_name'.tr(),
                         size: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -157,7 +158,7 @@ class _UserInfoState extends State<UserInfo> {
       ),
       floatingActionButton: _isShowSaveButton
           ? CustomButton(
-              buttonText: "Done",
+              buttonText: 'done_btn'.tr(),
               borderRadius: 15,
               horizontalMargin: 20,
               verticalMargin: 5,

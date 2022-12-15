@@ -1,12 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_tab_indicator.dart';
-import 'package:travel_app/widgets/carousel_item.dart';
-import 'package:provider/provider.dart';
 import 'package:travel_app/widgets/staggered_grid_item.dart';
-import '../helpers/app_light_text.dart';
 import '../helpers/destination_type.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
 import '../screen/detail_screen.dart';
@@ -19,10 +18,10 @@ class StaggeredGridView extends StatefulWidget {
 class _StaggeredGridViewState extends State<StaggeredGridView>
     with TickerProviderStateMixin {
   var tabNames = [
-    {DestinationType.place: 'Place'},
-    {DestinationType.forest: 'Forest'},
-    {DestinationType.lake: 'Lake'},
-    {DestinationType.waterfall: 'Waterfall'},
+    {DestinationType.place: 'place_tab'.tr()},
+    {DestinationType.forest: 'forest_tab'.tr()},
+    {DestinationType.lake: 'lake_tab'.tr()},
+    {DestinationType.waterfall: 'waterfall_tab'.tr()},
   ];
 
   @override
@@ -47,9 +46,6 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
               print(snapshot.data);
               return Column(
                 children: [
-                  // const SizedBox(
-                  //   height: 25,
-                  // ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TabBar(

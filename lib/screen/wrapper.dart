@@ -1,8 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/custom_buttom_navigation_bar.dart';
 import '../helpers/custom_tab_indicator.dart';
+import '../providers/language.dart';
 import 'algolia_search_screen.dart';
 import 'favorite_screen.dart';
 import 'home_screen.dart';
@@ -49,6 +52,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
     //   print(_currentPageNotifier.value);
     //
     // });
+    Language language = Provider.of<Language>(context);
     List<Widget> _icons = [
       const Icon(Icons.home_filled),
       const Icon(Icons.search),
@@ -63,7 +67,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
     };
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
-      body: SafeArea(bottom: false, child: screens[widget.bottomNavIndex]!),
+      body: screens[widget.bottomNavIndex]!,
       bottomNavigationBar: BottomNavigationBar(
 
         items: <BottomNavigationBarItem>[
@@ -73,7 +77,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
             ) : const Icon(
               Icons.home_outlined,
             ),
-            label: 'Home',
+            label: 'home_bottom_nav_bar'.tr(),
           ),
           BottomNavigationBarItem(
             icon: widget.bottomNavIndex == 1
@@ -83,7 +87,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
                 : const Icon(
                     Icons.search,
                   ),
-            label: 'Search',
+            label: 'search_bottom_nav_bar'.tr(),
           ),
           BottomNavigationBarItem(
             icon: widget.bottomNavIndex == 2
@@ -93,7 +97,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
                 : const Icon(
                     Icons.favorite_border_outlined,
                   ),
-            label: 'Favorite',
+            label: 'favorite_bottom_nav_bar'.tr(),
           ),
           BottomNavigationBarItem(
             icon: widget.isLogin
@@ -111,7 +115,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
                     : const Icon(
                         Icons.login_outlined,
                       ),
-            label: widget.isLogin ? "Profile" : "Login",
+            label: widget.isLogin ?'profile_bottom_nav_bar'.tr() : 'login_bottom_nav_bar'.tr(),
           ),
         ],
         onTap: _onItemTapped,

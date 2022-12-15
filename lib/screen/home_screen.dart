@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppLightText(
-                  text: 'Discover',
+                  text: 'home_title'.tr(),
                   color: AppColors.mainTextColor,
                   fontWeight: FontWeight.bold,
                   spacing: 2,
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 ElevatedButton.icon(
                   onPressed: goToAddDestinationScreen,
-                  label: const Text("Add"),
+                  label: Text('home_add_btn'.tr()),
                   icon: const Icon(Icons.add),
                 )
               ],
