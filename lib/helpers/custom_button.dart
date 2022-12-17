@@ -12,25 +12,31 @@ class CustomButton extends StatelessWidget {
   double verticalMargin;
   Color? textColor;
   Widget? icon;
+  double buttonTextSize;
+  double height;
+  EdgeInsets? textPadding;
 
-  CustomButton(
-      {Key? key,
-      required this.onTap,
-      required this.buttonText,
-      this.buttonColor,
-      required this.borderRadius,
-      this.borderColor,
-      this.horizontalMargin = 0.0,
-      this.verticalMargin = 0.0,
-      this.textColor,
-      this.icon})
-      : super(key: key);
+  CustomButton({
+    Key? key,
+    required this.onTap,
+    required this.buttonText,
+    this.buttonTextSize = 18,
+    this.buttonColor,
+    required this.borderRadius,
+    this.borderColor,
+    this.horizontalMargin = 0.0,
+    this.verticalMargin = 0.0,
+    this.textColor,
+    this.icon,
+    this.height = 60,
+    this.textPadding=EdgeInsets.zero
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: double.infinity,
+      height: height,
+      // width: double.infinity,
       margin: EdgeInsets.symmetric(
         horizontal: horizontalMargin,
         vertical: verticalMargin,
@@ -51,12 +57,14 @@ class CustomButton extends StatelessWidget {
             Material(
               color: Colors.transparent,
               child: Container(
-                // padding: const EdgeInsets.all(10),
+                padding: textPadding,
+                // color: Colors.red,
+
                 child: Center(
                   child: AppLightText(
                     spacing: 2,
                     text: buttonText,
-                    size: 18,
+                    size: buttonTextSize,
                     color: textColor == null ? Colors.white : textColor!,
                     padding: EdgeInsets.zero,
                     fontWeight: FontWeight.bold,

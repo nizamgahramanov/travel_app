@@ -107,7 +107,7 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  height: MediaQuery.of(context).size.height *1.2,
+                  height: MediaQuery.of(context).size.height *1.7,
                   margin: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 0,

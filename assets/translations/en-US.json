@@ -4,6 +4,7 @@
   "place_tab": "Place",
   "forest_tab": "Forest",
   "lake_tab": "Lake",
+  "mountain_tab": "Mountain",
   "waterfall_tab": "Waterfall",
   "view_on_map_btn": "View On Map",
   "overview": "Overview",
@@ -55,6 +56,15 @@
   "overview_az_title": "Overview In Azerbaijani",
   "region_title": "Region",
   "region_az_title": "Region In Azerbaijani",
-  "type_title": "Destination Type"
-
+  "category_title": "Destination Category",
+  "add_photo": "Add Photo",
+  "something_went_wrong_error_msg": "Something Went Wrong",
+  "current_location": "Current Location",
+  "chose_on_map": "Chose On Map",
+  "no_location_chosen": "No Location Chosen",
+  "destination_name_validation": "Please Enter Destination Name",
+  "destination_overview_az_validation": "Please Enter Destination Overview In Azerbaijani",
+  "destination_overview_validation": "Please Enter Destination Overview",
+  "destination_region_az_validation": "Please Enter Destination Region In Azerbaijani",
+  "destination_region_validation": "Please Enter Destination Region"
 }

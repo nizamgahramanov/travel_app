@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,9 +9,12 @@ import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
+import 'package:travel_app/widgets/shimmer_effect.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/destination.dart';
+import '../widgets/shimmer_effect_circular.dart';
+import 'error_and_no_favorite_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
@@ -40,7 +44,8 @@ class _DetailScreenState extends State<DetailScreen>
         popButtonColor: AppColors.backgroundColorOfApp,
         popButtonTextColor: Colors.black,
         isShowActionButton: true,
-        alertMessage: 'please_sign_up_before_make_favorite_dialog_msg_subtitle'.tr(),
+        alertMessage:
+            'please_sign_up_before_make_favorite_dialog_msg_subtitle'.tr(),
         actionButtonText: 'sign_up_btn'.tr(),
         actionButtonColor: AppColors.buttonBackgroundColor,
         onTapAction: () => Navigator.push(
@@ -86,6 +91,8 @@ class _DetailScreenState extends State<DetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    var locale = context.locale.languageCode;
+
     final clickedDestination =
         ModalRoute.of(context)!.settings.arguments as Destination;
     Map<String, dynamic> mapArgument = {
@@ -148,37 +155,62 @@ class _DetailScreenState extends State<DetailScreen>
                           : FireStoreService()
                               .isDestinationFavorite(clickedDestination.id!),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none ||
-                            snapshot.connectionState ==
-                                ConnectionState.active) {
-                          return Container(
-                            // color: Colors.redAccent,
-                            width: 50,
-                            margin: const EdgeInsets.only(
-                                right: 15, left: 5, top: 5, bottom: 5),
-                            child: TextButton(
-                              onPressed: () =>
-                                  toggleFavorite(clickedDestination),
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                padding: EdgeInsets.zero,
-                                primary: AppColors.buttonBackgroundColor,
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: ShimmerEffect.circular(
+                              width: 45,
+                              height: 45,
+                              shapeBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
                               ),
-                              child: !snapshot.hasData ||
-                                      snapshot.data!.docs.isEmpty
-                                  ? Icon(
-                                      Icons.favorite_border_outlined,
-                                      color: AppColors.backgroundColorOfApp,
-                                    )
-                                  : Icon(
-                                      Icons.favorite,
-                                      color: AppColors.backgroundColorOfApp,
-                                    ),
+                              isCircle: true,
                             ),
                           );
+                        } else if (snapshot.connectionState ==
+                                ConnectionState.none ||
+                            snapshot.connectionState ==
+                                ConnectionState.active) {
+                          if (snapshot.hasError) {
+                            return ErrorAndNoFavoriteScreen(
+                              text: "something_went_wrong_error_msg".tr(),
+                              path: "assets/svg/error.svg",
+                            );
+                          } else {
+                            return Container(
+                              // color: Colors.redAccent,
+                              width: 50,
+                              margin: const EdgeInsets.only(
+                                right: 15,
+                                left: 5,
+                                top: 5,
+                                bottom: 5,
+                              ),
+                              child: TextButton(
+                                onPressed: () =>
+                                    toggleFavorite(clickedDestination),
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: EdgeInsets.zero,
+                                  primary: AppColors.buttonBackgroundColor,
+                                ),
+                                child: !snapshot.hasData ||
+                                        snapshot.data!.docs.isEmpty
+                                    ? Icon(
+                                        Icons.favorite_border_outlined,
+                                        color: AppColors.backgroundColorOfApp,
+                                      )
+                                    : Icon(
+                                        Icons.favorite,
+                                        color: AppColors.backgroundColorOfApp,
+                                      ),
+                              ),
+                            );
+                          }
                         } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return ErrorAndNoFavoriteScreen(
+                            text: "something_went_wrong_error_msg".tr(),
+                            path: "assets/svg/error.svg",
                           );
                         }
                       }),
@@ -215,7 +247,9 @@ class _DetailScreenState extends State<DetailScreen>
                           padding: EdgeInsets.zero,
                         ),
                         CustomIconText(
-                          text: clickedDestination.region,
+                          text: locale == 'az'
+                              ? clickedDestination.regionAz
+                              : clickedDestination.region,
                           size: 12,
                           color: AppColors.backgroundColorOfApp,
                           icon: Icon(
@@ -281,7 +315,9 @@ class _DetailScreenState extends State<DetailScreen>
                               ),
                               AppLightText(
                                 spacing: 16,
-                                text: clickedDestination.overview,
+                                text: locale == 'az'
+                                    ? clickedDestination.overviewAz
+                                    : clickedDestination.overview,
                                 padding: EdgeInsets.zero,
                                 textAlign: TextAlign.justify,
                               ),
@@ -297,7 +333,7 @@ class _DetailScreenState extends State<DetailScreen>
           },
         ),
       ),
-      floatingActionButton:CustomButton(
+      floatingActionButton: CustomButton(
         buttonText: 'view_on_map_btn'.tr(),
         borderRadius: 15,
         horizontalMargin: 20,
@@ -344,11 +380,37 @@ class _MyBackgroundState extends State<MyBackground> {
           width: MediaQuery.of(context).size.width,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30),
-            child: Image.network(
-              widget.clickedDestination.photoUrl[showImageIndex],
-              fit: BoxFit.cover,
+            child: CachedNetworkImage(
+              height: settings.maxExtent,
+              imageUrl: widget.clickedDestination.photoUrl[showImageIndex],
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => Center(
+                child: ShimmerEffect.rectangular(
+                  height: settings.maxExtent,
+                  isCircle: false,
+                ),
+              ),
+              errorWidget: (context, url, error) {
+                return const Center(
+                  child: Icon(Icons.error, color: Colors.red),
+                );
+              },
             ),
-          ),
+          ), // child: ClipRRect(
+          //   borderRadius: BorderRadius.circular(30),
+          //   child: Image.network(
+          //     widget.clickedDestination.photoUrl[showImageIndex],
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
         ),
         Positioned(
           right: 20,
@@ -381,12 +443,42 @@ class _MyBackgroundState extends State<MyBackground> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                widget.clickedDestination
+                              child: CachedNetworkImage(
+                                height: settings.maxExtent,
+                                imageUrl: widget.clickedDestination
                                     .photoUrl[showImageIndex],
-                                fit: BoxFit.cover,
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Center(
+                                  child: ShimmerEffect.rectangular(
+                                    height: 50,
+                                    width: 70,
+                                    isCircle: false,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) {
+                                  return const Center(
+                                    child: Icon(Icons.error, color: Colors.red),
+                                  );
+                                },
                               ),
                             ),
+                            // child: ClipRRect(
+                            //   borderRadius: BorderRadius.circular(12),
+                            //   child: Image.network(
+                            //     widget.clickedDestination
+                            //         .photoUrl[showImageIndex],
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            // ),
                           )
                         : Container(
                             margin: const EdgeInsets.all(4),
@@ -398,11 +490,41 @@ class _MyBackgroundState extends State<MyBackground> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                widget.clickedDestination.photoUrl[index],
-                                fit: BoxFit.cover,
+                              child: CachedNetworkImage(
+                                height: settings.maxExtent,
+                                imageUrl: widget.clickedDestination
+                                    .photoUrl[index],
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Center(
+                                  child: ShimmerEffect.rectangular(
+                                    height: 50,
+                                    width: 60,
+                                    isCircle: false,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) {
+                                  return const Center(
+                                    child: Icon(Icons.error, color: Colors.red),
+                                  );
+                                },
                               ),
                             ),
+                            // child: ClipRRect(
+                            //   borderRadius: BorderRadius.circular(15),
+                            //   child: Image.network(
+                            //     widget.clickedDestination.photoUrl[index],
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            // ),
                           ),
                   ),
                 ),

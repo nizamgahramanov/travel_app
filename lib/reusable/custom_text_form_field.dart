@@ -7,24 +7,26 @@ class CustomTextFormField extends StatelessWidget {
     Key? key,
     this.controller,
     required this.keyboardType,
-    required this.onChanged,
+    this.onChanged,
     required this.onFieldSubmitted,
     this.onSaved,
     required this.textInputAction,
     this.suffixIcon,
     this.focusNode,
     this.obscureText = false,
+    this.validator,
 
   }) : super(key: key);
   final TextEditingController? controller;
   final TextInputType keyboardType;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onChanged;
   final ValueChanged<String> onFieldSubmitted;
   final ValueChanged? onSaved;
   final TextInputAction textInputAction;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
   final bool obscureText;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -34,6 +36,7 @@ class CustomTextFormField extends StatelessWidget {
       obscureText: obscureText,
       onChanged: onChanged,
       focusNode: focusNode,
+      validator: validator,
       onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         filled: true,

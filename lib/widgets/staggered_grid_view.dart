@@ -4,7 +4,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_tab_indicator.dart';
+import 'package:travel_app/screen/error_and_no_favorite_screen.dart';
 import 'package:travel_app/widgets/staggered_grid_item.dart';
+
 import '../helpers/destination_type.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
@@ -14,14 +16,21 @@ class StaggeredGridView extends StatefulWidget {
   @override
   State<StaggeredGridView> createState() => _StaggeredGridViewState();
 }
-
+enum DestinationCategory {
+  waterfall,
+  mountain,
+  lake,
+  place,
+  forest,
+}
 class _StaggeredGridViewState extends State<StaggeredGridView>
     with TickerProviderStateMixin {
   var tabNames = [
-    {DestinationType.place: 'place_tab'.tr()},
-    {DestinationType.forest: 'forest_tab'.tr()},
-    {DestinationType.lake: 'lake_tab'.tr()},
-    {DestinationType.waterfall: 'waterfall_tab'.tr()},
+    {DestinationCategory.place: 'place_tab'.tr()},
+    {DestinationCategory.forest: 'forest_tab'.tr()},
+    {DestinationCategory.lake: 'lake_tab'.tr()},
+    {DestinationCategory.waterfall: 'waterfall_tab'.tr()},
+    {DestinationCategory.mountain: 'mountain_tab'.tr()},
   ];
 
   @override
@@ -29,7 +38,7 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
     final providerData = Provider.of<Destinations>(context);
     print("Circle Tab");
     print(providerData);
-    TabController _tabController =
+    TabController tabController =
         TabController(length: tabNames.length, vsync: this);
     return StreamBuilder<List<Destination>>(
         stream: providerData.destinationItemsAll,
@@ -41,7 +50,10 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
           } else if (snapshot.connectionState == ConnectionState.active ||
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return const Text('Error');
+              return ErrorAndNoFavoriteScreen(
+                text: "something_went_wrong_error_msg".tr(),
+                path: "assets/svg/error.svg",
+              );
             } else {
               print(snapshot.data);
               return Column(
@@ -52,7 +64,7 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                       labelPadding: const EdgeInsets.only(right: 22),
                       unselectedLabelColor: Colors.grey,
                       labelColor: Colors.black,
-                      controller: _tabController,
+                      controller: tabController,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
                       indicator: CustomTabIndicator(
@@ -81,15 +93,12 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                     height: 20,
                   ),
                   Expanded(
-                    // height: 340,
-                    // padding: const EdgeInsets.only(left: 20),
-                    // width: double.maxFinite,
                     child: TabBarView(
-                      controller: _tabController,
+                      controller: tabController,
                       children: tabNames.map((e) {
                         Iterable<Destination> destinationIterable =
                             snapshot.data!.where(
-                                (element) => element.type == e.keys.first.name);
+                                (element) => element.category == e.keys.first.name);
                         return MasonryGridView.count(
                           crossAxisCount: 2,
                           itemCount: destinationIterable.length,
@@ -107,6 +116,8 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                               name: destinationIterable.elementAt(index).name,
                               region:
                                   destinationIterable.elementAt(index).region,
+                              regionAz:
+                                  destinationIterable.elementAt(index).regionAz,
                               photo: destinationIterable
                                   .elementAt(index)
                                   .photoUrl[0],
@@ -120,8 +131,9 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
               );
             }
           } else {
-            return const Center(
-              child: Text("SOMETHING UNKNOWN"),
+            return ErrorAndNoFavoriteScreen(
+              text: "something_went_wrong_error_msg".tr(),
+              path: "assets/svg/error.svg",
             );
           }
         });

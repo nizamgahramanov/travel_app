@@ -2,11 +2,11 @@ import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/model/destination.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
-import '../helpers/app_colors.dart';
+
 import '../helpers/app_light_text.dart';
 import '../model/debouncer.dart';
 import '../widgets/staggered_grid_item.dart';
@@ -179,8 +179,10 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                         id: snap.data['id'],
                                         name: snap.data['name'],
                                         overview: snap.data['overview'],
+                                        overviewAz: snap.data['overviewAz'],
                                         region: snap.data['region'],
-                                        type: snap.data['type'],
+                                        regionAz: snap.data['regionAz'],
+                                        category: snap.data['category'],
                                         photoUrl: snap.data['photo_url'],
                                         geoPoint: GeoPoint(
                                           snap.data['_geoloc']['lat'],
@@ -192,6 +194,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                   child: StaggeredGridItem(
                                     name: snap.data['name'],
                                     region: snap.data['region'],
+                                    regionAz: snap.data['regionAz'],
                                     photo: snap.data['photo_url'][0],
                                   ),
                                 );

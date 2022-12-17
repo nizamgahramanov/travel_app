@@ -1,24 +1,33 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:travel_app/widgets/shimmer_effect.dart';
 
 import '../helpers/app_colors.dart';
 
 class StaggeredGridItem extends StatelessWidget {
   final String name;
   final String region;
+  final String regionAz;
   final String photo;
 
   const StaggeredGridItem({
     required this.name,
     required this.region,
+    required this.regionAz,
     required this.photo,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print("OHOROR");
+    print(photo);
+
+    var locale = context.locale.languageCode;
     return Container(
       // padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
@@ -28,87 +37,106 @@ class StaggeredGridItem extends StatelessWidget {
         border: Border.all(color: Colors.grey, width: 0.1),
         color: Colors.white,
       ),
-      // color: Colors.white,
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              photo,
-              fit: BoxFit.cover,
-            ),
-          ),
+          _buildImage(),
           const SizedBox(
             height: 8,
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: AppLightText(
-              text: name,
-              size: 15,
-              color: AppColors.mainTextColor,
-              fontWeight: FontWeight.bold,
-              spacing: 2,
-              padding: EdgeInsets.zero,
-            ),
-          ),
-          const SizedBox(
-            height: 2,
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: CustomIconText(
-              text: region,
-              spacing: 3,
-              size: 13,
-              color: AppColors.buttonBackgroundColor,
-              icon: Icon(
-                Icons.location_on_outlined,
-                size: 13,
-                color: AppColors.buttonBackgroundColor,
-              ),
-              isIconFirst: true,
-            ),
-          ),
+          _buildText(locale),
           const SizedBox(
             height: 8,
           ),
         ],
       ),
     );
-    // return Container(
-    //   height: 240,
-    //   child: GridTile(
-    //       child: ClipRRect(
-    //         child: Image.network(
-    //           photo,
-    //           fit: BoxFit.cover,
-    //         ),
-    //       ),
-    //       footer: GridTileBar(
-    //         title: Column(
-    //           crossAxisAlignment: CrossAxisAlignment.start,
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             Align(
-    //               alignment: Alignment.centerLeft,
-    //               child: AppLargeText(
-    //                 text: name,
-    //                 size: 21,
-    //                 color: AppColors.mainTextColor,
-    //               ),
-    //             ),
-    //             Align(
-    //               alignment: Alignment.centerLeft,
-    //               child: AppLargeText(
-    //                 text: region,
-    //                 size: 10,
-    //                 color: AppColors.buttonBackgroundColor,
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       )),
-    // );
+  }
+
+  Widget _buildImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: CachedNetworkImage(
+        height: 300,
+        imageUrl: photo,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        placeholder: (context, url) => const Center(
+          child: ShimmerEffect.rectangular(
+            height: 300,
+            isCircle: false,
+          ),
+        ),
+        errorWidget: (context, url, error) {
+          return const Center(
+            child: Icon(Icons.error, color: Colors.red),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildText(String locale) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppLightText(
+            text: name,
+            size: 15,
+            color: AppColors.mainTextColor,
+            fontWeight: FontWeight.bold,
+            spacing: 2,
+            padding: EdgeInsets.zero,
+          ),
+        ),
+        const SizedBox(
+          height: 2,
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: CustomIconText(
+            text: locale == 'az' ? regionAz : region,
+            spacing: 3,
+            size: 13,
+            color: AppColors.buttonBackgroundColor,
+            icon: Icon(
+              Icons.location_on_outlined,
+              size: 13,
+              color: AppColors.buttonBackgroundColor,
+            ),
+            isIconFirst: true,
+          ),
+        ),
+      ],
+    );
   }
 }
+
+/*class ShimmerPlaceholder extends StatelessWidget {
+  const ShimmerPlaceholder({
+    Key? key, this.height, this.width,
+  }) : super(key: key);
+  final double? height,width;
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[500]!,
+      highlightColor: Colors.grey[300]!,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.grey[200],
+        ),
+      ),
+    );
+  }
+}*/

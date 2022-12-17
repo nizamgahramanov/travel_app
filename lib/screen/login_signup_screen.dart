@@ -90,7 +90,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     CustomButton(
                       buttonText: 'continue_btn'.tr(),
                       onTap: saveForm,
-                      borderRadius: 20,
+                      borderRadius: 15,
                     ),
                   Row(
                     children: <Widget>[
@@ -125,7 +125,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     onTap: () {
                       AuthService().signInWithGoogle(context);
                     },
-                    borderRadius: 20,
+                    borderRadius: 15,
                     buttonColor: Colors.transparent,
                     textColor: Colors.black,
                     icon: Container(

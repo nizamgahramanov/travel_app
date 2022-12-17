@@ -4,6 +4,7 @@
   "place_tab": "Məkan",
   "forest_tab": "Meşə",
   "lake_tab": "Göl",
+  "mountain_tab": "Dağ",
   "waterfall_tab": "Şəlalə",
   "view_on_map_btn": "Xəritədə Göstər",
   "overview": "Ümumi baxış",
@@ -46,7 +47,7 @@
   "password_is_not_correct_dialog_msg": "Şifrə Düzgün Deyil",
   "please_check_and_try_again_dialog_msg": "Zəhmət olmasa yoxlayın və yenidən cəhd edin",
   "welcome_back_title": "XOŞ GƏLDİNİZ",
-  "Do you want to exit": "Do you want to exit",
+  "Do you want to exit": "Çıxış etmək istəyirsiniz?",
   "There is a discrepancy on email. Please, contact support": "There is a discrepancy on email. Please, contact support",
   "home_bottom_nav_bar": "Əsas səhifə",
   "search_bottom_nav_bar": "Axtarış",
@@ -57,5 +58,18 @@
   "overview_az_title": "Azərbaycan Dilində Ümumi baxış",
   "region_title": "Rayon",
   "region_az_title": "Azərbaycan Dilində Rayon",
-  "type_title": "Səyahət Yeri Tipi"
+  "category_title": "Səyahət Yeri Categoriyasi",
+  "add_photo": "Şəkil Əlavə Et",
+  "something_went_wrong_error_msg": "Nə isə Səhv Getdi",
+  "current_location": "Cari Ünvan",
+  "chose_on_map": "Xəritədə Seç",
+  "no_location_chosen": "Hər Hansi Ünvan Seçilməyib",
+  "destination_name_validation": "Zəhmət Olmasa Adı Daxil Edin.",
+  "destination_overview_az_validation": "Zəhmət Olmasa Məlumatları Azərbaycan Dilində Daxil Edin",
+  "destination_overview_validation": "Zəhmət Olmasa Məlumatları daxil edin",
+  "destination_region_az_validation": "Zəhmət Olmasa Rayonu Azərbaycan Dilində Daxil Edin",
+  "destination_region_validation": "Zəhmət Olmasa Rayonu Daxil Edin"
+
+
+
 }
