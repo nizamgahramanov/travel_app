@@ -1,13 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
-import 'package:travel_app/screen/main_screen.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 
-import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
+import '../helpers/utility.dart';
+import '../services/firebase_firestore_service.dart';
 import 'login_with_password_screen.dart';
 
 class LoginSignupScreen extends StatefulWidget {
@@ -20,12 +23,36 @@ class LoginSignupScreen extends StatefulWidget {
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _form = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  bool _isShowSaveButton = false;
+
+  void checkIfEmailChanged(String character) {
+    print("checkIfNameChanged");
+    if (_emailController.text != '' &&
+        RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+            .hasMatch(_emailController.text)) {
+      // if(_emailController.text != ''){
+      setState(() {
+        print("isShow");
+        print(_isShowSaveButton);
+        _isShowSaveButton = true;
+      });
+    } else {
+      setState(() {
+        if (_isShowSaveButton) {
+          print("isShow false");
+          _isShowSaveButton = false;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(30.0),
       child: Center(
-        heightFactor: 1,
+        // heightFactor: 1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -33,20 +60,22 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               key: _form,
               child: Column(
                 children: [
-                  TextFormField(
-                    textInputAction: TextInputAction.done,
+                  AppLightText(
+                    text: 'email_title'.tr(),
+                    size: 18,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    spacing: 2,
+                    padding: EdgeInsets.zero,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextFormField(
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    enableSuggestions: true,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: "Enter your email",
-                      prefixIconColor: AppColors.buttonBackgroundColor,
-                    ),
+                    textInputAction: TextInputAction.done,
+                    onChanged: (character) => checkIfEmailChanged(character),
                     onFieldSubmitted: (_) {
                       saveForm();
                     },
@@ -54,14 +83,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       checkEmailIsRegistered(value);
                     },
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  CustomButton(
-                    buttonText: "Continue",
-                    onTap: saveForm,
-                    borderRadius: 20,
-                  ),
+                  if (_isShowSaveButton)
+                    const SizedBox(
+                      height: 30,
+                    ),
+                  if (_isShowSaveButton)
+                    CustomButton(
+                      buttonText: 'continue_btn'.tr(),
+                      onTap: saveForm,
+                      borderRadius: 15,
+                    ),
                   Row(
                     children: <Widget>[
                       const Expanded(
@@ -74,7 +105,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       ),
                       AppLightText(
                         spacing: 16,
-                        text: "or",
+                        text: 'or_divider'.tr(),
                         size: 12,
                         color: Colors.black87,
                         padding: EdgeInsets.zero,
@@ -90,14 +121,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     ],
                   ),
                   CustomButton(
-                    buttonText: "Continue with Google",
-                    borderColor: Colors.black,
-                    onTap: () {
-                      AuthService().signInWithGoogle();
-                    },
-                    borderRadius: 20,
+                    buttonText: 'continue_with_google_btn'.tr(),
+                    borderColor: AppColors.buttonBackgroundColor,
+                    onTap: () => AuthService().signInWithGoogle(context),
+                    borderRadius: 15,
                     buttonColor: Colors.transparent,
-                    textColor: Colors.black,
+                    textColor: AppColors.buttonBackgroundColor,
                     icon: Container(
                       width: 22,
                       height: 22,
@@ -116,37 +145,56 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   void saveForm() {
-    //check in firebase email is registered or not
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
 
-  void checkEmailIsRegistered(value) async {
-    List<String> isExistList;
-    print("value");
-    print(value);
+  void checkEmailIsRegistered(String value) async {
+    if (_isShowSaveButton) {
+      List<String> isEmailExistList;
+      print("value");
+      print(value);
+      isEmailExistList = await _auth.fetchSignInMethodsForEmail(value.trim());
+      final String? base16Encrypted =
+          await FireStoreService().getUserPasswordFromFirestore(value);
+      print(isEmailExistList);
+      print(base16Encrypted);
+      directNextScreen(isEmailExistList, base16Encrypted,value);
+    }
+  }
+  void directNextScreen(List<String> isEmailExistList, String? base16Encrypted, String value,){
     bool provider = false;
-    isExistList = await _auth.fetchSignInMethodsForEmail(value);
     Map<String, dynamic> arguments = {"provider": provider, "email": value};
-    print(isExistList);
-    if (isExistList.isEmpty) {
-      //  go to password page
-      Navigator.pushNamed(
-        context,
-        PasswordScreen.routeName,
-        arguments: arguments,
+    if (isEmailExistList.isNotEmpty && base16Encrypted == null) {
+      Utility.getInstance().showAlertDialog(
+        popButtonColor: Colors.red,
+        context: context,
+        alertTitle: "Discrepancy on email",
+        alertMessage:
+        "There is a discrepancy on email. Please, contact support",
+        popButtonText: 'back_btn'.tr(),
+        onPopTap: () => Navigator.of(context).pop(),
       );
     } else {
-      provider = true;
-      //  send auth cde to email address
-      if (isExistList[0] == "google.com") {
-        AuthService().signInWithGoogle();
-      } else {
+      if (isEmailExistList.isEmpty) {
+        //  go to password page
         Navigator.pushNamed(
           context,
-          LoginWithPasswordScreen.routeName,
+          PasswordScreen.routeName,
           arguments: arguments,
         );
+      } else {
+        provider = true;
+        //  send auth cde to email address
+        if (isEmailExistList[0] == "google.com") {
+          AuthService().signInWithGoogle(context);
+        } else {
+          Navigator.pushNamed(
+            context,
+            LoginWithPasswordScreen.routeName,
+            arguments: arguments,
+          );
+        }
       }
     }
   }

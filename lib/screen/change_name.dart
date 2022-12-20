@@ -1,40 +1,71 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/utility.dart';
-import 'package:travel_app/model/user.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 
-import '../helpers/app_light_text.dart';
+import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
-import '../model/user_credentials.dart';
-import 'main_screen.dart';
 
-class UserInfo extends StatefulWidget {
-  static const routeName = '/user_info';
-  UserInfo({
+class ChangeNameScreen extends StatefulWidget {
+  const ChangeNameScreen({
+    required this.firstName,
+    required this.lastName,
     Key? key,
   }) : super(key: key);
-
+  final String firstName;
+  final String lastName;
+  static const routeName = '/change-name';
   @override
-  State<UserInfo> createState() => _UserInfoState();
+  State<ChangeNameScreen> createState() => _ChangeNameScreenState();
 }
 
-class _UserInfoState extends State<UserInfo> {
-  final _form = GlobalKey<FormState>();
+class _ChangeNameScreenState extends State<ChangeNameScreen>
+    with TickerProviderStateMixin {
+  final _changeNameForm = GlobalKey<FormState>();
   final _lastnameFocusNode = FocusNode();
   final _firstnameFocusNode = FocusNode();
-  final TextEditingController _firstnameController = TextEditingController();
-  final TextEditingController _lastnameController = TextEditingController();
+  TextEditingController? _firstnameController;
+  TextEditingController? _lastnameController;
   bool _isShowSaveButton = false;
+  @override
+  void initState() {
+    super.initState();
+    _firstnameController = TextEditingController(text: widget.firstName);
+    _lastnameController = TextEditingController(text: widget.lastName);
+  }
+
+  @override
+  void dispose() {
+    _firstnameController?.dispose();
+    _lastnameController?.dispose();
+    super.dispose();
+  }
+
+  void saveNameChange() {
+    if (_isShowSaveButton) {
+      String? changedFirstName = _firstnameController?.text;
+      String? changedLastName = _lastnameController?.text;
+      AuthService().updateUserName(context, changedFirstName, changedLastName);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Wrapper(
+            isLogin: true,
+            bottomNavIndex: 3,
+          ),
+        ),
+      );
+    }
+  }
 
   void checkIfNameChanged(String text) {
     print("checkIfNameChanged");
-    if (_firstnameController.text != '' && _lastnameController.text != '') {
+    if ((widget.firstName != _firstnameController?.text ||
+            widget.lastName != _lastnameController?.text) &&
+        (_firstnameController?.text != '' && _lastnameController?.text != '')) {
       setState(() {
         print("isShow");
         print(_isShowSaveButton);
@@ -49,63 +80,25 @@ class _UserInfoState extends State<UserInfo> {
     }
   }
 
-  @override
-  void dispose() {
-    _firstnameController.dispose();
-    _lastnameController.dispose();
-    super.dispose();
+  void saveForm() {
+    print("SAVE FORM");
+    FocusScope.of(context).unfocus();
+    _changeNameForm.currentState!.save();
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
-    print(args.email);
-    print("KLKLKRE");
-
-    void _redirectUserToProfileScreen() {
-      // Navigator.pushAndRemoveUntil(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => Wrapper(
-      //       isLogin: true,
-      //       bottomNavIndex: 3,
-      //     ),
-      //   ),
-      //   (Route<dynamic> route) => false,
-      // );
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainScreen.routeName, (route) => false);
-    }
-
-    void _registerUser() async {
-      if (_isShowSaveButton) {
-        await AuthService().registerUser(
-          context: context,
-          firstName: _firstnameController.text,
-          lastName: _lastnameController.text,
-          email: args.email,
-          password: args.password,
-        );
-        _redirectUserToProfileScreen();
-      }
-    }
-
-    void saveForm() {
-      FocusScope.of(context).unfocus();
-      _form.currentState!.save();
-    }
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title: 'let\'s_get_know_app_bar_title'.tr(),
+        title: 'change_name_app_bar_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
               height: 20,
             ),
             Form(
-              key: _form,
+              key: _changeNameForm,
               child: Column(
                 children: [
                   Column(
@@ -131,8 +124,8 @@ class _UserInfoState extends State<UserInfo> {
                         },
                         child: CustomTextFormField(
                           controller: _firstnameController,
-                          keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.name,
                           focusNode: _firstnameFocusNode,
                           onChanged: (value) => checkIfNameChanged(value),
                           onFieldSubmitted: (_) => FocusScope.of(context)
@@ -159,12 +152,12 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                       CustomTextFormField(
                         controller: _lastnameController,
-                        keyboardType: TextInputType.name,
                         focusNode: _lastnameFocusNode,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.done,
                         onChanged: (value) => checkIfNameChanged(value),
                         onFieldSubmitted: (_) => saveForm(),
-                        textInputAction: TextInputAction.done,
-                        onSaved: (_) => _registerUser(),
+                        onSaved: (_) => saveNameChange(),
                       )
                     ],
                   ),
@@ -180,10 +173,39 @@ class _UserInfoState extends State<UserInfo> {
               borderRadius: 15,
               horizontalMargin: 20,
               verticalMargin: 5,
-              onTap: saveForm,
+              onTap: () => saveForm(),
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+//FAB button
+// class NoScalingAnimation extends FloatingActionButtonAnimator {
+//   double? _x;
+//   double? _y;
+//   @override
+//   Offset getOffset(
+//       {required Offset begin, required Offset end, required double progress}) {
+//     _x = begin.dx + (end.dx - begin.dx) * progress;
+//     _y = begin.dy + (end.dy - begin.dy) * progress;
+//     print('x offset');
+//     print(_x);
+//     print('y offset');
+//     print(_y);
+//     return end;
+//   }
+//
+//   @override
+//   Animation<double> getRotationAnimation({required Animation<double> parent}) {
+//     print('getRotationAnimation');
+//     return Tween<double>(begin: 0.5, end: 1.0).animate(parent);
+//   }
+//
+//   @override
+//   Animation<double> getScaleAnimation({required Animation<double> parent}) {
+//     print('getScaleAnimation');
+//     return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+//   }
+// }

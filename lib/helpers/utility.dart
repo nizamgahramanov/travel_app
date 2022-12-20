@@ -20,6 +20,7 @@ class Utility {
     final String? actionButtonText,
     final VoidCallback? onTapAction,
     final Color? actionButtonColor,
+    final Color? popButtonTextColor,
   }) {
     // set up the AlertDialog
     CustomAlertDialog alert = CustomAlertDialog(
@@ -32,6 +33,7 @@ class Utility {
       actionButtonText: actionButtonText,
       onTapAction: onTapAction,
       actionButtonColor: actionButtonColor,
+      popButtonTextColor:popButtonTextColor ,
     );
 
     // show the dialog

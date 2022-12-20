@@ -8,30 +8,35 @@ class Destination {
   final String? id;
   final String name;
   final String overview;
+  final String overviewAz;
   final String region;
-  final String type;
-  final GeoPoint geoPoint;
+  final String regionAz;
+  final String category;
+  final GeoPoint? geoPoint;
   List<dynamic> photoUrl;
 
   Destination({
     required this.id,
     required this.name,
     required this.overview,
+    required this.overviewAz,
     required this.region,
-    required this.type,
+    required this.regionAz,
+    required this.category,
     required this.photoUrl,
-    required this.geoPoint,
-    // required this.reviews
+    this.geoPoint,
   });
   Map<String, dynamic> createMap() {
     return {
       'id': id,
       'name': name,
       'overview': overview,
+      'overview_az':overviewAz,
       'region': region,
-      'type': type,
+      'region_az':regionAz,
+      'category': category,
       'photo_url': photoUrl,
-      'geoPoint':geoPoint
+      'geoPoint': geoPoint
     };
   }
 
@@ -39,8 +44,10 @@ class Destination {
       : id = firestoreMap['id'],
         name = firestoreMap['name'],
         overview = firestoreMap['overview'],
+        overviewAz = firestoreMap['overview_az'],
         region = firestoreMap['region'],
-        type = firestoreMap['type'],
+        regionAz = firestoreMap['region_az'],
+        category = firestoreMap['category'],
         photoUrl = firestoreMap['photo_url'].cast<String>(),
         geoPoint = firestoreMap['geoPoint'];
 }

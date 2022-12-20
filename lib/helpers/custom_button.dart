@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/app_large_text.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
 
 class CustomButton extends StatelessWidget {
   VoidCallback onTap;
@@ -8,63 +8,72 @@ class CustomButton extends StatelessWidget {
   Color? buttonColor;
   double borderRadius;
   Color? borderColor;
-  double margin;
+  double horizontalMargin;
+  double verticalMargin;
   Color? textColor;
   Widget? icon;
+  double buttonTextSize;
+  double height;
+  EdgeInsets? textPadding;
 
-  CustomButton(
-      {Key? key,
-      required this.onTap,
-      required this.buttonText,
-      this.buttonColor,
-      required this.borderRadius,
-      this.borderColor,
-      this.margin = 0.0,
-      this.textColor,
-      this.icon})
-      : super(key: key);
+  CustomButton({
+    Key? key,
+    required this.onTap,
+    required this.buttonText,
+    this.buttonTextSize = 18,
+    this.buttonColor,
+    required this.borderRadius,
+    this.borderColor,
+    this.horizontalMargin = 0.0,
+    this.verticalMargin = 0.0,
+    this.textColor,
+    this.icon,
+    this.height = 60,
+    this.textPadding=EdgeInsets.zero
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: margin),
+      height: height,
+      // width: double.infinity,
+      margin: EdgeInsets.symmetric(
+        horizontal: horizontalMargin,
+        vertical: verticalMargin,
+      ),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          color: buttonColor ?? AppColors.buttonBackgroundColor,
-          border: borderColor == null
-              ? Border.all(color: AppColors.inputColor)
-              : Border.all(color: Colors.black),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 10,
-              blurRadius: 10,
-              offset: Offset(0,1),
-            )
-          ]),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) icon!,
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
+        borderRadius: BorderRadius.circular(borderRadius),
+        color: buttonColor ?? AppColors.buttonBackgroundColor,
+        border: borderColor == null
+            ? Border.all(color: AppColors.inputColor)
+            : Border.all(color: borderColor!),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) icon!,
+            Material(
+              color: Colors.transparent,
               child: Container(
-                // padding: const EdgeInsets.all(10),
+                padding: textPadding,
+                // color: Colors.red,
+
                 child: Center(
-                  child: AppLargeText(
+                  child: AppLightText(
+                    spacing: 2,
                     text: buttonText,
-                    size: 18,
-                    color: textColor == null ? Colors.white : textColor!,
+                    size: buttonTextSize,
+                    color: textColor == null ? AppColors.whiteColor : textColor!,
+                    padding: EdgeInsets.zero,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

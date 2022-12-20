@@ -1,10 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/user_preferences.dart';
 import 'package:travel_app/providers/destinations.dart';
+import 'package:travel_app/providers/language.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/add_destination_screen.dart';
-import 'package:travel_app/screen/change_email_screen.dart';
-import 'package:travel_app/screen/change_firstname.dart';
 import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/detail_screen.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
@@ -14,18 +17,28 @@ import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/start_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/screen/user_info.dart';
-import 'package:provider/provider.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
+
 import 'model/destination.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await EasyLocalization.ensureInitialized();
+  await UserPreferences.init();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('az', 'Latn'),
+      ],
+      fallbackLocale: Locale('en', 'US'),
+      path: 'assets/translations',
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -73,16 +86,16 @@ class _MyAppState extends State<MyApp> {
           child: const ChangePasswordScreen(),
           settings: settings,
         );
-      case ChangeEmailScreen.routeName:
-        return CustomPageRoute(
-          child: const ChangeEmailScreen(),
-          settings: settings,
-        );
-      case ChangeFirstnameScreen.routeName:
-        return CustomPageRoute(
-          child: const ChangeFirstnameScreen(),
-          settings: settings,
-        );
+      // case ChangeEmailScreen.routeName:
+      //   return CustomPageRoute(
+      //     child: const ChangeEmailScreen(),
+      //     settings: settings,
+      //   );
+      // case ChangeNameScreen.routeName:
+      //   return CustomPageRoute(
+      //     child: const ChangeNameScreen(),
+      //     settings: settings,
+      //   );
       case AddDestinationScreen.routeName:
         return CustomPageRoute(
           child: const AddDestinationScreen(),
@@ -103,11 +116,11 @@ class _MyAppState extends State<MyApp> {
           child: LoginWithPasswordScreen(),
           settings: settings,
         );
-      case Wrapper.routeName:
-        return CustomPageRoute(
-          child: Wrapper(isLogin: false, bottomNavIndex: 1),
-          settings: settings,
-        );
+      // case Wrapper.routeName:
+      //   return CustomPageRoute(
+      //     child: Wrapper(isLogin: false, bottomNavIndex: 1),
+      //     settings: settings,
+      //   );
     }
   }
 
@@ -133,21 +146,30 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(
           value: Destinations(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Language(),
+        ),
         Provider<AuthService>(
           create: (_) => AuthService(),
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Seyr Et',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: AppColors.buttonBackgroundColor,
+            secondary: AppColors.blackColor38
+          ),
           textSelectionTheme: TextSelectionThemeData(
             selectionColor: AppColors.buttonBackgroundColor,
             cursorColor: AppColors.buttonBackgroundColor,
             selectionHandleColor: AppColors.buttonBackgroundColor,
           ),
         ),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         home: const StartScreen(),
         onGenerateRoute: (route) => onGenerateRoute(route),
       ),

@@ -17,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    print("MAIN SCREEN TRIGGERED");
     return StreamBuilder<app.User?>(
         stream: authService.user,
         builder: (
@@ -40,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
             print("PROGRESS");
             return const Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child:Text("Loading..."),
               ),
             );
           }
