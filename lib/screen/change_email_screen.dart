@@ -121,6 +121,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
       body: CustomNestedScrollView(
         title: 'change_email_app_bar_title'.tr(),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
               height: 20,

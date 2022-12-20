@@ -38,6 +38,12 @@ class CustomTextFormField extends StatelessWidget {
       focusNode: focusNode,
       validator: validator,
       onFieldSubmitted: onFieldSubmitted,
+      obscuringCharacter: "*",
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 18.0,
+        color: AppColors.buttonBackgroundColor,
+      ),
       decoration: InputDecoration(
         filled: true,
         border: OutlineInputBorder(

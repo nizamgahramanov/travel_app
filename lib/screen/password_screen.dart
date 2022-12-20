@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
@@ -20,18 +21,13 @@ class _PasswordScreenState extends State<PasswordScreen> {
   final _form = GlobalKey<FormState>();
   final _passwordFocusNode = FocusNode();
   final _passwordController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  bool _innerListIsScrolled = false;
   bool _isShowContinueButton = false;
   bool _minimumPasswordLength = false;
   bool _atLeastOneNumber = false;
   bool _atLeastOneLowerCase = false;
   bool _atLeastOneUpperCase = false;
   bool _isObscure = true;
-
-  Key _key = const PageStorageKey({});
   void saveForm() {
-    //check in firebase email is registered or not
     FocusScope.of(context).unfocus();
     _form.currentState!.save();
   }
@@ -43,35 +39,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
   }
 
   @override
-  void initState() {
-    _scrollController.addListener(_updateScrollPosition);
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    _scrollController.removeListener(_updateScrollPosition);
+    _passwordController.dispose();
     super.dispose();
   }
 
-  void _updateScrollPosition() {
-    if (!_innerListIsScrolled &&
-        _scrollController.position.extentAfter == 0.0) {
-      setState(() {
-        _innerListIsScrolled = true;
-      });
-    } else if (_innerListIsScrolled &&
-        _scrollController.position.extentAfter > 0.0) {
-      print('_scrollController.position.extentAfter');
-      print(_scrollController.position.extentAfter);
-
-      setState(() {
-        _innerListIsScrolled = false;
-        // Reset scroll positions of the TabBarView pages
-        _key = const PageStorageKey({});
-      });
-    }
-  }
 
   void checkPasswordValidations(String character) {
     print(character);
@@ -120,7 +92,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     print("args");
     print(args);
 
-    void goNextScreen(value) async {
+    void goNextScreen(String value) {
       if (!args['provider'] && _isShowContinueButton) {
         Navigator.pushNamed(
           context,
@@ -144,11 +116,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
             ),
             AppLightText(
               spacing: 16,
-              text: "'welcome_msg'.tr() ${args['email']}",
+              text: "${'welcome_msg'.tr()} ${args['email']}",
               padding: EdgeInsets.zero,
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Form(
               key: _form,
@@ -195,66 +167,70 @@ class _PasswordScreenState extends State<PasswordScreen> {
             const SizedBox(
               height: 20,
             ),
-            AppLightText(
-              spacing: 16,
+            CustomIconText(
               text: 'minimum_of_6_characters_validation'.tr(),
-              isShowIcon: true,
-              icon: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.check,
-                  color:
-                      _minimumPasswordLength ? Colors.redAccent : Colors.black,
-                ),
+              color: _minimumPasswordLength
+                  ? AppColors.blackColor
+                  : AppColors.blackColor38,
+              icon: Icon(
+                Icons.check,
+                color: _minimumPasswordLength
+                    ? AppColors.blackColor
+                    : AppColors.blackColor38,
               ),
-              padding: EdgeInsets.zero,
+              spacing: 10,
+              isIconFirst: true,
             ),
-            AppLightText(
-              spacing: 16,
+            const SizedBox(
+              height: 7,
+            ),
+            CustomIconText(
               text: 'at_least_one_lower_case_validation'.tr(),
-              isShowIcon: true,
-              icon: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.check,
-                  color: _atLeastOneLowerCase ? Colors.redAccent : Colors.black,
-                ),
+              color: _atLeastOneLowerCase
+                  ? AppColors.blackColor
+                  : AppColors.blackColor38,
+              icon: Icon(
+                Icons.check,
+                color: _atLeastOneLowerCase
+                    ? AppColors.blackColor
+                    : AppColors.blackColor38,
               ),
-              padding: EdgeInsets.zero,
+              spacing: 10,
+              isIconFirst: true,
             ),
-            AppLightText(
-              spacing: 16,
+            const SizedBox(
+              height: 7,
+            ),
+            CustomIconText(
               text: 'at_least_one_upper_case_validation'.tr(),
-              isShowIcon: true,
-              icon: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.check,
-                  color: _atLeastOneUpperCase ? Colors.redAccent : Colors.black,
-                ),
+              color: _atLeastOneUpperCase
+                  ? AppColors.blackColor
+                  : AppColors.blackColor38,
+              icon: Icon(
+                Icons.check,
+                color: _atLeastOneUpperCase
+                    ? AppColors.blackColor
+                    : AppColors.blackColor38,
               ),
-              padding: EdgeInsets.zero,
+              spacing: 10,
+              isIconFirst: true,
             ),
-            AppLightText(
-              spacing: 16,
+            const SizedBox(
+              height: 7,
+            ),
+            CustomIconText(
               text: 'at_least_one_number_validation'.tr(),
-              isShowIcon: true,
-              icon: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.check,
-                  color: _atLeastOneNumber ? Colors.redAccent : Colors.black,
-                ),
+              color: _atLeastOneNumber
+                  ? AppColors.blackColor
+                  : AppColors.blackColor38,
+              icon: Icon(
+                Icons.check,
+                color: _atLeastOneNumber
+                    ? AppColors.blackColor
+                    : AppColors.blackColor38,
               ),
-              padding: EdgeInsets.zero,
+              spacing: 10,
+              isIconFirst: true,
             ),
           ],
         ),

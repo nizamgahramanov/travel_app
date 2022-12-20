@@ -7,20 +7,18 @@ class AppSliverAppBar extends StatefulWidget {
   final String image_path;
   final String title_text;
   bool innerBoxIsScrolled;
-  AppSliverAppBar({
-    Key? key,
-    required this.image_path,
-    required this.title_text,
-    required this.innerBoxIsScrolled
-  }) : super(key: key);
+  AppSliverAppBar(
+      {Key? key,
+      required this.image_path,
+      required this.title_text,
+      required this.innerBoxIsScrolled})
+      : super(key: key);
 
   @override
   State<AppSliverAppBar> createState() => _AppSliverAppBarState();
 }
 
 class _AppSliverAppBarState extends State<AppSliverAppBar> {
-  final _form = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -30,12 +28,13 @@ class _AppSliverAppBarState extends State<AppSliverAppBar> {
         },
         child: Icon(
           Icons.arrow_back,
-          color: widget.innerBoxIsScrolled ? Colors.black : Colors.white,
+          color: widget.innerBoxIsScrolled
+              ? AppColors.blackColor
+              : AppColors.whiteColor,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteColor,
       pinned: true,
-      //floating: true,
       stretch: true,
       expandedHeight: 200.0,
       flexibleSpace: FlexibleSpaceBar(
@@ -44,11 +43,13 @@ class _AppSliverAppBarState extends State<AppSliverAppBar> {
           widget.title_text,
           // "Great time to discover",
           style: TextStyle(
-              color: widget.innerBoxIsScrolled ? Colors.black : Colors.white),
+            color: widget.innerBoxIsScrolled
+                ? AppColors.blackColor
+                : AppColors.whiteColor,
+          ),
         ),
         background: Image.network(
           widget.image_path,
-          // "https://i.picsum.photos/id/877/200/300.jpg?hmac=kxnqPHdYgfVGqD41ArUXpM0IuUCD2GYefTwBboMDVeA",
           fit: BoxFit.cover,
         ),
       ),

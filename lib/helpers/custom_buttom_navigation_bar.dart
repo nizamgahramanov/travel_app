@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/custom_tab_indicator.dart';
 
+import 'app_colors.dart';
+
 class CustomButtomNavigatioinBar extends StatefulWidget {
   final bool isLogin;
   int? bottomNavIndex;
@@ -50,10 +52,10 @@ class _CustomButtomNavigatioinBarState extends State<CustomButtomNavigatioinBar>
         color: Colors.black.withOpacity(0.8),
         child: TabBar(
           onTap: _onItemTapped,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withOpacity(0.4),
-          indicator: const CustomTabIndicator(
-            color: Colors.white,
+          labelColor: AppColors.whiteColor,
+          unselectedLabelColor: AppColors.whiteColor.withOpacity(0.4),
+          indicator: CustomTabIndicator(
+            color: AppColors.whiteColor,
             isCircle: true,
             radius: 3,
           ),

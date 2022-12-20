@@ -12,14 +12,15 @@ import '../screen/maps_screen.dart';
 
 class LocationInput extends StatefulWidget {
   final Function onSelectPlace;
-  LocationInput(this.onSelectPlace);
+  final String destinationName;
+  LocationInput(this.onSelectPlace, this.destinationName);
   @override
   State<LocationInput> createState() => _LocationInputState();
 }
 
 class _LocationInputState extends State<LocationInput> {
   String? _previewImageUrl;
-  bool isSelecting = true;
+  bool _isSelecting = true;
 
   Future<void> _getCurrentUserLocation() async {
     print("GET CURRENT USER LOCATION");
@@ -43,9 +44,10 @@ class _LocationInputState extends State<LocationInput> {
     //   ),
     // );
     Map<String, dynamic> arguments = {
-      "isSelecting": isSelecting,
+      "isSelecting": _isSelecting,
       "geoPoint": const GeoPoint(40.35412015822521, 47.783417697006065),
-      "zoom": 7.0
+      "zoom": 7.0,
+      "name":widget.destinationName
     };
     final selectedLocation = await Navigator.of(context).pushNamed(
       MapScreen.routeName,

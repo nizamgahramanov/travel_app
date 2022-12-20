@@ -13,7 +13,6 @@ import 'package:travel_app/widgets/shimmer_effect.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/destination.dart';
-import '../widgets/shimmer_effect_circular.dart';
 import 'error_and_no_favorite_screen.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -53,7 +52,7 @@ class _DetailScreenState extends State<DetailScreen>
           MaterialPageRoute(
             builder: (context) => Wrapper(
               isLogin: false,
-              bottomNavIndex: 1,
+              bottomNavIndex: 3,
             ),
           ),
         ),
@@ -98,10 +97,11 @@ class _DetailScreenState extends State<DetailScreen>
     Map<String, dynamic> mapArgument = {
       "isSelecting": isSelecting,
       "geoPoint": clickedDestination.geoPoint,
-      "zoom": 12.0,
+      "zoom": 7.0,
       "name": clickedDestination.name
     };
     void showDestinationOnMap() {
+      print("VIEW ON MAP");
       Navigator.of(context)
           .pushNamed(MapScreen.routeName, arguments: mapArgument);
     }
@@ -114,8 +114,6 @@ class _DetailScreenState extends State<DetailScreen>
       body: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          print("_innerListIsScrolled");
-          print(_innerListIsScrolled);
           return <Widget>[
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -220,7 +218,7 @@ class _DetailScreenState extends State<DetailScreen>
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   // titlePadding: EdgeInsets.zero,
-                  expandedTitleScale: 1.7,
+                  expandedTitleScale: 1.8,
                   collapseMode: CollapseMode.parallax,
                   titlePadding: _innerListIsScrolled
                       ? const EdgeInsets.symmetric(
@@ -338,7 +336,7 @@ class _DetailScreenState extends State<DetailScreen>
         borderRadius: 15,
         horizontalMargin: 20,
         verticalMargin: 20,
-        onTap: () => showDestinationOnMap,
+        onTap: () => showDestinationOnMap(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -404,13 +402,7 @@ class _MyBackgroundState extends State<MyBackground> {
                 );
               },
             ),
-          ), // child: ClipRRect(
-          //   borderRadius: BorderRadius.circular(30),
-          //   child: Image.network(
-          //     widget.clickedDestination.photoUrl[showImageIndex],
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          ),
         ),
         Positioned(
           right: 20,
@@ -421,7 +413,7 @@ class _MyBackgroundState extends State<MyBackground> {
               maxHeight: MediaQuery.of(context).size.height * 0.3,
               maxWidth: 60,
               child: Container(
-                color: Colors.white,
+                color:AppColors.whiteColor,
                 child: ListView.builder(
                   itemCount: widget.clickedDestination.photoUrl.length,
                   padding: EdgeInsets.zero,
@@ -438,7 +430,7 @@ class _MyBackgroundState extends State<MyBackground> {
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
                                 width: 3,
-                                color: Colors.black,
+                                color: AppColors.blackColor,
                               ),
                             ),
                             child: ClipRRect(
@@ -457,10 +449,10 @@ class _MyBackgroundState extends State<MyBackground> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) => Center(
+                                placeholder: (context, url) =>  const Center(
                                   child: ShimmerEffect.rectangular(
                                     height: 50,
-                                    width: 70,
+                                    width: 50,
                                     isCircle: false,
                                   ),
                                 ),
@@ -471,14 +463,6 @@ class _MyBackgroundState extends State<MyBackground> {
                                 },
                               ),
                             ),
-                            // child: ClipRRect(
-                            //   borderRadius: BorderRadius.circular(12),
-                            //   child: Image.network(
-                            //     widget.clickedDestination
-                            //         .photoUrl[showImageIndex],
-                            //     fit: BoxFit.cover,
-                            //   ),
-                            // ),
                           )
                         : Container(
                             margin: const EdgeInsets.all(4),
@@ -504,10 +488,10 @@ class _MyBackgroundState extends State<MyBackground> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) => Center(
+                                placeholder: (context, url) =>  const Center(
                                   child: ShimmerEffect.rectangular(
                                     height: 50,
-                                    width: 60,
+                                    width: 50,
                                     isCircle: false,
                                   ),
                                 ),
@@ -518,13 +502,6 @@ class _MyBackgroundState extends State<MyBackground> {
                                 },
                               ),
                             ),
-                            // child: ClipRRect(
-                            //   borderRadius: BorderRadius.circular(15),
-                            //   child: Image.network(
-                            //     widget.clickedDestination.photoUrl[index],
-                            //     fit: BoxFit.cover,
-                            //   ),
-                            // ),
                           ),
                   ),
                 ),

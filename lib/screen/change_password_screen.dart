@@ -32,7 +32,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     color: Colors.black,
                   ),
                 ),
-                backgroundColor: Colors.white,
+                backgroundColor: AppColors.whiteColor,
                 pinned: true,
                 //floating: true,
                 stretch: true,

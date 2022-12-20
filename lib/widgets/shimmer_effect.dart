@@ -8,17 +8,16 @@ class ShimmerEffect extends StatelessWidget {
   final bool isCircle;
   final ShapeBorder shapeBorder;
 
-  const ShimmerEffect.rectangular({
-    this.width=double.infinity,
-    required this.height,
-    required this.isCircle
-}) : this.shapeBorder = const RoundedRectangleBorder();
-  const ShimmerEffect.circular({
-    required this.width,
-    required this.height,
-    required this.isCircle,
-    this.shapeBorder = const CircleBorder()
-});
+  const ShimmerEffect.rectangular(
+      {this.width = double.infinity,
+      required this.height,
+      required this.isCircle})
+      : this.shapeBorder = const RoundedRectangleBorder();
+  const ShimmerEffect.circular(
+      {required this.width,
+      required this.height,
+      required this.isCircle,
+      this.shapeBorder = const CircleBorder()});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +27,18 @@ class ShimmerEffect extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        margin: const EdgeInsets.only(right: 15, left: 5, top: 5, bottom: 5),
-        decoration: isCircle?  ShapeDecoration(
-          color: Colors.grey[200],
-          shape: shapeBorder,
-        ):BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(15),
-        ),
+        margin: isCircle
+            ? const EdgeInsets.only(right: 17, left: 5, top: 5, bottom: 5)
+            : EdgeInsets.zero,
+        decoration: isCircle
+            ? ShapeDecoration(
+                color: Colors.grey[200],
+                shape: shapeBorder,
+              )
+            : BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(15),
+              ),
       ),
     );
   }

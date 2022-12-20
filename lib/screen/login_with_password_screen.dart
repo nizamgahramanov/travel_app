@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -56,7 +57,20 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
       _isObscure = !_isObscure;
     });
   }
-
+  void _redirectUserToProfileScreen() {
+    // Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => Wrapper(
+    //       isLogin: true,
+    //       bottomNavIndex: 0,
+    //     ),
+    //   ),
+    //       (Route<dynamic> route) => false,
+    // );
+    Navigator.pushNamedAndRemoveUntil(
+        context, MainScreen.routeName, (route) => false);
+  }
   void checkPasswordCorrect(enteredPassword, context) async {
     //    1. Daxil olan userin emailinə vasitəsi ilə firestoredan məlumatlarını çəkirik
     //    2. Melumatlarda encrypt olunmuş passvordu decrypt edib userin daxil etiyi passvordla yoxlayiriq
@@ -67,20 +81,15 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final String? base16Encrypted =
           await FireStoreService().getUserPasswordFromFirestore(args['email']);
-      // final String decryptedPassword =
-      //     EnDeCryption().decryptWithAES(Encrypted.fromBase16(base16Encrypted!));
       bool isPasswordCorrect =
           EnDeCryption().isPasswordCorrect(enteredPassword, base16Encrypted!);
-      // print(decryptedPassword);
       if (isPasswordCorrect) {
-        AuthService().loginUser(
+        await AuthService().loginUser(
           context: context,
           email: args['email'],
           password: enteredPassword,
         );
-        // I think this approach is not correct
-        Navigator.pushNamedAndRemoveUntil(
-            context, MainScreen.routeName, (route) => false);
+        _redirectUserToProfileScreen();
       } else {
         Utility.getInstance().showAlertDialog(
           popButtonColor: AppColors.backgroundColorOfApp,
@@ -148,7 +157,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
                       CustomTextFormField(
                         controller: _passwordController,
                         focusNode: _passwordFocusNode,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
                         obscureText: _isObscure,
                         suffixIcon: GestureDetector(

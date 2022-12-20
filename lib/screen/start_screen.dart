@@ -19,9 +19,9 @@ class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.black,
-        systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ));
     super.initState();
   }
@@ -31,12 +31,15 @@ class _StartScreenState extends State<StartScreen> {
     // print(res);
     User? result = FirebaseAuth.instance.currentUser;
     print(result);
-    bool isLogin=false;
-    if(result!=null){
-      isLogin=true;
+    bool isLogin = false;
+    if (result != null) {
+      isLogin = true;
     }
     print(isLogin);
-    Navigator.of(context).pushReplacementNamed(MainScreen.routeName,arguments: isLogin);
+    Navigator.of(context).pushReplacementNamed(
+      MainScreen.routeName,
+      arguments: isLogin,
+    );
   }
 
   @override
@@ -68,7 +71,7 @@ class _StartScreenState extends State<StartScreen> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: AppLightText(
                   text: 'discover_the_land_of_fire'.tr(),
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   size: 32,
                   fontWeight: FontWeight.bold,
                   spacing: 0,

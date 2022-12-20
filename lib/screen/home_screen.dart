@@ -28,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       child: Padding(
         padding: const EdgeInsets.only(
           top: 20.0,
-          left: 20,
-          right: 20,
+          left: 20.0,
+          right: 20.0,
           bottom: 0,
         ),
         child: Column(
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [
                 AppLightText(
                   text: 'home_title'.tr(),
-                  color: AppColors.mainTextColor,
+                  color: AppColors.blackColor,
                   fontWeight: FontWeight.bold,
                   spacing: 2,
                   padding: EdgeInsets.zero,
@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Expanded(
               child: StaggeredGridView(),
             ),
-            // const TopDestination(),
           ],
         ),
       ),

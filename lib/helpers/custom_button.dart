@@ -46,7 +46,7 @@ class CustomButton extends StatelessWidget {
         color: buttonColor ?? AppColors.buttonBackgroundColor,
         border: borderColor == null
             ? Border.all(color: AppColors.inputColor)
-            : Border.all(color: Colors.black),
+            : Border.all(color: borderColor!),
       ),
       child: InkWell(
         onTap: onTap,
@@ -65,7 +65,7 @@ class CustomButton extends StatelessWidget {
                     spacing: 2,
                     text: buttonText,
                     size: buttonTextSize,
-                    color: textColor == null ? Colors.white : textColor!,
+                    color: textColor == null ? AppColors.whiteColor : textColor!,
                     padding: EdgeInsets.zero,
                     fontWeight: FontWeight.bold,
                   ),

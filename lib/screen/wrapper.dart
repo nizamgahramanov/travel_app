@@ -69,7 +69,6 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
       backgroundColor: AppColors.backgroundColorOfApp,
       body: screens[widget.bottomNavIndex]!,
       bottomNavigationBar: BottomNavigationBar(
-
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: widget.bottomNavIndex == 0 ? const Icon(

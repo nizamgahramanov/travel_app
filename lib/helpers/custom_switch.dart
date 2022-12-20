@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'app_colors.dart';
+
 class CustomSwitch extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
@@ -21,10 +24,10 @@ class _CustomSwitchState extends State<CustomSwitch>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 60));
     _circleAnimation = AlignmentTween(
-        begin: widget.value ? Alignment.centerRight : Alignment.centerLeft,
-        end: widget.value ? Alignment.centerLeft : Alignment.centerRight)
+            begin: widget.value ? Alignment.centerRight : Alignment.centerLeft,
+            end: widget.value ? Alignment.centerLeft : Alignment.centerRight)
         .animate(CurvedAnimation(
-        parent: _animationController!, curve: Curves.linear));
+            parent: _animationController!, curve: Curves.linear));
   }
 
   @override
@@ -57,12 +60,14 @@ class _CustomSwitchState extends State<CustomSwitch>
                   top: 2.0, bottom: 2.0, right: 2.0, left: 2.0),
               child: Container(
                 alignment:
-                widget.value ? Alignment.centerRight : Alignment.centerLeft,
+                    widget.value ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   width: 20.0,
                   height: 20.0,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white),
+                    shape: BoxShape.circle,
+                    color: AppColors.whiteColor,
+                  ),
                 ),
               ),
             ),

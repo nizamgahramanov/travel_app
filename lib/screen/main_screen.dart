@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
             print("PROGRESS");
             return const Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child:Text("Loading..."),
               ),
             );
           }

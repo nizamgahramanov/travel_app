@@ -384,7 +384,10 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  LocationInput(_selectPlace),
+                  LocationInput(_selectPlace,_nameController.text),
+                  const SizedBox(
+                    height: 85,
+                  ),
                 ],
               ),
             ),

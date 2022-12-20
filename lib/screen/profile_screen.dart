@@ -8,6 +8,7 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/model/firestore_user.dart';
 import 'package:travel_app/screen/change_name.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 
@@ -15,8 +16,10 @@ import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../providers/language.dart';
 import '../reusable/custom_radio_text.dart';
+import '../widgets/shimmer_effect.dart';
 import 'change_email_screen.dart';
 import 'change_password_screen.dart';
+import 'error_and_no_favorite_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -68,6 +71,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.of(context).pop();
     AuthService().signOut(context);
   }
+  void returnToSighUpPage(){
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Wrapper(
+          isLogin: false,
+          bottomNavIndex: 0,
+        ),
+      ),
+          (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +90,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     print("LLangCCDOO");
     print(langCode);
     User? result = FirebaseAuth.instance.currentUser;
+    if(result==null){
+      returnToSighUpPage();
+    }
     final List titleList = [
       'name_title'.tr(),
       'email_title'.tr(),
@@ -85,7 +103,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         children: [
           Container(
-            color: Colors.yellow,
             width: double.maxFinite,
             height: MediaQuery.of(context).size.height * 0.47,
             child: Stack(
@@ -110,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   right: 20,
                   child: AppLightText(
                     text: 'profile_title'.tr(),
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     size: 32,
                     fontWeight: FontWeight.bold,
                     spacing: 2,
@@ -131,22 +148,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     builder: (BuildContext context,
                         AsyncSnapshot<FirestoreUser> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return Expanded(
+                          child: Container(
+                            color: AppColors.whiteColor,
+                            child: ListView.separated(
+                                padding: const EdgeInsets.only(bottom: 0.0),
+                                shrinkWrap: false,
+                                itemBuilder: (context, index) {
+                                  return const ListTile(
+                                    title: ShimmerEffect.rectangular(
+                                      height: 16,
+                                      isCircle: false,
+                                      width: 12,
+                                    ),
+                                    subtitle: ShimmerEffect.rectangular(
+                                      height: 16,
+                                      isCircle: false,
+                                      width: 60,
+                                    ),
+                                    trailing: ShimmerEffect.rectangular(
+                                      height: 25,
+                                      isCircle: false,
+                                      width: 25,
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (_, __) => Divider(
+                                      color: AppColors.buttonBackgroundColor,
+                                    ),
+                                itemCount: titleList.length),
+                          ),
                         );
                       } else if (snapshot.connectionState ==
                               ConnectionState.active ||
                           snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
-                          return const Text('Error');
+                          return ErrorAndNoFavoriteScreen(
+                            text: "something_went_wrong_error_msg".tr(),
+                            path: "assets/svg/error.svg",
+                          );
                         } else {
                           return Expanded(
                             // color: Colors.white,
                             // width: double.maxFinite,
                             child: Container(
-                              color: Colors.white,
+                              color: AppColors.whiteColor,
                               child: ListView.separated(
-                                padding: const EdgeInsets.only(bottom: 0.0),
+                                padding: EdgeInsets.zero,
                                 shrinkWrap: false,
                                 itemBuilder: (context, index) {
                                   final data = titleList[index];
@@ -156,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       spacing: 16,
                                       text: data,
                                       size: 16,
-                                      color: Colors.black,
+                                      color: AppColors.blackColor,
                                       padding: EdgeInsets.zero,
                                     ),
                                     subtitle: index == 0
@@ -191,8 +239,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         }
                       } else {
-                        return const Center(
-                          child: Text("SOMETHING UNKNOWN"),
+                        return ErrorAndNoFavoriteScreen(
+                          text: "something_went_wrong_error_msg".tr(),
+                          path: "assets/svg/error.svg",
                         );
                       }
                     }),
@@ -200,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 8,
                 ),
                 Container(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   child: ListTile(
                     title: AppLightText(
                       spacing: 16,
@@ -246,24 +295,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GestureDetector(
                   onTap: () {
                     Utility.getInstance().showAlertDialog(
-                        context: context,
-                        alertTitle: 'log_out_question'.tr(),
-                        popButtonColor: AppColors.backgroundColorOfApp,
-                        popButtonText: 'back_btn'.tr(),
-                        onPopTap: () => Navigator.of(context).pop(),
-                        isShowActionButton: true,
-                        actionButtonText: 'log_out_btn'.tr(),
-                        onTapAction: logout,
-                        actionButtonColor: Colors.redAccent,
-                        popButtonTextColor: Colors.black);
+                      context: context,
+                      alertTitle: 'log_out_question'.tr(),
+                      popButtonColor: AppColors.backgroundColorOfApp,
+                      popButtonText: 'back_btn'.tr(),
+                      onPopTap: () => Navigator.of(context).pop(),
+                      isShowActionButton: true,
+                      actionButtonText: 'log_out_btn'.tr(),
+                      onTapAction: logout,
+                      actionButtonColor: Colors.redAccent,
+                      popButtonTextColor: AppColors.blackColor,
+                    );
                     // AuthService().signOut();
                   },
                   child: Container(
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     padding: const EdgeInsets.all(15),
                     child: CustomIconText(
                       text: 'log_out_btn'.tr(),
-                      color: Colors.black,
+                      color: AppColors.blackColor,
                       spacing: 0,
                       size: 18,
                       isIconFirst: false,
@@ -330,9 +380,8 @@ class RadioListBuilderState extends State<RadioListBuilder> {
           padding: const EdgeInsets.only(
             left: 25,
           ),
-          // padding: EdgeInsets.zero,
           size: 22,
-          color: Colors.black,
+          color: AppColors.blackColor,
           spacing: 0,
         ),
         const SizedBox(

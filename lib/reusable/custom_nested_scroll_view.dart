@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 
 class CustomNestedScrollView extends StatefulWidget {
@@ -53,6 +54,9 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
 
   @override
   Widget build(BuildContext context) {
+    var heigth = MediaQuery.of(context).size.height;
+    print("HEIGHT");
+    print(heigth);
     return NestedScrollView(
       controller: _scrollController,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -61,32 +65,28 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverAppBar(
               leading: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
+                onTap: () => Navigator.of(context).pop(),
                 child: const Icon(
                   Icons.arrow_back,
                   color: Colors.black,
                 ),
               ),
-
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.whiteColor,
               pinned: true,
-              stretch: true,
+              stretch: false,
               expandedHeight: 120.0,
               flexibleSpace: FlexibleSpaceBar(
                 expandedTitleScale: 2,
                 collapseMode: CollapseMode.pin,
                 centerTitle: false,
-
                 title: _innerListIsScrolled
-                    ? Text(
-                        widget.title,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat',
-                        ),
+                    ? AppLightText(
+                        text: widget.title,
+                        padding: EdgeInsets.zero,
+                        spacing: 0,
+                        color: AppColors.blackColor,
+                        fontWeight: FontWeight.bold,
+                        alignment: Alignment.bottomLeft,
                       )
                     : null,
                 background: MyBackground(title: widget.title),
@@ -99,7 +99,6 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
         builder: (BuildContext context) {
           return CustomScrollView(
             slivers: [
-
               SliverOverlapInjector(
                 handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                   context,
@@ -107,7 +106,6 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  height: MediaQuery.of(context).size.height *1.7,
                   margin: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 0,

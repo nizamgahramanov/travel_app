@@ -16,7 +16,7 @@ class AppLightText extends StatelessWidget {
     Key? key,
     this.size = 16,
     required this.text,
-    this.color = Colors.black38,
+    this.color = AppColors.blackColor38,
     this.isShowIcon = false,
     this.icon,
     this.alignment = Alignment.centerLeft,

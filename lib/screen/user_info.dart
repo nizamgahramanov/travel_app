@@ -1,13 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/utility.dart';
+import 'package:travel_app/model/user.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
+import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/user_credentials.dart';
+import 'main_screen.dart';
 
 class UserInfo extends StatefulWidget {
   static const routeName = '/user_info';
@@ -56,23 +61,36 @@ class _UserInfoState extends State<UserInfo> {
     final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
     print(args.email);
     print("KLKLKRE");
-    void registerUser() async {
+
+    void _redirectUserToProfileScreen() {
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => Wrapper(
+      //       isLogin: true,
+      //       bottomNavIndex: 3,
+      //     ),
+      //   ),
+      //   (Route<dynamic> route) => false,
+      // );
+      Navigator.pushNamedAndRemoveUntil(
+          context, MainScreen.routeName, (route) => false);
+    }
+
+    void _registerUser() async {
       if (_isShowSaveButton) {
-        AuthService().registerUser(
+        await AuthService().registerUser(
           context: context,
           firstName: _firstnameController.text,
           lastName: _lastnameController.text,
           email: args.email,
           password: args.password,
         );
+        _redirectUserToProfileScreen();
       }
-      // I think this approach is not correct
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, MainScreen.routeName, (route) => false);
     }
 
     void saveForm() {
-      print("SSAVE FORRM");
       FocusScope.of(context).unfocus();
       _form.currentState!.save();
     }
@@ -80,7 +98,7 @@ class _UserInfoState extends State<UserInfo> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
-        title:'let\'s_get_know_app_bar_title'.tr(),
+        title: 'let\'s_get_know_app_bar_title'.tr(),
         child: Column(
           children: [
             const SizedBox(
@@ -146,7 +164,7 @@ class _UserInfoState extends State<UserInfo> {
                         onChanged: (value) => checkIfNameChanged(value),
                         onFieldSubmitted: (_) => saveForm(),
                         textInputAction: TextInputAction.done,
-                        onSaved: (_) => registerUser(),
+                        onSaved: (_) => _registerUser(),
                       )
                     ],
                   ),

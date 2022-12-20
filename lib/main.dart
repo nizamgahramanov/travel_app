@@ -157,7 +157,10 @@ class _MyAppState extends State<MyApp> {
         title: 'Seyr Et',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: AppColors.buttonBackgroundColor,
+            secondary: AppColors.blackColor38
+          ),
           textSelectionTheme: TextSelectionThemeData(
             selectionColor: AppColors.buttonBackgroundColor,
             cursorColor: AppColors.buttonBackgroundColor,

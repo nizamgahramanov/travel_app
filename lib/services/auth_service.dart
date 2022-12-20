@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,7 +7,7 @@ import 'package:travel_app/model/user.dart';
 import '../exception/custom_auth_exception.dart';
 import 'firebase_firestore_service.dart';
 
-class AuthService {
+class AuthService{
   final _firebaseAuth = auth.FirebaseAuth.instance;
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
@@ -28,15 +29,19 @@ class AuthService {
       print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
           await GoogleSignIn(scopes: <String>["email"]).signIn();
-
+      print("Error not here");
+      print(googleSignInAccount);
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
+
+      print("Error not here2");
+      print(googleSignInAuthentication);
 
       final credential = auth.GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      print(googleSignInAccount);
+      print("Error not here3");
 
       auth.UserCredential result =
           await _firebaseAuth.signInWithCredential(credential);
@@ -56,19 +61,21 @@ class AuthService {
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
+        alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
-        popButtonText: 'Ok',
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
+      print("error message");
+      print(e);
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'Ok',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -89,8 +96,7 @@ class AuthService {
           .createUserWithEmailAndPassword(
             email: email,
             password: password,
-          )
-          .whenComplete(() => null);
+          );
       if (userCredential.user != null) {
         FireStoreService().createUserInFirestore(
           userCredential.user!.uid,
@@ -100,14 +106,13 @@ class AuthService {
           password,
         );
       }
-
       return _userFromFirebase(userCredential.user);
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
+        alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
-        popButtonText: 'Ok',
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -115,9 +120,9 @@ class AuthService {
     } catch (e) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'Ok',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -141,9 +146,9 @@ class AuthService {
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
+        alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
-        popButtonText: 'Ok',
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -151,9 +156,9 @@ class AuthService {
     } catch (e) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'Ok',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -184,9 +189,9 @@ class AuthService {
         print(authError.message);
         Utility.getInstance().showAlertDialog(
           context: context,
-          alertTitle: 'Oops!',
+          alertTitle: 'oops_error_title'.tr(),
           alertMessage: authError.message,
-          popButtonText: 'Ok',
+          popButtonText: 'ok_btn'.tr(),
           popButtonColor: Colors.redAccent,
           onPopTap: () => Navigator.of(context).pop(),
         );
@@ -194,9 +199,9 @@ class AuthService {
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
+        alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
-        popButtonText: 'Ok',
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -204,9 +209,9 @@ class AuthService {
     } catch (e) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'Ok',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -234,9 +239,9 @@ class AuthService {
           print(authError.message);
           Utility.getInstance().showAlertDialog(
             context: context,
-            alertTitle: 'Oops!',
+            alertTitle: 'oops_error_title'.tr(),
             alertMessage: authError.message,
-            popButtonText: 'Ok',
+            popButtonText: 'ok_btn'.tr(),
             popButtonColor: Colors.redAccent,
             onPopTap: () => Navigator.of(context).pop(),
           );
@@ -244,9 +249,9 @@ class AuthService {
       } on auth.FirebaseAuthException catch (authError) {
         Utility.getInstance().showAlertDialog(
           context: context,
-          alertTitle: 'Oops!',
+          alertTitle: 'oops_error_title'.tr(),
           alertMessage: authError.message,
-          popButtonText: 'Ok',
+          popButtonText: 'ok_btn'.tr(),
           popButtonColor: Colors.redAccent,
           onPopTap: () => Navigator.of(context).pop(),
         );
@@ -254,9 +259,9 @@ class AuthService {
       } catch (e) {
         Utility.getInstance().showAlertDialog(
           context: context,
-          alertTitle: 'Oops!',
-          alertMessage: 'Unknown error occurred while processing your request',
-          popButtonText: 'Ok',
+          alertTitle: 'oops_error_title'.tr(),
+          alertMessage: 'unknown_error_msg'.tr(),
+          popButtonText: 'ok_btn'.tr(),
           popButtonColor: Colors.redAccent,
           onPopTap: () => Navigator.of(context).pop(),
         );
@@ -272,9 +277,9 @@ class AuthService {
     } on auth.FirebaseAuthException catch (authError) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
+        alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
-        popButtonText: 'Ok',
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );
@@ -282,9 +287,9 @@ class AuthService {
     } catch (e) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'Ok',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         popButtonColor: Colors.redAccent,
         onPopTap: () => Navigator.of(context).pop(),
       );

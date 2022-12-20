@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,8 +33,11 @@ class StaggeredGridItem extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(15),
         ),
-        border: Border.all(color: Colors.grey, width: 0.1),
-        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey,
+          width: 0.1,
+        ),
+        color: AppColors.whiteColor,
       ),
       child: Column(
         children: [
@@ -90,7 +92,7 @@ class StaggeredGridItem extends StatelessWidget {
           child: AppLightText(
             text: name,
             size: 15,
-            color: AppColors.mainTextColor,
+            color: AppColors.blackColor,
             fontWeight: FontWeight.bold,
             spacing: 2,
             padding: EdgeInsets.zero,
@@ -119,24 +121,3 @@ class StaggeredGridItem extends StatelessWidget {
   }
 }
 
-/*class ShimmerPlaceholder extends StatelessWidget {
-  const ShimmerPlaceholder({
-    Key? key, this.height, this.width,
-  }) : super(key: key);
-  final double? height,width;
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey[500]!,
-      highlightColor: Colors.grey[300]!,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Colors.grey[200],
-        ),
-      ),
-    );
-  }
-}*/

@@ -24,7 +24,7 @@ class AppButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: 'Montserrat',
-            color: AppColors.textColor1,
+            color: AppColors.whiteColor,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
