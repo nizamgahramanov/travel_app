@@ -38,8 +38,8 @@ class CustomRadioText extends StatelessWidget {
             ),
             AppLightText(
               text: label,
-              size: 16,
-              color: Colors.black,
+              size: 15,
+              // color: Colors.black,
               padding: EdgeInsets.zero,
               spacing: 0,
             ),

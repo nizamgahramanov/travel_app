@@ -13,13 +13,13 @@ import 'login_signup_screen.dart';
 
 class Wrapper extends StatefulWidget {
   final bool isLogin;
-  int bottomNavIndex;
+  int? bottomNavIndex;
 
   static const routeName = '/wrapper';
   Wrapper({
     Key? key,
     required this.isLogin,
-    required this.bottomNavIndex,
+    this.bottomNavIndex,
   }) : super(key: key);
 
   @override
@@ -71,11 +71,13 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: widget.bottomNavIndex == 0 ? const Icon(
-              Icons.home,
-            ) : const Icon(
-              Icons.home_outlined,
-            ),
+            icon: widget.bottomNavIndex == 0
+                ? const Icon(
+                    Icons.home,
+                  )
+                : const Icon(
+                    Icons.home_outlined,
+                  ),
             label: 'home_bottom_nav_bar'.tr(),
           ),
           BottomNavigationBarItem(
@@ -114,12 +116,14 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
                     : const Icon(
                         Icons.login_outlined,
                       ),
-            label: widget.isLogin ?'profile_bottom_nav_bar'.tr() : 'login_bottom_nav_bar'.tr(),
+            label: widget.isLogin
+                ? 'profile_bottom_nav_bar'.tr()
+                : 'login_bottom_nav_bar'.tr(),
           ),
         ],
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        currentIndex: widget.bottomNavIndex,
+        currentIndex: widget.bottomNavIndex ?? 0,
         selectedFontSize: 13,
         unselectedFontSize: 13,
         selectedItemColor: AppColors.buttonBackgroundColor,

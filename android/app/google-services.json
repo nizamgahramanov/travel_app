@@ -7,18 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813623624377:android:257ee9f10fb58334521168",
+        "mobilesdk_app_id": "1:813623624377:android:4775e21faa7028fe521168",
         "android_client_info": {
           "package_name": "com.example.travel_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "813623624377-afgllh1sue9341g2qqaijfgab4rguhct.apps.googleusercontent.com",
+          "client_id": "813623624377-6ue0eaei6f5mmgr9rqkkp2ii5mn8nape.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.travel_app",
-            "certificate_hash": "89aea6684d9a45b4816f56ac68ba1aa2c52d490b"
+            "certificate_hash": "b651758318a3071ebce8bf7b2a68ea419d284dd4"
           }
         },
         {

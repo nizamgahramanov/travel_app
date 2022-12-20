@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/helpers/utility.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
@@ -50,8 +51,7 @@ class _DetailScreenState extends State<DetailScreen>
         onTapAction: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Wrapper(
-              isLogin: false,
+            builder: (context) => MainScreen(
               bottomNavIndex: 3,
             ),
           ),
@@ -413,7 +413,7 @@ class _MyBackgroundState extends State<MyBackground> {
               maxHeight: MediaQuery.of(context).size.height * 0.3,
               maxWidth: 60,
               child: Container(
-                color:AppColors.whiteColor,
+                color: AppColors.whiteColor,
                 child: ListView.builder(
                   itemCount: widget.clickedDestination.photoUrl.length,
                   padding: EdgeInsets.zero,
@@ -449,7 +449,7 @@ class _MyBackgroundState extends State<MyBackground> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) =>  const Center(
+                                placeholder: (context, url) => const Center(
                                   child: ShimmerEffect.rectangular(
                                     height: 50,
                                     width: 50,
@@ -476,8 +476,8 @@ class _MyBackgroundState extends State<MyBackground> {
                               borderRadius: BorderRadius.circular(15),
                               child: CachedNetworkImage(
                                 height: settings.maxExtent,
-                                imageUrl: widget.clickedDestination
-                                    .photoUrl[index],
+                                imageUrl:
+                                    widget.clickedDestination.photoUrl[index],
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   decoration: BoxDecoration(
@@ -488,7 +488,7 @@ class _MyBackgroundState extends State<MyBackground> {
                                     ),
                                   ),
                                 ),
-                                placeholder: (context, url) =>  const Center(
+                                placeholder: (context, url) => const Center(
                                   child: ShimmerEffect.rectangular(
                                     height: 50,
                                     width: 50,

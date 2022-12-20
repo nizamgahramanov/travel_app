@@ -58,18 +58,17 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     });
   }
   void _redirectUserToProfileScreen() {
-    // Navigator.pushAndRemoveUntil(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => Wrapper(
-    //       isLogin: true,
-    //       bottomNavIndex: 0,
-    //     ),
-    //   ),
-    //       (Route<dynamic> route) => false,
-    // );
-    Navigator.pushNamedAndRemoveUntil(
-        context, MainScreen.routeName, (route) => false);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainScreen(
+          bottomNavIndex: 0,
+        ),
+      ),
+          (Route<dynamic> route) => false,
+    );
+    // Navigator.pushNamedAndRemoveUntil(
+    //     context, MainScreen.routeName, (route) => false);
   }
   void checkPasswordCorrect(enteredPassword, context) async {
     //    1. Daxil olan userin emailinə vasitəsi ilə firestoredan məlumatlarını çəkirik

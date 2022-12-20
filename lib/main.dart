@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/user_preferences.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/providers/language.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
@@ -26,7 +25,6 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
-  await UserPreferences.init();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(
     EasyLocalization(
@@ -49,8 +47,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Destination> favorites = [];
-
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case DetailScreen.routeName:
@@ -58,12 +54,11 @@ class _MyAppState extends State<MyApp> {
           child: DetailScreen(),
           settings: settings,
         );
-      case MainScreen.routeName:
-        return CustomPageRoute(
-            child: MainScreen(
-              favoriteList: favorites,
-            ),
-            settings: settings);
+      // case MainScreen.routeName:
+      //   return CustomPageRoute(
+      //     child: MainScreen(),
+      //     settings: settings,
+      //   );
       case PasswordScreen.routeName:
         print("PASSWORD GO ");
         print(settings);
@@ -158,9 +153,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(
-            primary: AppColors.buttonBackgroundColor,
-            secondary: AppColors.blackColor38
-          ),
+              primary: AppColors.buttonBackgroundColor,
+              secondary: AppColors.blackColor38),
           textSelectionTheme: TextSelectionThemeData(
             selectionColor: AppColors.buttonBackgroundColor,
             cursorColor: AppColors.buttonBackgroundColor,

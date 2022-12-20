@@ -73,8 +73,15 @@ class _UserInfoState extends State<UserInfo> {
       //   ),
       //   (Route<dynamic> route) => false,
       // );
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainScreen.routeName, (route) => false);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(
+            bottomNavIndex: 3,
+          ),
+        ),
+        (Route<dynamic> route) => false,
+      );
     }
 
     void _registerUser() async {

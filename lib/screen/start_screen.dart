@@ -26,19 +26,27 @@ class _StartScreenState extends State<StartScreen> {
     super.initState();
   }
 
-  void goToMainScreen() async {
+  void goToMainScreen() {
     // var res = await AuthService().handleAuthState();
     // print(res);
-    User? result = FirebaseAuth.instance.currentUser;
-    print(result);
-    bool isLogin = false;
-    if (result != null) {
-      isLogin = true;
-    }
-    print(isLogin);
-    Navigator.of(context).pushReplacementNamed(
-      MainScreen.routeName,
-      arguments: isLogin,
+    // User? result = FirebaseAuth.instance.currentUser;
+    // print(result);
+    // bool isLogin = false;
+    // if (result != null) {
+    //   isLogin = true;
+    // }
+    // print(isLogin);
+    // Navigator.of(context).pushReplacementNamed(
+    //   MainScreen.routeName,
+    //   arguments: isLogin,
+    // );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainScreen(
+          bottomNavIndex: 0,
+        ),
+      ),
     );
   }
 

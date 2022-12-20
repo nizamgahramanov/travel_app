@@ -71,6 +71,7 @@
   "destination_region_validation": "Zəhmət Olmasa Rayonu Daxil Edin",
   "unknown_error_msg": "Sorğunuzu emal edərkən naməlum xəta baş verdi",
   "oops_error_title": "Xəta!",
-  "ok_btn": "Yaxşı"
+  "ok_btn": "Yaxşı",
+  "loading_msg": "Yüklənir..."
 
 }

@@ -5,9 +5,12 @@ import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 
 class MainScreen extends StatefulWidget {
-  bool? isLogin;
+  int? bottomNavIndex;
 
-  MainScreen({Key? key, favoriteList}) : super(key: key);
+  MainScreen({
+    Key? key,
+    required this.bottomNavIndex,
+  }) : super(key: key);
   static const routeName = '/main';
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -31,17 +34,17 @@ class _MainScreenState extends State<MainScreen> {
             return user == null
                 ? Wrapper(
                     isLogin: false,
-                    bottomNavIndex: 0,
+                    bottomNavIndex: widget.bottomNavIndex,
                   )
                 : Wrapper(
                     isLogin: true,
-                    bottomNavIndex: 0,
+                    bottomNavIndex: widget.bottomNavIndex,
                   );
           } else {
             print("PROGRESS");
             return const Scaffold(
               body: Center(
-                child:Text("Loading..."),
+                child: Text("Loading..."),
               ),
             );
           }
