@@ -31,19 +31,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void listTileOnTap(int index, String firstName, String lastName, String email,
-      String? password) {
-    if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChangeNameScreen(
-            firstName: firstName,
-            lastName: lastName,
-          ),
+  void listTileOnTap(
+      String firstName, String lastName, String email, String? password) {
+    // if (index == 0) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNameScreen(
+          firstName: firstName,
+          lastName: lastName,
         ),
-      );
-    } else {
+      ),
+    );
+    /* } else {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       );
-    }
+    }*/
   }
 
   void logout() {
@@ -136,24 +136,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               CustomListTile(
-                                  title: titleList[0],
-                                  data: 'loading_msg'.tr()),
+                                title: titleList[0],
+                                data: 'loading_msg'.tr(),
+                                icon: const Icon(
+                                    Icons.arrow_forward_ios_outlined),
+                              ),
                               Divider(
                                 height: 1,
                                 color: AppColors.buttonBackgroundColor,
                               ),
                               CustomListTile(
-                                title: titleList[1],
-                                data: 'loading_msg'.tr(),
-                              ),
+                                  title: titleList[1],
+                                  data: 'loading_msg'.tr(),
+                                  icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined)),
                               Divider(
                                 height: 1,
                                 color: AppColors.buttonBackgroundColor,
                               ),
                               CustomListTile(
-                                title: titleList[2],
-                                data: 'loading_msg'.tr(),
-                              ),
+                                  title: titleList[2],
+                                  data: 'loading_msg'.tr(),
+                                  icon: const Icon(
+                                      Icons.arrow_forward_ios_outlined)),
                             ],
                           );
                         } else if (snapshot.connectionState ==
@@ -168,28 +173,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                CustomListTile(
-                                    title: titleList[0],
-                                    data:
-                                        '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}'),
+                                GestureDetector(
+                                  onTap: () => listTileOnTap(
+                                    snapshot.data!.firstName!,
+                                    snapshot.data!.lastName!,
+                                    snapshot.data!.email,
+                                    snapshot.data!.password,
+                                  ),
+                                  child: CustomListTile(
+                                      title: titleList[0],
+                                      data:
+                                          '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
+                                      icon: const Icon(
+                                          Icons.arrow_forward_ios_outlined)),
+                                ),
                                 Divider(
                                   height: 1,
                                   color: AppColors.buttonBackgroundColor,
                                 ),
                                 CustomListTile(
-                                  title: titleList[1],
-                                  data: snapshot.data!.email,
-                                ),
+                                    title: titleList[1],
+                                    data: snapshot.data!.email,
+                                    icon: const Icon(
+                                        Icons.arrow_forward_ios_outlined)),
                                 Divider(
                                   height: 1,
                                   color: AppColors.buttonBackgroundColor,
                                 ),
                                 CustomListTile(
-                                  title: titleList[2],
-                                  data: context.locale.languageCode == 'az'
-                                      ? 'azerbaijani'.tr()
-                                      : 'english'.tr(),
-                                ),
+                                    title: titleList[2],
+                                    data: context.locale.languageCode == 'az'
+                                        ? 'azerbaijani'.tr()
+                                        : 'english'.tr(),
+                                    icon: const Icon(
+                                        Icons.arrow_forward_ios_outlined)),
                               ],
                             );
                           }
@@ -201,12 +218,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       }),
                 ),
-                Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 20,
+                GestureDetector(
+                  onTap: () {
+                    Utility.getInstance().showAlertDialog(
+                      context: context,
+                      alertTitle: 'log_out_question'.tr(),
+                      popButtonColor: AppColors.backgroundColorOfApp,
+                      popButtonText: 'back_btn'.tr(),
+                      onPopTap: () => Navigator.of(context).pop(),
+                      isShowActionButton: true,
+                      actionButtonText: 'log_out_btn'.tr(),
+                      onTapAction: logout,
+                      actionButtonColor: Colors.redAccent,
+                      popButtonTextColor: AppColors.blackColor,
+                    );
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 20,
+                    ),
+                    child: CustomListTile(
+                      title: 'log_out_btn'.tr(),
+                      icon: const Icon(
+                        Icons.logout_rounded,
+                        // size: 28,
+                        // color: AppColors.blackColor38,
+                      ),
+                    ),
                   ),
-                  child: CustomListTile(title: 'log_out_btn'.tr()),
                 ),
                 /*StreamBuilder<FirestoreUser>(
                     stream: FireStoreService().getUserDataByUID(result!.uid),
