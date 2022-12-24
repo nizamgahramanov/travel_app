@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 
+import '../helpers/app_colors.dart';
 import '../helpers/location_helper.dart';
 import '../screen/maps_screen.dart';
 
@@ -34,15 +34,6 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   Future<void> _selectOnMap() async {
-    // final selectedLocation = await Navigator.of(context).push<LatLng>(
-    //   MaterialPageRoute(
-    //     fullscreenDialog: true,
-    //     builder: (context) => MapScreen(
-    //       isSelecting: true,
-    //
-    //     ),
-    //   ),
-    // );
     Map<String, dynamic> arguments = {
       "isSelecting": _isSelecting,
       "geoPoint": const GeoPoint(40.35412015822521, 47.783417697006065),
@@ -80,7 +71,7 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
-              color: Colors.grey,
+              color: AppColors.grey,
             ),
           ),
           width: double.infinity,

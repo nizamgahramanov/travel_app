@@ -1,204 +1,361 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:encrypt/encrypt.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:travel_app/helpers/app_light_text.dart';
+import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
+import 'package:travel_app/reusable/custom_text_form_field.dart';
+import 'package:travel_app/screen/wrapper.dart';
+import 'package:travel_app/services/auth_service.dart';
+import 'package:travel_app/services/en_de_cryption.dart';
 
 import '../helpers/app_colors.dart';
-import '../helpers/app_light_text.dart';
+import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
+import '../helpers/custom_icon_text.dart';
+import '../services/firebase_firestore_service.dart';
+import 'main_screen.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
-  static const routeName = "/change-password";
+  static const routeName = '/forgot-password';
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.mainColor,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return <Widget>[
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverAppBar(
-                elevation: 5,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                ),
-                backgroundColor: AppColors.whiteColor,
-                pinned: true,
-                //floating: true,
-                stretch: true,
-                expandedHeight: 100.0,
-                flexibleSpace: const FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text(
-                    "Change Password",
-                    // "Great time to discover",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-            ),
-          ];
-        },
-        body: Builder(
-          builder: (BuildContext context) {
-            return CustomScrollView(
-              slivers: [
-                SliverOverlapInjector(
-                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                    context,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 0,
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        // Column(
-                        //   children: widget.body_header
-                        //       .map((e) => AppLightText(text: e))
-                        //       .toList(),
-                        // ),
+class _ChangePasswordScreenState extends State<ChangePasswordScreen>
+    with TickerProviderStateMixin {
+  final _resetPasswordForm = GlobalKey<FormState>();
+  final _newPasswordFocusNode = FocusNode();
+  final _repeatPasswordFocusNode = FocusNode();
+  final _newPasswordController = TextEditingController();
+  final _repeatPasswordController = TextEditingController();
+  bool _minimumPasswordLength = false;
+  bool _atLeastOneNumber = false;
+  bool _atLeastOneLowerCase = false;
+  bool _atLeastOneUpperCase = false;
+  bool _isShowDoneButton = false;
+  bool _isObscureNewPassword = true;
+  bool _isObscureRepeatPassword = true;
 
-                        Form(
-                          // key: _form,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                obscureText: true,
-                                enableSuggestions: false,
-                                autocorrect: false,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.buttonBackgroundColor,
-                                    ),
-                                  ),
-                                  labelText: "Current Password",
-                                  labelStyle: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) {
-                                  // saveForm();
-                                },
-                                onSaved: (value) {
-                                  // first_name = value!;
-                                },
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              TextFormField(
-                                obscureText: true,
-                                enableSuggestions: false,
-                                autocorrect: false,
-                                decoration: InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: AppColors.buttonBackgroundColor,
-                                    ),
-                                  ),
-                                  labelText: "New Password",
-                                  labelStyle: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) {
-                                  // saveForm();
-                                },
-                                onSaved: (value) {
-                                  // last_name = value!;
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: AppLightText(
-                            spacing: 16,
-                            size: 14,
-                            text:
-                                "Password must meet the following requirements:",
-                            padding: EdgeInsets.zero,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "Minimum of 8 characters",
-                          isShowIcon: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "At least one lower case",
-                          isShowIcon: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "At least one upper case",
-                          isShowIcon: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "At least one number",
-                          isShowIcon: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                        AppLightText(
-                          spacing: 16,
-                          text: "At least one special character",
-                          isShowIcon: true,
-                          padding: EdgeInsets.zero,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // SliverToBoxAdapter(
-                //   child: Container(
-                //     height: 10,
-                //     color: AppColors.mainColor,
-                //   ),
-                // ),
-              ],
-            );
-          },
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _toggleObscureNewPassword() {
+    setState(() {
+      _isObscureNewPassword = !_isObscureNewPassword;
+    });
+  }
+
+  void _toggleObscureRepeatPassword() {
+    setState(() {
+      _isObscureRepeatPassword = !_isObscureRepeatPassword;
+    });
+  }
+
+  @override
+  void dispose() {
+    _newPasswordController.dispose();
+    _repeatPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _checkNewPasswordValidation(String character) {
+    print("_checkNewPasswordValidation");
+    print(_newPasswordController.text.length);
+    if (_newPasswordController.text.length >= 6) {
+      setState(() {
+        _minimumPasswordLength = true;
+      });
+    } else {
+      setState(() {
+        _minimumPasswordLength = false;
+      });
+    }
+    if (!RegExp(lowerCasePattern).hasMatch(_newPasswordController.text)) {
+      setState(() {
+        _atLeastOneLowerCase = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneLowerCase = true;
+      });
+    }
+    if (!RegExp(upperCasePattern).hasMatch(_newPasswordController.text)) {
+      setState(() {
+        _atLeastOneUpperCase = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneUpperCase = true;
+      });
+    }
+    if (!RegExp((r'\d')).hasMatch(_newPasswordController.text)) {
+      setState(() {
+        _atLeastOneNumber = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneNumber = true;
+      });
+    }
+    if (_minimumPasswordLength &&
+        _atLeastOneNumber &&
+        _atLeastOneLowerCase &&
+        _atLeastOneUpperCase &&
+        _newPasswordController.text == _repeatPasswordController.text) {
+      setState(() {
+        _isShowDoneButton = true;
+      });
+    } else {
+      setState(() {
+        _isShowDoneButton = false;
+      });
+    }
+  }
+
+  void _checkRepeatPasswordValidation(String character) {
+    print("_checkRepeatPasswordValidation");
+    if (_newPasswordController.text == _repeatPasswordController.text) {
+      setState(() {
+        _isShowDoneButton = true;
+      });
+      print("SHOW BUTTON TRUE");
+    } else {
+      setState(() {
+        _isShowDoneButton = false;
+      });
+    }
+  }
+
+  void updateUserPassword(String newPassword, String email) async {
+    print("saveResetPassword");
+    print(email);
+
+    if (_isShowDoneButton) {
+      final String? base16Encrypted =
+          await FireStoreService().getUserPasswordFromFirestore(email);
+      if (base16Encrypted != null) {
+        String oldPassword = EnDeCryption()
+            .decryptWithAES(Encrypted.fromBase16(base16Encrypted));
+        callUpdatePasswordMethod(newPassword, oldPassword, email);
+      }
+    }
+  }
+
+  void callUpdatePasswordMethod(
+    String newPassword,
+    String oldPassword,
+    String email,
+  ) {
+    AuthService().updateUserPassword(
+      context,
+      newPassword,
+      oldPassword,
+      email,
+    );
+    print("KURN");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainScreen(
+          bottomNavIndex: 3,
         ),
       ),
-      floatingActionButton: CustomButton(
-        buttonText: "SAVE",
-        borderRadius: 15,
-        horizontalMargin: 20,
-        onTap: () {},
+    );
+  }
+
+  void saveForm() {
+    print("SAVE FORM");
+    FocusScope.of(context).unfocus();
+    _resetPasswordForm.currentState!.save();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print("ARGUMENT EMA");
+    print(args['email']);
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: AppColors.backgroundColorOfApp,
+      body: CustomNestedScrollView(
+        title: 'reset_password_app_title'.tr(),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Form(
+              key: _resetPasswordForm,
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'new_password_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Focus(
+                        autofocus: true,
+                        onFocusChange: (bool inFocus) {
+                          if (inFocus) {
+                            FocusScope.of(context)
+                                .requestFocus(_newPasswordFocusNode);
+                          }
+                        },
+                        child: CustomTextFormField(
+                          controller: _newPasswordController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.name,
+                          focusNode: _newPasswordFocusNode,
+                          obscureText: _isObscureNewPassword,
+                          suffixIcon: GestureDetector(
+                            onTap: () => _toggleObscureNewPassword(),
+                            child: _isObscureNewPassword
+                                ? const Icon(Icons.remove_red_eye_outlined)
+                                : const Icon(Icons.remove_red_eye),
+                          ),
+                          onChanged: (value) =>
+                              _checkNewPasswordValidation(value),
+                          onFieldSubmitted: (_) => FocusScope.of(context)
+                              .requestFocus(_repeatPasswordFocusNode),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Column(
+                    children: [
+                      AppLightText(
+                        text: 'repeat_password_title'.tr(),
+                        size: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      CustomTextFormField(
+                        controller: _repeatPasswordController,
+                        focusNode: _repeatPasswordFocusNode,
+                        obscureText: _isObscureRepeatPassword,
+                        suffixIcon: GestureDetector(
+                          onTap: () => _toggleObscureRepeatPassword(),
+                          child: _isObscureRepeatPassword
+                              ? const Icon(Icons.remove_red_eye_outlined)
+                              : const Icon(Icons.remove_red_eye),
+                        ),
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) =>
+                            _checkRepeatPasswordValidation(value),
+                        onFieldSubmitted: (_) => saveForm(),
+                        onSaved: (value) =>
+                            updateUserPassword(value, args['email']),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomIconText(
+                        text: 'minimum_of_6_characters_validation'.tr(),
+                        color: _minimumPasswordLength
+                            ? AppColors.blackColor
+                            : AppColors.blackColor38,
+                        icon: Icon(
+                          Icons.check,
+                          color: _minimumPasswordLength
+                              ? AppColors.blackColor
+                              : AppColors.blackColor38,
+                        ),
+                        spacing: 10,
+                        isIconFirst: true,
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      CustomIconText(
+                        text: 'at_least_one_lower_case_validation'.tr(),
+                        color: _atLeastOneLowerCase
+                            ? AppColors.blackColor
+                            : AppColors.blackColor38,
+                        icon: Icon(
+                          Icons.check,
+                          color: _atLeastOneLowerCase
+                              ? AppColors.blackColor
+                              : AppColors.blackColor38,
+                        ),
+                        spacing: 10,
+                        isIconFirst: true,
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      CustomIconText(
+                        text: 'at_least_one_upper_case_validation'.tr(),
+                        color: _atLeastOneUpperCase
+                            ? AppColors.blackColor
+                            : AppColors.blackColor38,
+                        icon: Icon(
+                          Icons.check,
+                          color: _atLeastOneUpperCase
+                              ? AppColors.blackColor
+                              : AppColors.blackColor38,
+                        ),
+                        spacing: 10,
+                        isIconFirst: true,
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      CustomIconText(
+                        text: 'at_least_one_number_validation'.tr(),
+                        color: _atLeastOneNumber
+                            ? AppColors.blackColor
+                            : AppColors.blackColor38,
+                        icon: Icon(
+                          Icons.check,
+                          color: _atLeastOneNumber
+                              ? AppColors.blackColor
+                              : AppColors.blackColor38,
+                        ),
+                        spacing: 10,
+                        isIconFirst: true,
+                      ),
+                      const SizedBox(
+                        height: 80,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
+      floatingActionButton: _isShowDoneButton
+          ? CustomButton(
+              buttonText: 'done_btn'.tr(),
+              borderRadius: 15,
+              horizontalMargin: 20,
+              verticalMargin: 5,
+              onTap: () => saveForm(),
+              borderColor: AppColors.buttonBackgroundColor,
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

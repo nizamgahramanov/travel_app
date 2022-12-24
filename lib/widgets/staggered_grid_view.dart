@@ -1,12 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_tab_indicator.dart';
-import 'package:travel_app/screen/error_and_no_favorite_screen.dart';
+import 'package:travel_app/screen/error_and_no_network_and_favorite_screen.dart';
+import 'package:travel_app/widgets/network_connection_checker.dart';
+import 'package:travel_app/widgets/spinner.dart';
 import 'package:travel_app/widgets/staggered_grid_item.dart';
 
+import '../helpers/constants.dart';
 import '../helpers/destination_type.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
@@ -16,6 +20,7 @@ class StaggeredGridView extends StatefulWidget {
   @override
   State<StaggeredGridView> createState() => _StaggeredGridViewState();
 }
+
 enum DestinationCategory {
   waterfall,
   mountain,
@@ -23,6 +28,7 @@ enum DestinationCategory {
   place,
   forest,
 }
+
 class _StaggeredGridViewState extends State<StaggeredGridView>
     with TickerProviderStateMixin {
   var tabNames = [
@@ -44,15 +50,13 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
         stream: providerData.destinationItemsAll,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Spinner();
           } else if (snapshot.connectionState == ConnectionState.active ||
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return ErrorAndNoFavoriteScreen(
-                text: "something_went_wrong_error_msg".tr(),
-                path: "assets/svg/error.svg",
+              return ErrorAndNoNetworkAndFavoriteScreen(
+                text: 'something_went_wrong_error_msg'.tr(),
+                path: errorImage,
               );
             } else {
               print(snapshot.data);
@@ -61,9 +65,9 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TabBar(
-                      labelPadding: const EdgeInsets.only(right: 22),
-                      unselectedLabelColor: Colors.grey,
-                      labelColor: Colors.black,
+                      labelPadding: const EdgeInsets.only(right: 20),
+                      unselectedLabelColor: Colors.black38,
+                      labelColor: AppColors.buttonBackgroundColor,
                       controller: tabController,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
@@ -71,8 +75,6 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                         color: AppColors.buttonBackgroundColor,
                         isCircle: false,
                       ),
-                      // unselectedLabelColor:
-                      //     AppColors.mainTextColor.withOpacity(0.8),
                       tabs: tabNames
                           .map(
                             (e) => Tab(
@@ -97,30 +99,34 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                       controller: tabController,
                       children: tabNames.map((e) {
                         Iterable<Destination> destinationIterable =
-                            snapshot.data!.where(
-                                (element) => element.category == e.keys.first.name);
-                        return MasonryGridView.count(
-                          crossAxisCount: 2,
-                          itemCount: destinationIterable.length,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          itemBuilder: (context, index) => GestureDetector(
-                            onTap: () {
-                              print("CLICKED");
-                              Navigator.of(context).pushNamed(
-                                DetailScreen.routeName,
-                                arguments: destinationIterable.elementAt(index),
-                              );
-                            },
-                            child: StaggeredGridItem(
-                              name: destinationIterable.elementAt(index).name,
-                              region:
-                                  destinationIterable.elementAt(index).region,
-                              regionAz:
-                                  destinationIterable.elementAt(index).regionAz,
-                              photo: destinationIterable
-                                  .elementAt(index)
-                                  .photoUrl[0],
+                            snapshot.data!.where((element) =>
+                                element.category == e.keys.first.name);
+                        return NetworkConnectionChecker(
+                          child: MasonryGridView.count(
+                            crossAxisCount: 2,
+                            itemCount: destinationIterable.length,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {
+                                print("CLICKED");
+                                Navigator.of(context).pushNamed(
+                                  DetailScreen.routeName,
+                                  arguments:
+                                      destinationIterable.elementAt(index),
+                                );
+                              },
+                              child: StaggeredGridItem(
+                                name: destinationIterable.elementAt(index).name,
+                                region:
+                                    destinationIterable.elementAt(index).region,
+                                regionAz: destinationIterable
+                                    .elementAt(index)
+                                    .regionAz,
+                                photo: destinationIterable
+                                    .elementAt(index)
+                                    .photoUrl[0],
+                              ),
                             ),
                           ),
                         );
@@ -131,9 +137,9 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
               );
             }
           } else {
-            return ErrorAndNoFavoriteScreen(
-              text: "something_went_wrong_error_msg".tr(),
-              path: "assets/svg/error.svg",
+            return ErrorAndNoNetworkAndFavoriteScreen(
+              text: 'something_went_wrong_error_msg'.tr(),
+              path: errorImage,
             );
           }
         });

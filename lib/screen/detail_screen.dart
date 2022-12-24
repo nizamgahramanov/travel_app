@@ -3,18 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_colors.dart';
+import 'package:travel_app/helpers/constants.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:travel_app/widgets/shimmer_effect.dart';
+
 import '../helpers/app_light_text.dart';
 import '../helpers/custom_button.dart';
 import '../model/destination.dart';
-import 'error_and_no_favorite_screen.dart';
+import 'error_and_no_network_and_favorite_screen.dart';
 
 class DetailScreen extends StatefulWidget {
   static const routeName = '/detail';
@@ -145,7 +147,7 @@ class _DetailScreenState extends State<DetailScreen>
                     ),
                   ),
                 ),
-                titleTextStyle: const TextStyle(color: Colors.redAccent),
+                titleTextStyle: const TextStyle(color: AppColors.redAccent300,),
                 actions: [
                   StreamBuilder<QuerySnapshot>(
                       stream: user == null
@@ -170,9 +172,9 @@ class _DetailScreenState extends State<DetailScreen>
                             snapshot.connectionState ==
                                 ConnectionState.active) {
                           if (snapshot.hasError) {
-                            return ErrorAndNoFavoriteScreen(
-                              text: "something_went_wrong_error_msg".tr(),
-                              path: "assets/svg/error.svg",
+                            return ErrorAndNoNetworkAndFavoriteScreen(
+                              text: 'something_went_wrong_error_msg'.tr(),
+                              path: errorImage,
                             );
                           } else {
                             return Container(
@@ -206,9 +208,9 @@ class _DetailScreenState extends State<DetailScreen>
                             );
                           }
                         } else {
-                          return ErrorAndNoFavoriteScreen(
-                            text: "something_went_wrong_error_msg".tr(),
-                            path: "assets/svg/error.svg",
+                          return ErrorAndNoNetworkAndFavoriteScreen(
+                            text: 'something_went_wrong_error_msg'.tr(),
+                            path: errorImage,
                           );
                         }
                       }),
@@ -302,7 +304,7 @@ class _DetailScreenState extends State<DetailScreen>
                               ),
                               AppLightText(
                                 text: 'overview'.tr(),
-                                color: Colors.black,
+                                color: AppColors.blackColor,
                                 size: 22,
                                 fontWeight: FontWeight.bold,
                                 spacing: 2,
@@ -331,13 +333,16 @@ class _DetailScreenState extends State<DetailScreen>
           },
         ),
       ),
-      floatingActionButton: CustomButton(
-        buttonText: 'view_on_map_btn'.tr(),
-        borderRadius: 15,
-        horizontalMargin: 20,
-        verticalMargin: 20,
-        onTap: () => showDestinationOnMap(),
-      ),
+      floatingActionButton: clickedDestination.geoPoint != null
+          ? CustomButton(
+              buttonText: 'view_on_map_btn'.tr(),
+              borderRadius: 15,
+              horizontalMargin: 20,
+              verticalMargin: 20,
+              onTap: () => showDestinationOnMap(),
+              borderColor: AppColors.buttonBackgroundColor,
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -397,9 +402,7 @@ class _MyBackgroundState extends State<MyBackground> {
                 ),
               ),
               errorWidget: (context, url, error) {
-                return const Center(
-                  child: Icon(Icons.error, color: Colors.red),
-                );
+                return _buildError(150, 150);
               },
             ),
           ),
@@ -411,8 +414,9 @@ class _MyBackgroundState extends State<MyBackground> {
             borderRadius: BorderRadius.circular(15.0),
             child: LimitedBox(
               maxHeight: MediaQuery.of(context).size.height * 0.3,
-              maxWidth: 60,
+              maxWidth: 70,
               child: Container(
+                width: 60,
                 color: AppColors.whiteColor,
                 child: ListView.builder(
                   itemCount: widget.clickedDestination.photoUrl.length,
@@ -421,86 +425,29 @@ class _MyBackgroundState extends State<MyBackground> {
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () => verticalListItemClicked(index),
                     child: showImageIndex == index
-                        ? Container(
-                            margin: const EdgeInsets.all(4.0),
-                            width: 50,
-                            height: 50,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                        ? _buildSmallList(
+                            showImageIndex,
+                            settings.maxExtent,
+                            BoxDecoration(
+                              borderRadius: BorderRadius.circular(13),
                               border: Border.all(
-                                width: 3,
-                                color: AppColors.blackColor,
+                                width: .5,
+                                color: AppColors.buttonBackgroundColor,
                               ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: CachedNetworkImage(
-                                height: settings.maxExtent,
-                                imageUrl: widget.clickedDestination
-                                    .photoUrl[showImageIndex],
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                placeholder: (context, url) => const Center(
-                                  child: ShimmerEffect.rectangular(
-                                    height: 50,
-                                    width: 50,
-                                    isCircle: false,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) {
-                                  return const Center(
-                                    child: Icon(Icons.error, color: Colors.red),
-                                  );
-                                },
-                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.buttonBackgroundColor,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                )
+                              ],
                             ),
                           )
-                        : Container(
-                            margin: const EdgeInsets.all(4),
-                            width: 50,
-                            height: 50,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: CachedNetworkImage(
-                                height: settings.maxExtent,
-                                imageUrl:
-                                    widget.clickedDestination.photoUrl[index],
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                placeholder: (context, url) => const Center(
-                                  child: ShimmerEffect.rectangular(
-                                    height: 50,
-                                    width: 50,
-                                    isCircle: false,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) {
-                                  return const Center(
-                                    child: Icon(Icons.error, color: Colors.red),
-                                  );
-                                },
-                              ),
+                        : _buildSmallList(
+                            index,
+                            settings.maxExtent,
+                            BoxDecoration(
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                   ),
@@ -510,6 +457,51 @@ class _MyBackgroundState extends State<MyBackground> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSmallList(int index, double height, BoxDecoration decoration) {
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.all(4),
+      clipBehavior: Clip.antiAlias,
+      decoration: decoration,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: CachedNetworkImage(
+          height: height,
+          imageUrl: widget.clickedDestination.photoUrl[index],
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          placeholder: (context, url) => const Center(
+            child: ShimmerEffect.rectangular(
+              height: 50,
+              width: 50,
+              isCircle: false,
+            ),
+          ),
+          errorWidget: (context, url, error) {
+            return _buildError(50, 50);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(double? width, double? height) {
+    return Center(
+      child: SvgPicture.asset(
+        placeholderImage,
+        width: width,
+        height: height,
+      ),
     );
   }
 }

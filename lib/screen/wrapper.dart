@@ -33,25 +33,8 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
     });
   }
 
-  // set currentPage(int thePage) {
-  //   widget.bottomNavIndex = thePage;
-  //   _currentPageNotifier.value = thePage;
-  // }
-  // late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    // _tabController = TabController(vsync: this, length: 4);
-  }
-
   @override
   Widget build(BuildContext context) {
-    // _currentPageNotifier.addListener(() {
-    //   print("DASD");
-    //   print(_currentPageNotifier.value);
-    //
-    // });
     Language language = Provider.of<Language>(context);
     List<Widget> _icons = [
       const Icon(Icons.home_filled),
@@ -66,6 +49,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
       3: widget.isLogin ? ProfileScreen() : const LoginSignupScreen(),
     };
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundColorOfApp,
       body: screens[widget.bottomNavIndex]!,
       bottomNavigationBar: BottomNavigationBar(
@@ -132,7 +116,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
         // selectedLabelStyle: TextStyle(color: Colors.black),
         // unselectedIconTheme: IconThemeData(color: Colors.black),
         // elevation: 10,
-        unselectedItemColor: AppColors.buttonBackgroundColor.withOpacity(0.6),
+        unselectedItemColor: AppColors.blackColor38,
       ),
     );
   }

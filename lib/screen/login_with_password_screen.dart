@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
-import 'package:travel_app/screen/wrapper.dart';
+import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
+
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
+import '../reusable/custom_nested_scroll_view.dart';
 import 'main_screen.dart';
 
 class LoginWithPasswordScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class LoginWithPasswordScreen extends StatefulWidget {
   String? password;
 
   LoginWithPasswordScreen({key}) : super(key: key);
+
   @override
   State<LoginWithPasswordScreen> createState() =>
       _LoginWithPasswordScreenState();
@@ -52,43 +55,50 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
     }
   }
 
-  void toggleObscure() {
+  void _toggleObscure() {
     setState(() {
       _isObscure = !_isObscure;
     });
   }
-  void _redirectUserToProfileScreen() {
+
+  void _goProfileScreen() {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => MainScreen(
-          bottomNavIndex: 0,
+          bottomNavIndex: 3,
         ),
       ),
-          (Route<dynamic> route) => false,
+      (Route<dynamic> route) => false,
     );
     // Navigator.pushNamedAndRemoveUntil(
     //     context, MainScreen.routeName, (route) => false);
   }
-  void checkPasswordCorrect(enteredPassword, context) async {
+
+  void goForgotPasswordScreen(String email) {
+    print("EMAILLLL");
+    print(email);
+    Navigator.pushNamed(context, ChangePasswordScreen.routeName,
+        arguments: {'email': email});
+  }
+
+  void checkPasswordCorrect(context, email, enteredPassword) async {
     //    1. Daxil olan userin emailinə vasitəsi ilə firestoredan məlumatlarını çəkirik
     //    2. Melumatlarda encrypt olunmuş passvordu decrypt edib userin daxil etiyi passvordla yoxlayiriq
     //    3. userin daxil etdiyi passvord dogrudursa home page yoneldirik
     //    4. dogru deyilse dialog gosteririk
     if (_isShowDoneButton) {
-      final args =
-          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final String? base16Encrypted =
-          await FireStoreService().getUserPasswordFromFirestore(args['email']);
+          await FireStoreService().getUserPasswordFromFirestore(email);
       bool isPasswordCorrect =
           EnDeCryption().isPasswordCorrect(enteredPassword, base16Encrypted!);
       if (isPasswordCorrect) {
         await AuthService().loginUser(
           context: context,
-          email: args['email'],
+          email: email,
           password: enteredPassword,
         );
-        _redirectUserToProfileScreen();
+        _goProfileScreen();
       } else {
         Utility.getInstance().showAlertDialog(
           popButtonColor: AppColors.backgroundColorOfApp,
@@ -105,75 +115,48 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
-      appBar: AppBar(
-        title: AppLightText(
-          text: 'welcome_back_title'.tr(),
-          size: 20,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          spacing: 2,
-          padding: EdgeInsets.zero,
-        ),
-        backgroundColor: AppColors.backgroundColorOfApp,
-        elevation: 0.0,
-        leading: InkWell(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+      resizeToAvoidBottomInset: true,
+      backgroundColor: AppColors.backgroundColorOfApp,
+      body: CustomNestedScrollView(
+        title: 'welcome_back_title'.tr(),
+        child: Form(
+          key: _loginWithPasswordForm,
           child: Column(
             children: [
               const SizedBox(
-                height: 15.0,
+                height: 20,
               ),
-              Container(
-                height:130,
-                child: Form(
-                  key: _loginWithPasswordForm,
-                  child: Column(
-                    children: [
-                      AppLightText(
-                        text: 'current_password_title'.tr(),
-                        size: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        spacing: 2,
-                        padding: EdgeInsets.zero,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CustomTextFormField(
-                        controller: _passwordController,
-                        focusNode: _passwordFocusNode,
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.done,
-                        obscureText: _isObscure,
-                        suffixIcon: GestureDetector(
-                          onTap: () => toggleObscure(),
-                          child: _isObscure
-                              ? const Icon(Icons.remove_red_eye_outlined)
-                              : const Icon(Icons.remove_red_eye),
-                        ),
-                        onChanged: (value) => checkIfPasswordChanged(value),
-                        onFieldSubmitted: (_) => saveForm(),
-                        onSaved: (value) =>
-                            checkPasswordCorrect(value, context),
-                      )
-                    ],
-                  ),
+              AppLightText(
+                text: 'current_password_title'.tr(),
+                size: 18,
+                color: AppColors.blackColor,
+                fontWeight: FontWeight.bold,
+                spacing: 2,
+                padding: EdgeInsets.zero,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextFormField(
+                controller: _passwordController,
+                focusNode: _passwordFocusNode,
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.done,
+                obscureText: _isObscure,
+                suffixIcon: GestureDetector(
+                  onTap: () => _toggleObscure(),
+                  child: _isObscure
+                      ? const Icon(Icons.remove_red_eye_outlined)
+                      : const Icon(Icons.remove_red_eye),
                 ),
-              )
+                onChanged: (value) => checkIfPasswordChanged(value),
+                onFieldSubmitted: (_) => saveForm(),
+                onSaved: (value) =>
+                    checkPasswordCorrect(context, args['email'], value),
+              ),
             ],
           ),
         ),
@@ -184,6 +167,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,
+              borderColor: AppColors.buttonBackgroundColor,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

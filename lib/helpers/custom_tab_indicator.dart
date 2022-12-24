@@ -33,7 +33,7 @@ class _CustomPainter extends BoxPainter {
     assert(configuration.size != null);
 
     final Paint paint = Paint();
-    double xAxisPos = offset.dx + configuration.size!.width / 2 - 10;
+    double xAxisPos = offset.dx + configuration.size!.width / 2 -10;
     double yAxisPos =
         offset.dy + configuration.size!.height - indicatorHeight / 2;
     paint.color = color;
@@ -46,7 +46,7 @@ class _CustomPainter extends BoxPainter {
       RRect fullRect = RRect.fromRectAndCorners(
         Rect.fromCenter(
           center: Offset(xAxisPos, yAxisPos),
-          width: configuration.size!.width / 1.8,
+          width: configuration.size!.width,
           height: indicatorHeight,
         ),
         topLeft: Radius.circular(radius),

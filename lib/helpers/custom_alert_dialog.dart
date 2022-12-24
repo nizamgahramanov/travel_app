@@ -85,6 +85,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
                 borderRadius: 25,
                 horizontalMargin: 25,
                 buttonColor: widget.actionButtonColor,
+                borderColor: AppColors.backgroundColorOfApp,
               ),
             const SizedBox(height: 10),
             CustomButton(
@@ -94,6 +95,7 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               horizontalMargin: 25,
               buttonColor: widget.popButtonColor,
               textColor: widget.popButtonTextColor,
+              borderColor: AppColors.backgroundColorOfApp,
             ),
             const SizedBox(height: 25),
             // Container(

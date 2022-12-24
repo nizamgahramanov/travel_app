@@ -1,15 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../helpers/app_colors.dart';
 import '../helpers/utility.dart';
 
 class CustomAuthException extends FirebaseAuthException {
   CustomAuthException(BuildContext context, String code, String message)
       : super(code: code, message: message) {
     switch (code) {
-      // case "user-not-found":
-      //   throw CustomException.userNotFound(message);
-      // case "wrong-password":
-      //   throw CustomException.wrongPassword(message);
       case "user-disabled":
         throw CustomException(ctx: context,errorMessage: message);
       case "invalid-email":
@@ -50,33 +48,13 @@ class CustomException extends StatelessWidget {
     print("build");
     return Utility.getInstance().showAlertDialog(
       context: ctx,
-      alertTitle: 'Error',
+      alertTitle: 'oops_error_title'.tr(),
       alertMessage: errorMessage,
-      popButtonText: 'Ok',
-      popButtonColor: Colors.redAccent,
+      popButtonText: 'ok_btn'.tr(),
+      popButtonColor: AppColors.redAccent300,
       onPopTap:()=> Navigator.of(context).pop(),
     );
   }
 }
 
-// class CustomException {
-//   final String? errorMessage;
-//   CustomException({this.errorMessage});
-//
-//   // factory CustomException.userNotFound(String message) = UserNotFoundException;
-//   // factory CustomException.wrongPassword(String message) =
-//   // WrongPasswordException;
-// }
-// class UserNotFoundException extends CustomException {
-//   UserNotFoundException(
-//     this.message,
-//   ) : super(errorMessage: message);
-//   final String? message;
-// }
-//
-// class WrongPasswordException extends CustomException {
-//   WrongPasswordException(
-//     this.message,
-//   ) : super(errorMessage: message);
-//   final String? message;
-// }
+

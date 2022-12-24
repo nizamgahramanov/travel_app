@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/model/user.dart' as app;
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
+
+import '../helpers/app_colors.dart';
 
 class MainScreen extends StatefulWidget {
   int? bottomNavIndex;
@@ -42,9 +45,12 @@ class _MainScreenState extends State<MainScreen> {
                   );
           } else {
             print("PROGRESS");
-            return const Scaffold(
+            return Scaffold(
               body: Center(
-                child: Text("Loading..."),
+                child: SpinKitThreeBounce(
+                  color: AppColors.buttonBackgroundColor,
+                  size: 25.0,
+                ),
               ),
             );
           }

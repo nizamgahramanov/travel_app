@@ -100,8 +100,8 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
         context: context,
         alertTitle: 'Oops!',
         alertMessage: 'Unknown error occurred while processing your request',
-        popButtonText: 'back_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonText: 'ok_btn'.tr(),
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
     }
@@ -399,6 +399,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
         buttonText: 'done_btn'.tr(),
         borderRadius: 15,
         horizontalMargin: 20,
+        borderColor: AppColors.buttonBackgroundColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

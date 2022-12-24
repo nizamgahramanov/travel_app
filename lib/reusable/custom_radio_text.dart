@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 
+import '../helpers/app_colors.dart';
+
 class CustomRadioText extends StatelessWidget {
   const CustomRadioText({
     super.key,
@@ -31,6 +33,7 @@ class CustomRadioText extends StatelessWidget {
           children: <Widget>[
             Radio<bool>(
               groupValue: groupValue,
+              activeColor: AppColors.buttonBackgroundColor,
               value: value,
               onChanged: (bool? newValue) {
                 onChanged(newValue!);

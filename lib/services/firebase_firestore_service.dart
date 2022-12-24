@@ -110,12 +110,6 @@ class FireStoreService {
         .doc(uid)
         .snapshots()
         .map((event) => FirestoreUser.fromFirestore(event.data()!));
-    //specific case for getting user from uid
-    // return _db
-    //     .collection("users")
-    //     .doc(uid)
-    //     .get()
-    //     .then((value) => FirestoreUser.fromFirestore(value.data()!));
   }
 
   Future<List<dynamic>> getUserByUid(String uid) {
@@ -155,11 +149,19 @@ class FireStoreService {
   }
 
   updateUserEmail(String? email, String? uid) {
-    print("updateUserName");
     if (uid != null) {
       DocumentReference docRef = _db.collection('users').doc(uid);
       var batch = _db.batch();
       batch.update(docRef, {'email': email});
+      batch.commit();
+    }
+  }
+  updateUserPassword(String password, String? uid) {
+    if (uid != null) {
+      DocumentReference docRef = _db.collection('users').doc(uid);
+      String encryptedPassword = EnDeCryption().encryptWithAES(password).base16;
+      var batch = _db.batch();
+      batch.update(docRef, {'password': encryptedPassword});
       batch.commit();
     }
   }

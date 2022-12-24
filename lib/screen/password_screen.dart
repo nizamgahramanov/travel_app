@@ -7,6 +7,7 @@ import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/user_info.dart';
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
+import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -44,7 +45,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
     super.dispose();
   }
 
-
   void checkPasswordValidations(String character) {
     print(character);
     print(_passwordController.text.length);
@@ -57,23 +57,32 @@ class _PasswordScreenState extends State<PasswordScreen> {
         _minimumPasswordLength = false;
       });
     }
-    if (RegExp("(?=.*[a-z])").hasMatch(character)) {
-      _atLeastOneLowerCase = true;
+    if (!RegExp(lowerCasePattern).hasMatch(_passwordController.text)) {
+      setState(() {
+        _atLeastOneLowerCase = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneLowerCase = true;
+      });
     }
-    if (!RegExp("(?=.*[a-z])").hasMatch(_passwordController.text)) {
-      _atLeastOneLowerCase = false;
-    }
-    if (RegExp("(?=.*[A-Z])").hasMatch(character)) {
-      _atLeastOneUpperCase = true;
-    }
-    if (!RegExp("(?=.*[A-Z])").hasMatch(_passwordController.text)) {
-      _atLeastOneUpperCase = false;
-    }
-    if (RegExp((r'\d')).hasMatch(character)) {
-      _atLeastOneNumber = true;
+    if (!RegExp(upperCasePattern).hasMatch(_passwordController.text)) {
+      setState(() {
+        _atLeastOneUpperCase = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneUpperCase = true;
+      });
     }
     if (!RegExp((r'\d')).hasMatch(_passwordController.text)) {
-      _atLeastOneNumber = false;
+      setState(() {
+        _atLeastOneNumber = false;
+      });
+    } else {
+      setState(() {
+        _atLeastOneNumber = true;
+      });
     }
     if (_minimumPasswordLength &&
         _atLeastOneNumber &&
@@ -241,6 +250,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,
+              borderColor: AppColors.buttonBackgroundColor,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

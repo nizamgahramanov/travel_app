@@ -64,14 +64,20 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
           SliverOverlapAbsorber(
             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverAppBar(
+              elevation: 1,
+              forceElevated: _innerListIsScrolled? true:false,
               leading: InkWell(
-                onTap: () => Navigator.of(context).pop(),
+                onTap: () => {
+                  print("ARROW BUTTON"),
+                  FocusScope.of(context).unfocus(),
+                  Navigator.of(context).pop(),
+                },
                 child: const Icon(
                   Icons.arrow_back,
                   color: Colors.black,
                 ),
               ),
-              backgroundColor: AppColors.whiteColor,
+              backgroundColor: AppColors.backgroundColorOfApp,
               pinned: true,
               stretch: false,
               expandedHeight: 120.0,
@@ -135,13 +141,6 @@ class MyBackground extends StatefulWidget {
 class _MyBackgroundState extends State<MyBackground> {
   @override
   Widget build(BuildContext context) {
-    final FlexibleSpaceBarSettings? settings =
-        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-    if (settings != null) {
-      print(settings.currentExtent);
-      print(settings.maxExtent);
-      print(kToolbarHeight);
-    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(

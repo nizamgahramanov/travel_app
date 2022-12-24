@@ -7,18 +7,20 @@ import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/providers/language.dart';
 import 'package:travel_app/reusable/custom_page_route.dart';
 import 'package:travel_app/screen/add_destination_screen.dart';
-import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/detail_screen.dart';
+import 'package:travel_app/screen/change_password_screen.dart';
 import 'package:travel_app/screen/login_signup_screen.dart';
 import 'package:travel_app/screen/login_with_password_screen.dart';
-import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/maps_screen.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import 'package:travel_app/screen/start_screen.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:travel_app/services/auth_service.dart';
+import 'package:travel_app/services/network_service.dart';
+import 'package:travel_app/widgets/network_connection_checker.dart';
 
+import 'helpers/constants.dart';
 import 'model/destination.dart';
 
 void main() async {
@@ -78,7 +80,7 @@ class _MyAppState extends State<MyApp> {
         );
       case ChangePasswordScreen.routeName:
         return CustomPageRoute(
-          child: const ChangePasswordScreen(),
+          child: ChangePasswordScreen(),
           settings: settings,
         );
       // case ChangeEmailScreen.routeName:
@@ -111,11 +113,6 @@ class _MyAppState extends State<MyApp> {
           child: LoginWithPasswordScreen(),
           settings: settings,
         );
-      // case Wrapper.routeName:
-      //   return CustomPageRoute(
-      //     child: Wrapper(isLogin: false, bottomNavIndex: 1),
-      //     settings: settings,
-      //   );
     }
   }
 
@@ -147,9 +144,13 @@ class _MyAppState extends State<MyApp> {
         Provider<AuthService>(
           create: (_) => AuthService(),
         ),
+        StreamProvider(
+          create: (context) => NetworkService().controller.stream,
+          initialData: NetworkStatus.online,
+        )
       ],
       child: MaterialApp(
-        title: 'Seyr Et',
+        title: materialAppTitle,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(

@@ -5,9 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
 import '../exception/custom_auth_exception.dart';
+import '../helpers/app_colors.dart';
 import 'firebase_firestore_service.dart';
 
-class AuthService{
+class AuthService {
   final _firebaseAuth = auth.FirebaseAuth.instance;
   User? _userFromFirebase(auth.User? user) {
     if (user == null) {
@@ -64,7 +65,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
@@ -76,7 +77,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: 'unknown_error_msg'.tr(),
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomException(ctx: context, errorMessage: "Unknown Error");
@@ -92,11 +93,10 @@ class AuthService{
   }) async {
     try {
       print("signInWithEmailAndPassword");
-      final userCredential = await _firebaseAuth
-          .createUserWithEmailAndPassword(
-            email: email,
-            password: password,
-          );
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       if (userCredential.user != null) {
         FireStoreService().createUserInFirestore(
           userCredential.user!.uid,
@@ -113,7 +113,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
@@ -123,7 +123,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: 'unknown_error_msg'.tr(),
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomException(ctx: context, errorMessage: e.toString());
@@ -149,7 +149,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
@@ -159,7 +159,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: 'unknown_error_msg'.tr(),
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomException(ctx: context, errorMessage: "Unknown Error");
@@ -171,7 +171,8 @@ class AuthService{
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        style:
+            const TextStyle(color: AppColors.redAccent300, letterSpacing: 0.5),
       ),
     );
   }
@@ -185,14 +186,13 @@ class AuthService{
         FireStoreService().updateUserName(
             firstName, lastName, _firebaseAuth.currentUser!.uid);
       }).catchError((authError) {
-        print("ERRROR HAPPPENENEDEDEDE");
         print(authError.message);
         Utility.getInstance().showAlertDialog(
           context: context,
           alertTitle: 'oops_error_title'.tr(),
           alertMessage: authError.message,
           popButtonText: 'ok_btn'.tr(),
-          popButtonColor: Colors.redAccent,
+          popButtonColor: AppColors.redAccent300,
           onPopTap: () => Navigator.of(context).pop(),
         );
       });
@@ -202,7 +202,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
@@ -212,7 +212,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: 'unknown_error_msg'.tr(),
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomException(ctx: context, errorMessage: e.toString());
@@ -242,7 +242,7 @@ class AuthService{
             alertTitle: 'oops_error_title'.tr(),
             alertMessage: authError.message,
             popButtonText: 'ok_btn'.tr(),
-            popButtonColor: Colors.redAccent,
+            popButtonColor: AppColors.redAccent300,
             onPopTap: () => Navigator.of(context).pop(),
           );
         });
@@ -252,7 +252,7 @@ class AuthService{
           alertTitle: 'oops_error_title'.tr(),
           alertMessage: authError.message,
           popButtonText: 'ok_btn'.tr(),
-          popButtonColor: Colors.redAccent,
+          popButtonColor: AppColors.redAccent300,
           onPopTap: () => Navigator.of(context).pop(),
         );
         throw CustomAuthException(context, authError.code, authError.message!);
@@ -262,11 +262,66 @@ class AuthService{
           alertTitle: 'oops_error_title'.tr(),
           alertMessage: 'unknown_error_msg'.tr(),
           popButtonText: 'ok_btn'.tr(),
-          popButtonColor: Colors.redAccent,
+          popButtonColor: AppColors.redAccent300,
           onPopTap: () => Navigator.of(context).pop(),
         );
         throw CustomException(ctx: context, errorMessage: e.toString());
       }
+    }
+  }
+
+  void updateUserPassword(BuildContext context, String password,
+      String oldPassword, String email) async {
+    try {
+      print("UPDATET PASSWORD AUTHSERVICE");
+      print(oldPassword);
+      print(email);
+      await _firebaseAuth.currentUser!.reauthenticateWithCredential(
+        auth.EmailAuthProvider.credential(
+          email: email,
+          password: oldPassword,
+        ),
+      );
+      print("Update user eamil");
+      _firebaseAuth.currentUser!.updatePassword(password).then((_) {
+        print("THEN BLOCK FIREDS");
+        FireStoreService().updateUserPassword(
+          password,
+          _firebaseAuth.currentUser!.uid,
+        );
+      }).catchError((authError) {
+        print("ERRROR HAPPPENENEDEDEDE");
+        print(authError.message);
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'oops_error_title'.tr(),
+          alertMessage: authError.message,
+          popButtonText: 'ok_btn'.tr(),
+          popButtonColor: AppColors.redAccent300,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
+      });
+    } on auth.FirebaseAuthException catch (authError) {
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: authError.message,
+        popButtonText: 'ok_btn'.tr(),
+        popButtonColor: AppColors.redAccent300,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      throw CustomAuthException(context, authError.code, authError.message!);
+    } catch (e) {
+      Utility.getInstance().showAlertDialog(
+        context: context,
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'unknown_error_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
+        popButtonColor: AppColors.redAccent300,
+        onPopTap: () => Navigator.of(context).pop(),
+      );
+      print(e);
+      throw CustomException(ctx: context, errorMessage: e.toString());
     }
   }
 
@@ -280,7 +335,7 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: authError.message,
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomAuthException(context, authError.code, authError.message!);
@@ -290,14 +345,20 @@ class AuthService{
         alertTitle: 'oops_error_title'.tr(),
         alertMessage: 'unknown_error_msg'.tr(),
         popButtonText: 'ok_btn'.tr(),
-        popButtonColor: Colors.redAccent,
+        popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
       throw CustomException(ctx: context, errorMessage: e.toString());
     }
   }
 
-  splitGoogleFullName(String? fullName) {
+  void sendResetPasswordEmail(String email) async {
+    await _firebaseAuth
+        .sendPasswordResetEmail(email: email)
+        .then((_) => print("Authservice"));
+  }
+
+  List<String>? splitGoogleFullName(String? fullName) {
     List<String>? result;
     if (fullName != null) {
       result = fullName.split(" ");

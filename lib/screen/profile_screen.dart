@@ -5,22 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
-import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:travel_app/model/firestore_user.dart';
-import 'package:travel_app/screen/change_name.dart';
-import 'package:travel_app/screen/wrapper.dart';
+import 'package:travel_app/screen/change_name_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 
+import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
 import '../helpers/custom_list_tile.dart';
 import '../helpers/utility.dart';
 import '../providers/language.dart';
 import '../reusable/custom_radio_text.dart';
-import '../widgets/shimmer_effect.dart';
 import 'change_email_screen.dart';
 import 'change_password_screen.dart';
-import 'error_and_no_favorite_screen.dart';
+import 'error_and_no_network_and_favorite_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -31,29 +29,96 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  void listTileOnTap(
-      String firstName, String lastName, String email, String? password) {
-    // if (index == 0) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ChangeNameScreen(
-          firstName: firstName,
-          lastName: lastName,
-        ),
-      ),
-    );
-    /* } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChangeEmailScreen(
-            email: email,
-            password: password,
+  void _onTapToListTile(int index, FirestoreUser? user) {
+    // snapshot.data!.firstName!,
+    // snapshot.data!.lastName!,
+    // snapshot.data!.email,
+    // snapshot.data!.password,
+    if (user != null) {
+      if (index == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangeNameScreen(
+              firstName: user.firstName!,
+              lastName: user.lastName!,
+            ),
           ),
+        );
+      } else if (index == 1) {
+        if (user.password != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChangeEmailScreen(
+                email: user.email,
+                password: user.password,
+              ),
+            ),
+          );
+        }
+      } else if (index == 2) {
+        Navigator.pushNamed(context, ChangePasswordScreen.routeName,
+            arguments: {'email': user.email});
+      } else {
+        showModalBottomSheet<void>(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25.0),
+            ),
+          ),
+          builder: (BuildContext context) {
+            return Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              height: 230,
+              child: RadioListBuilder(
+                langCode: context.locale.languageCode,
+              ),
+            );
+          },
+        );
+      }
+    }
+  }
+
+  String? _changeDataByIndex(int index, FirestoreUser? user) {
+    if (user != null) {
+      if (index == 0) {
+        return '${user.firstName!} ${user.lastName!}';
+      } else if (index == 1) {
+        return user.email;
+      } else if (index == 2) {
+        return null;
+      } else {
+        return context.locale.languageCode == 'az'
+            ? 'azerbaijani'.tr()
+            : 'english'.tr();
+      }
+    }
+    return null;
+  }
+
+  Widget? _getIcon(int index, FirestoreUser? user) {
+    if (index == 1) {
+      if (user!.password != null) {
+        return const Icon(
+          Icons.arrow_forward_ios_outlined,
+        );
+      }
+    } else if (index == 3) {
+      return const RotatedBox(
+        quarterTurns: 1,
+        child: Icon(
+          Icons.arrow_forward_ios_outlined,
         ),
       );
-    }*/
+    } else {
+      return const Icon(
+        Icons.arrow_forward_ios_outlined,
+      );
+    }
+    return null;
   }
 
   void logout() {
@@ -72,6 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final List titleList = [
       'name_title'.tr(),
       'email_title'.tr(),
+      'password_title'.tr(),
       'language_title'.tr(),
     ];
     return Container(
@@ -81,11 +147,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Container(
             width: double.maxFinite,
-            height: MediaQuery.of(context).size.height * 0.47,
+            height: MediaQuery.of(context).size.height * 0.4,
             child: Stack(
               children: [
                 Positioned(
-                  height: MediaQuery.of(context).size.height * 0.47,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   width: MediaQuery.of(context).size.width,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
@@ -93,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       bottomRight: Radius.circular(0),
                     ),
                     child: Image.asset(
-                      "assets/images/profile_screen.jpg",
+                      profileScreenImage,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -114,8 +180,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          Expanded(
+          Container(
+            height: MediaQuery.of(context).size.height * .51,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // const SizedBox(
                 //   height: 8,
@@ -123,97 +192,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Card(
                   margin: const EdgeInsets.only(
                     left: 8,
-                    top: 20,
+                    top: 8,
                     right: 8,
                   ),
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   child: StreamBuilder<FirestoreUser>(
                       stream: FireStoreService().getUserDataByUID(result!.uid),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              CustomListTile(
-                                title: titleList[0],
-                                data: 'loading_msg'.tr(),
-                                icon: const Icon(
-                                    Icons.arrow_forward_ios_outlined),
-                              ),
-                              Divider(
-                                height: 1,
-                                color: AppColors.buttonBackgroundColor,
-                              ),
-                              CustomListTile(
-                                  title: titleList[1],
-                                  data: 'loading_msg'.tr(),
-                                  icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined)),
-                              Divider(
-                                height: 1,
-                                color: AppColors.buttonBackgroundColor,
-                              ),
-                              CustomListTile(
-                                  title: titleList[2],
-                                  data: 'loading_msg'.tr(),
-                                  icon: const Icon(
-                                      Icons.arrow_forward_ios_outlined)),
-                            ],
-                          );
+                          return Container(
+                              child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemCount: titleList.length,
+                            itemBuilder: (BuildContext context, int index) =>
+                                CustomListTile(
+                              title: titleList[index],
+                              data: 'loading_msg'.tr(),
+                              icon: index == 3
+                                  ? const RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                    ),
+                            ),
+                            separatorBuilder: (_, __) => Divider(
+                              height: 1,
+                              color: AppColors.buttonBackgroundColor,
+                            ),
+                          ));
                         } else if (snapshot.connectionState ==
                                 ConnectionState.active ||
                             snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasError) {
-                            return ErrorAndNoFavoriteScreen(
+                            return ErrorAndNoNetworkAndFavoriteScreen(
                               text: "something_went_wrong_error_msg".tr(),
                               path: "assets/svg/error.svg",
                             );
                           } else {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => listTileOnTap(
-                                    snapshot.data!.firstName!,
-                                    snapshot.data!.lastName!,
-                                    snapshot.data!.email,
-                                    snapshot.data!.password,
+                            return Container(
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: titleList.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        GestureDetector(
+                                  onTap: () => _onTapToListTile(
+                                    index,
+                                    snapshot.data,
                                   ),
+                                  behavior: HitTestBehavior.translucent,
                                   child: CustomListTile(
-                                      title: titleList[0],
-                                      data:
-                                          '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
-                                      icon: const Icon(
-                                          Icons.arrow_forward_ios_outlined)),
+                                    title: titleList[index],
+                                    data: _changeDataByIndex(
+                                      index,
+                                      snapshot.data,
+                                    ),
+                                    icon: _getIcon(index, snapshot.data),
+                                  ),
                                 ),
-                                Divider(
+                                separatorBuilder: (_, __) => Divider(
                                   height: 1,
                                   color: AppColors.buttonBackgroundColor,
                                 ),
-                                CustomListTile(
-                                    title: titleList[1],
-                                    data: snapshot.data!.email,
-                                    icon: const Icon(
-                                        Icons.arrow_forward_ios_outlined)),
-                                Divider(
-                                  height: 1,
-                                  color: AppColors.buttonBackgroundColor,
-                                ),
-                                CustomListTile(
-                                    title: titleList[2],
-                                    data: context.locale.languageCode == 'az'
-                                        ? 'azerbaijani'.tr()
-                                        : 'english'.tr(),
-                                    icon: const Icon(
-                                        Icons.arrow_forward_ios_outlined)),
-                              ],
+                              ),
                             );
                           }
                         } else {
-                          return ErrorAndNoFavoriteScreen(
+                          return ErrorAndNoNetworkAndFavoriteScreen(
                             text: "something_went_wrong_error_msg".tr(),
-                            path: "assets/svg/error.svg",
+                            path: errorImage,
                           );
                         }
                       }),
@@ -229,14 +283,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isShowActionButton: true,
                       actionButtonText: 'log_out_btn'.tr(),
                       onTapAction: logout,
-                      actionButtonColor: Colors.redAccent,
+                      actionButtonColor: AppColors.redAccent300,
                       popButtonTextColor: AppColors.blackColor,
                     );
                   },
                   child: Card(
                     margin: const EdgeInsets.symmetric(
                       horizontal: 8,
-                      vertical: 20,
+                      vertical: 8,
                     ),
                     child: CustomListTile(
                       title: 'log_out_btn'.tr(),
@@ -248,160 +302,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-                /*StreamBuilder<FirestoreUser>(
-                    stream: FireStoreService().getUserDataByUID(result!.uid),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<FirestoreUser> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return AppLightText(text: "Loading...", padding: EdgeInsets.zero, spacing: 0);
-                      } else if (snapshot.connectionState ==
-                              ConnectionState.active ||
-                          snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasError) {
-                          return ErrorAndNoFavoriteScreen(
-                            text: "something_went_wrong_error_msg".tr(),
-                            path: "assets/svg/error.svg",
-                          );
-                        } else {
-                          return Expanded(
-                            child: LimitedBox(
-                              maxHeight: MediaQuery.of(context).size.height * .1,
-                              child: Container(
-                                color: Colors.red,
-                                child: ListView.separated(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: false,
-                                  itemBuilder: (context, index) {
-                                    final data = titleList[index];
-                                    return ListTile(
-                                      trailing: snapshot.data!.password!=null? const Icon(Icons.edit_outlined):null,
-                                      title: AppLightText(
-                                        spacing: 16,
-                                        text: data,
-                                        size: 15,
-                                        color: AppColors.blackColor.withOpacity(0.8),
-
-                                        fontWeight: FontWeight.bold,
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      subtitle: index == 0
-                                          ? AppLightText(
-                                              spacing: 16,
-                                              text:
-                                                  '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
-                                              size: 14,
-                                              padding: EdgeInsets.zero,
-                                            )
-                                          : AppLightText(
-                                              spacing: 16,
-                                              text: snapshot.data!.email,
-                                              size: 14,
-                                              padding: EdgeInsets.zero,
-                                            ),
-                                      onTap:snapshot.data!.password!=null? () => listTileOnTap(
-                                        index,
-                                        snapshot.data!.firstName!,
-                                        snapshot.data!.lastName!,
-                                        snapshot.data!.email,
-                                        snapshot.data!.password,
-                                      ):null,
-                                    );
-                                  },
-                                  separatorBuilder: (_, __) => Divider(
-                                    color: AppColors.buttonBackgroundColor,
-                                  ),
-                                  itemCount: titleList.length,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                      } else {
-                        return ErrorAndNoFavoriteScreen(
-                          text: "something_went_wrong_error_msg".tr(),
-                          path: "assets/svg/error.svg",
-                        );
-                      }
-                    }),*/
-                // Container(
-                //   color: AppColors.whiteColor,
-                //   child: ListTile(
-                //     title: AppLightText(
-                //       spacing: 16,
-                //       text: 'language_title'.tr(),
-                //       size: 15,
-                //       color: Colors.black.withOpacity(.8),
-                //       fontWeight: FontWeight.bold,
-                //       padding: EdgeInsets.zero,
-                //     ),
-                //     trailing: const Icon(Icons.arrow_drop_down_sharp),
-                //     subtitle: AppLightText(
-                //       text: context.locale.languageCode == 'az'
-                //           ? 'azerbaijani'.tr()
-                //           : 'english'.tr(),
-                //       spacing: 0,
-                //       padding: EdgeInsets.zero,
-                //       size: 14,
-                //     ),
-                //     onTap: () {
-                //       showModalBottomSheet<void>(
-                //         context: context,
-                //         shape: const RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.vertical(
-                //             top: Radius.circular(25.0),
-                //           ),
-                //         ),
-                //         builder: (BuildContext context) {
-                //           return Container(
-                //             margin: const EdgeInsets.symmetric(vertical: 20),
-                //             height: 230,
-                //             child: RadioListBuilder(
-                //               langCode: context.locale.languageCode,
-                //             ),
-                //           );
-                //         },
-                //       );
-                //     },
-                //   ),
-                // ),
-                // const SizedBox(
-                //   height: 8,
-                // ),
-/*                GestureDetector(
-                  onTap: () {
-                    Utility.getInstance().showAlertDialog(
-                      context: context,
-                      alertTitle: 'log_out_question'.tr(),
-                      popButtonColor: AppColors.backgroundColorOfApp,
-                      popButtonText: 'back_btn'.tr(),
-                      onPopTap: () => Navigator.of(context).pop(),
-                      isShowActionButton: true,
-                      actionButtonText: 'log_out_btn'.tr(),
-                      onTapAction: logout,
-                      actionButtonColor: Colors.redAccent,
-                      popButtonTextColor: AppColors.blackColor,
-                    );
-                    // AuthService().signOut();
-                  },
-                  child: Container(
-                    color: AppColors.whiteColor,
-                    padding: const EdgeInsets.all(15),
-                    child: CustomIconText(
-                      text: 'log_out_btn'.tr(),
-                      color: AppColors.blackColor.withOpacity(.8),
-                      spacing: 0,
-                      size: 15,
-                      isIconFirst: false,
-                      fontWeight: FontWeight.bold,
-                      icon: const Icon(
-                        Icons.logout_rounded,
-                        size: 28,
-                        color: AppColors.blackColor38,
-                      ),
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    ),
-                  ),
-                )*/
               ],
             ),
           ),
@@ -489,6 +389,7 @@ class RadioListBuilderState extends State<RadioListBuilder> {
             saveLanguage();
             language.onLanguageChanged();
           },
+          borderColor: AppColors.buttonBackgroundColor,
         ),
       ],
     );

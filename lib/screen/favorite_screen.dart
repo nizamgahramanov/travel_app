@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
+import 'package:travel_app/widgets/network_connection_checker.dart';
+import '../helpers/constants.dart';
 import '../model/destination.dart';
+import '../widgets/spinner.dart';
 import '../widgets/staggered_grid_item.dart';
 import 'detail_screen.dart';
-import 'error_and_no_favorite_screen.dart';
+import 'error_and_no_network_and_favorite_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
   // final List<Destination> favoriteList;
@@ -20,80 +23,90 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _firebaseAuth == null
-        ? ErrorAndNoFavoriteScreen(
-            text: 'no_favorites_yet_info'.tr(),
-            path: "assets/svg/favorite_screen.svg",
-          )
-        : SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 0,
-              ),
-              child: StreamBuilder<List<Destination>>(
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.connectionState ==
-                          ConnectionState.active ||
-                      snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      return const Text('Error');
-                    } else {
-                      if (snapshot.hasData && snapshot.data!.isEmpty) {
-                        return ErrorAndNoFavoriteScreen(
-                          text: 'no_favorites_yet_info'.tr(),
-                          path: "assets/svg/favorite_screen.svg",
+    return NetworkConnectionChecker(
+
+      child: _firebaseAuth == null
+          ? ErrorAndNoNetworkAndFavoriteScreen(
+              text: 'no_favorites_yet_info'.tr(),
+              path: noFavoriteScreenImage,
+        //       width: 300,
+        // height: 300,
+            )
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 0,
+                ),
+                child: StreamBuilder<List<Destination>>(
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Spinner();
+                    } else if (snapshot.connectionState ==
+                            ConnectionState.active ||
+                        snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return ErrorAndNoNetworkAndFavoriteScreen(
+                          text: "something_went_wrong_error_msg".tr(),
+                          path: errorImage
+                          // width: 300,
+                          // height: 300,
                         );
                       } else {
-                        return MasonryGridView.count(
-                          crossAxisCount: 2,
-                          itemCount: snapshot.data!.length,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  DetailScreen.routeName,
-                                  arguments: Destination(
-                                    id: snapshot.data![index].id,
-                                    name: snapshot.data![index].name,
-                                    overview: snapshot.data![index].overview,
-                                    overviewAz:
-                                        snapshot.data![index].overviewAz,
-                                    region: snapshot.data![index].region,
-                                    regionAz: snapshot.data![index].regionAz,
-                                    category: snapshot.data![index].category,
-                                    photoUrl: snapshot.data![index].photoUrl,
-                                    geoPoint: snapshot.data![index].geoPoint,
-                                  ),
-                                );
-                              },
-                              child: StaggeredGridItem(
-                                name: snapshot.data![index].name,
-                                region: snapshot.data![index].region,
-                                regionAz: snapshot.data![index].regionAz,
-                                photo: snapshot.data![index].photoUrl[0],
-                              ),
-                            );
-                          },
-                        );
+                        if (snapshot.hasData && snapshot.data!.isEmpty) {
+                          return ErrorAndNoNetworkAndFavoriteScreen(
+                            text: 'no_favorites_yet_info'.tr(),
+                            path: noFavoriteScreenImage,
+                            // width: 300,
+                            // height: 300,
+                          );
+                        } else {
+                          return MasonryGridView.count(
+                            crossAxisCount: 2,
+                            itemCount: snapshot.data!.length,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                    DetailScreen.routeName,
+                                    arguments: Destination(
+                                      id: snapshot.data![index].id,
+                                      name: snapshot.data![index].name,
+                                      overview: snapshot.data![index].overview,
+                                      overviewAz:
+                                          snapshot.data![index].overviewAz,
+                                      region: snapshot.data![index].region,
+                                      regionAz: snapshot.data![index].regionAz,
+                                      category: snapshot.data![index].category,
+                                      photoUrl: snapshot.data![index].photoUrl,
+                                      geoPoint: snapshot.data![index].geoPoint,
+                                    ),
+                                  );
+                                },
+                                child: StaggeredGridItem(
+                                  name: snapshot.data![index].name,
+                                  region: snapshot.data![index].region,
+                                  regionAz: snapshot.data![index].regionAz,
+                                  photo: snapshot.data![index].photoUrl[0],
+                                ),
+                              );
+                            },
+                          );
+                        }
                       }
+                    } else {
+                      return ErrorAndNoNetworkAndFavoriteScreen(
+                        text: 'no_favorites_yet_info'.tr(),
+                        path: noFavoriteScreenImage,
+                      );
                     }
-                  } else {
-                    return ErrorAndNoFavoriteScreen(
-                      text: 'no_favorites_yet_info'.tr(),
-                      path: "assets/svg/favorite_screen.svg",
-                    );
-                  }
-                },
-                stream: FireStoreService().getFavoriteList(),
+                  },
+                  stream: FireStoreService().getFavoriteList(),
+                ),
               ),
             ),
-          );
+    );
   }
 }

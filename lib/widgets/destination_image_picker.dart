@@ -6,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 
+import '../helpers/app_colors.dart';
+
 class DestinationImagePicker extends StatefulWidget {
   DestinationImagePicker(this.imagePickFn);
   final void Function(List<XFile?> pickedImage) imagePickFn;
@@ -50,9 +52,9 @@ class _DestinationImagePickerState extends State<DestinationImagePicker> {
           onTap: pickImage,
           buttonText: 'add_photo'.tr(),
           borderRadius: 15,
-          buttonColor: Colors.transparent,
-          textColor: Colors.black,
-          borderColor: Colors.black,
+          buttonColor: AppColors.transparent,
+          textColor: AppColors.blackColor,
+          borderColor: AppColors.blackColor,
           icon: Container(
             width: 22,
             height: 22,
@@ -72,10 +74,10 @@ class _DestinationImagePickerState extends State<DestinationImagePicker> {
               itemBuilder: (BuildContext ctx, index) {
                 return CircleAvatar(
                   radius: 42,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: AppColors.grey,
                   child: CircleAvatar(
                       radius: 40,
-                      backgroundColor: Colors.grey,
+                      backgroundColor: AppColors.grey,
                       backgroundImage: pickedImages.isNotEmpty
                           ? FileImage(File(pickedImages[index]!.path))
                           : null),

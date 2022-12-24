@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/helpers/custom_icon_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/widgets/shimmer_effect.dart';
 
 import '../helpers/app_colors.dart';
+import '../helpers/constants.dart';
 
 class StaggeredGridItem extends StatelessWidget {
   final String name;
@@ -23,12 +25,9 @@ class StaggeredGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("OHOROR");
-    print(photo);
 
     var locale = context.locale.languageCode;
     return Container(
-      // padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(
           Radius.circular(15),
@@ -76,9 +75,7 @@ class StaggeredGridItem extends StatelessWidget {
           ),
         ),
         errorWidget: (context, url, error) {
-          return const Center(
-            child: Icon(Icons.error, color: Colors.red),
-          );
+          return _buildError(120, 120);
         },
       ),
     );
@@ -117,6 +114,15 @@ class StaggeredGridItem extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+  Widget _buildError(double? width, double? height){
+    return Center(
+      child: SvgPicture.asset(
+        placeholderImage,
+        width: width,
+        height: height,
+      ),
     );
   }
 }

@@ -1,12 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
-import 'package:travel_app/helpers/utility.dart';
-import 'package:travel_app/model/user.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_light_text.dart';
@@ -188,6 +184,7 @@ class _UserInfoState extends State<UserInfo> {
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: saveForm,
+              borderColor: AppColors.buttonBackgroundColor,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 
 import '../helpers/app_colors.dart';
 import '../helpers/custom_button.dart';
+import 'main_screen.dart';
 
 class ChangeNameScreen extends StatefulWidget {
   const ChangeNameScreen({
@@ -52,8 +52,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Wrapper(
-            isLogin: true,
+          builder: (context) => MainScreen(
             bottomNavIndex: 3,
           ),
         ),
@@ -89,6 +88,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
         title: 'change_name_app_bar_title'.tr(),
@@ -106,7 +106,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                       AppLightText(
                         text: 'first_name'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -142,7 +142,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
                       AppLightText(
                         text: 'last_name'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -174,6 +174,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: () => saveForm(),
+              borderColor: AppColors.buttonBackgroundColor,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

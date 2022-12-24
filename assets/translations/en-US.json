@@ -17,6 +17,7 @@
   "profile_title": "YOUR SETTINGS IN SEYR ET",
   "change_name_app_bar_title": "CHANGE NAME",
   "change_email_app_bar_title": "CHANGE EMAIL",
+  "reset_password_app_title": "RESET PASSWORD",
   "no_favorites_yet_info": "No Favorites Yet",
   "no_result_found_info": "No Result Found",
   "first_name": "First Name",
@@ -47,6 +48,7 @@
   "password_is_not_correct_dialog_msg": "Password Is Not Correct",
   "please_check_and_try_again_dialog_msg": "Please check and try again",
   "welcome_back_title": "WELCOME BACK",
+  "there_is_a_discrepancy_on_email_dialog_msg": "There is a discrepancy on email",
   "home_bottom_nav_bar": "Home",
   "search_bottom_nav_bar": "Search",
   "favorite_bottom_nav_bar": "Favorite",
@@ -70,6 +72,12 @@
   "unknown_error_msg": "Unknown error occurred while processing your request",
   "oops_error_title": "Oops!",
   "ok_btn": "Ok",
-  "loading_msg": "Loading..."
+  "loading_msg": "Loading...",
+  "no_internet_connection_msg": "No Internet Connection",
+  "forgot_password": "Forgot Password?",
+  "new_password_title": "New Password",
+  "repeat_password_title": "Repeat Password"
+
+
 
 }

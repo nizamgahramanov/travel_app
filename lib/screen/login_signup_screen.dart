@@ -8,6 +8,7 @@ import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/password_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 
+import '../helpers/constants.dart';
 import '../helpers/custom_button.dart';
 import '../helpers/utility.dart';
 import '../services/firebase_firestore_service.dart';
@@ -92,6 +93,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       buttonText: 'continue_btn'.tr(),
                       onTap: saveForm,
                       borderRadius: 15,
+                      borderColor: AppColors.buttonBackgroundColor,
                     ),
                   Row(
                     children: <Widget>[
@@ -131,8 +133,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       width: 22,
                       height: 22,
                       margin: const EdgeInsets.only(right: 25),
-                      child: SvgPicture.asset(
-                          'assets/images/google-color-icon.svg'),
+                      child: SvgPicture.asset(googleColorfulIconImage),
                     ),
                   ),
                 ],
@@ -159,20 +160,24 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           await FireStoreService().getUserPasswordFromFirestore(value);
       print(isEmailExistList);
       print(base16Encrypted);
-      directNextScreen(isEmailExistList, base16Encrypted,value);
+      directNextScreen(isEmailExistList, base16Encrypted, value);
     }
   }
-  void directNextScreen(List<String> isEmailExistList, String? base16Encrypted, String value,){
+
+  void directNextScreen(
+    List<String> isEmailExistList,
+    String? base16Encrypted,
+    String value,
+  ) {
     bool provider = false;
     Map<String, dynamic> arguments = {"provider": provider, "email": value};
     if (isEmailExistList.isNotEmpty && base16Encrypted == null) {
       Utility.getInstance().showAlertDialog(
-        popButtonColor: Colors.red,
+        popButtonColor: AppColors.redAccent300,
         context: context,
-        alertTitle: "Discrepancy on email",
-        alertMessage:
-        "There is a discrepancy on email. Please, contact support",
-        popButtonText: 'back_btn'.tr(),
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'there_is_a_discrepancy_on_email_dialog_msg'.tr(),
+        popButtonText: 'ok_btn'.tr(),
         onPopTap: () => Navigator.of(context).pop(),
       );
     } else {

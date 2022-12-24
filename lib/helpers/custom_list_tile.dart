@@ -8,11 +8,11 @@ class CustomListTile extends StatelessWidget {
     Key? key,
     required this.title,
     this.data,
-    required this.icon,
+    this.icon,
   }) : super(key: key);
   final String title;
   final String? data;
-  final Widget icon;
+  final Widget? icon;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,7 +44,8 @@ class CustomListTile extends StatelessWidget {
               ),
             ],
           ),
-          icon
+          if(icon!=null)
+            icon!
         ],
       ),
     );

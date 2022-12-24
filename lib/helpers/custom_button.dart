@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
+
+import '../services/network_service.dart';
 
 class CustomButton extends StatelessWidget {
   VoidCallback onTap;
   String buttonText;
   Color? buttonColor;
   double borderRadius;
-  Color? borderColor;
+  Color borderColor;
   double horizontalMargin;
   double verticalMargin;
   Color? textColor;
@@ -16,24 +19,25 @@ class CustomButton extends StatelessWidget {
   double height;
   EdgeInsets? textPadding;
 
-  CustomButton({
-    Key? key,
-    required this.onTap,
-    required this.buttonText,
-    this.buttonTextSize = 18,
-    this.buttonColor,
-    required this.borderRadius,
-    this.borderColor,
-    this.horizontalMargin = 0.0,
-    this.verticalMargin = 0.0,
-    this.textColor,
-    this.icon,
-    this.height = 60,
-    this.textPadding=EdgeInsets.zero
-  }) : super(key: key);
+  CustomButton(
+      {Key? key,
+      required this.onTap,
+      required this.buttonText,
+      this.buttonTextSize = 18,
+      this.buttonColor,
+      required this.borderRadius,
+      required this.borderColor,
+      this.horizontalMargin = 0.0,
+      this.verticalMargin = 0.0,
+      this.textColor,
+      this.icon,
+      this.height = 60,
+      this.textPadding = EdgeInsets.zero})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var networkStatus = Provider.of<NetworkStatus>(context);
     return Container(
       height: height,
       // width: double.infinity,
@@ -44,12 +48,12 @@ class CustomButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
         color: buttonColor ?? AppColors.buttonBackgroundColor,
-        border: borderColor == null
-            ? Border.all(color: AppColors.inputColor)
-            : Border.all(color: borderColor!),
+        border: networkStatus == NetworkStatus.online
+            ? Border.all(color: borderColor)
+            : Border.all(color: AppColors.redAccent),
       ),
       child: InkWell(
-        onTap: onTap,
+        onTap: networkStatus == NetworkStatus.online ? onTap : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -65,7 +69,8 @@ class CustomButton extends StatelessWidget {
                     spacing: 2,
                     text: buttonText,
                     size: buttonTextSize,
-                    color: textColor == null ? AppColors.whiteColor : textColor!,
+                    color:
+                        textColor == null ? AppColors.whiteColor : textColor!,
                     padding: EdgeInsets.zero,
                     fontWeight: FontWeight.bold,
                   ),

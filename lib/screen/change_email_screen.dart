@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
+import 'package:travel_app/screen/main_screen.dart';
 import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 
@@ -89,19 +90,18 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Wrapper(
-              isLogin: true,
+            builder: (context) => MainScreen(
               bottomNavIndex: 3,
             ),
           ),
         );
       } else {
         Utility.getInstance().showAlertDialog(
-          popButtonColor: Colors.red,
+          popButtonColor: AppColors.redAccent300,
           context: context,
           alertTitle: 'password_is_not_correct_dialog_msg'.tr(),
           alertMessage: 'please_check_and_try_again_dialog_msg'.tr(),
-          popButtonText: 'back_btn'.tr(),
+          popButtonText: 'ok_btn'.tr(),
           onPopTap: () => Navigator.of(context).pop(),
         );
       }
@@ -117,6 +117,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
         title: 'change_email_app_bar_title'.tr(),
@@ -136,7 +137,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                         spacing: 2,
                         text: 'email_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         padding: EdgeInsets.zero,
                       ),
@@ -171,7 +172,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
                       AppLightText(
                         text: 'current_password_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,
@@ -210,6 +211,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: () => saveForm(),
+              borderColor: AppColors.buttonBackgroundColor,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

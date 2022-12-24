@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class CustomIconText extends StatelessWidget {
   double size;
   final String text;
@@ -13,7 +15,7 @@ class CustomIconText extends StatelessWidget {
     Key? key,
     this.size = 16,
     required this.text,
-    this.color = Colors.black38,
+    this.color = AppColors.blackColor38,
     required this.icon,
     required this.spacing,
     required this.isIconFirst,
