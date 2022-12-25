@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/screen/profile_screen.dart';
 import '../helpers/app_colors.dart';
-import '../helpers/custom_buttom_navigation_bar.dart';
-import '../helpers/custom_tab_indicator.dart';
 import '../providers/language.dart';
 import 'algolia_search_screen.dart';
 import 'favorite_screen.dart';

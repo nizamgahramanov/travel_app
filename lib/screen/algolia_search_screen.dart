@@ -111,7 +111,8 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                         )
                       : null,
                   onChanged: (_) {
-                    if (_searchTextController.text.length >= 2 && networkStatus==NetworkStatus.online) {
+                    if (_searchTextController.text.length >= 2 &&
+                        networkStatus == NetworkStatus.online) {
                       _debouncer.run(() {
                         _search();
                       });
@@ -137,8 +138,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                     ? const Spinner()
                     : _results == null
                         ? Center(
-                            child: SvgPicture.asset(
-                                'assets/svg/search_screen.svg'),
+                            child: SvgPicture.asset(searchScreenImage),
                           )
                         : _results!.isEmpty
                             ? SingleChildScrollView(
@@ -148,8 +148,8 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                     Container(
                                       height: 350,
                                       // color: Colors.blue,
-                                      child: SvgPicture.asset(
-                                          'assets/svg/no_result_found.svg'),
+                                      child:
+                                          SvgPicture.asset(noResultFoundImage),
                                     ),
                                     AppLightText(
                                       text: 'no_result_found_info'.tr(),

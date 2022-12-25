@@ -11,7 +11,6 @@ import 'package:travel_app/widgets/spinner.dart';
 import 'package:travel_app/widgets/staggered_grid_item.dart';
 
 import '../helpers/constants.dart';
-import '../helpers/destination_type.dart';
 import '../model/destination.dart';
 import '../providers/destinations.dart';
 import '../screen/detail_screen.dart';

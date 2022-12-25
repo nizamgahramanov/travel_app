@@ -62,8 +62,6 @@ class CustomButton extends StatelessWidget {
               color: Colors.transparent,
               child: Container(
                 padding: textPadding,
-                // color: Colors.red,
-
                 child: Center(
                   child: AppLightText(
                     spacing: 2,

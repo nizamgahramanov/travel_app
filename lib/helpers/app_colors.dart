@@ -14,9 +14,6 @@ class AppColors {
   static const Color grey200 = Color(0xFFEEEEEE);
   static const Color grey300 = Color(0xFFE0E0E0);
   static const Color transparent = Colors.transparent;
-
-  // static final Color buttonBackgroundColor = Color(0xFF8F7214);
-  //8F7214FF
   static final Color buttonBackgroundColor = Color(0xFF7A6767);
   static final Color inputColor = Color(0xFFFAF7EE);
   static final Color backgroundColorOfApp = Color(0xFFF5F5F5);

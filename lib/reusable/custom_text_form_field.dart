@@ -64,39 +64,3 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
-
-// class BoxTextField extends StatelessWidget {
-//   final TextEditingController controller;
-//   final FormFieldValidator<String> validator;
-//   final bool obsecure;
-//   final bool readOnly;
-//   final VoidCallback onTap;
-//   final VoidCallback onEditingCompleted;
-//   final TextInputType keyboardType;
-//   final ValueChanged<String> onChanged;
-//   final bool isMulti;
-//   final bool autofocus;
-//   final bool enabled;
-//   final String errorText;
-//   final String label;
-//   final Widget suffix;
-//   final Widget prefix;
-//
-//   BoxTextField(
-//       {Key key,
-//         this.controller,
-//         this.validator,
-//         this.keyboardType = TextInputType.text,
-//         this.obsecure = false,
-//         this.onTap,
-//         this.isMulti = false,
-//         this.readOnly = false,
-//         this.autofocus = false,
-//         this.errorText,
-//         @required this.label,
-//         this.suffix,
-//         this.prefix,
-//         this.enabled = true,
-//         this.onEditingCompleted,
-//         this.onChanged})
-//       : super(key: key);

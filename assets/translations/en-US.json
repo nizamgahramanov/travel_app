@@ -69,7 +69,7 @@
   "destination_overview_validation": "Please Enter Destination Overview",
   "destination_region_az_validation": "Please Enter Destination Region In Azerbaijani",
   "destination_region_validation": "Please Enter Destination Region",
-  "unknown_error_msg": "Unknown error occurred while processing your request",
+  "c": "Unknown error occurred while processing your request",
   "oops_error_title": "Oops!",
   "ok_btn": "Ok",
   "loading_msg": "Loading...",

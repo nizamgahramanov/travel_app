@@ -53,20 +53,5 @@ class CustomIconText extends StatelessWidget {
         if (!isIconFirst) icon,
       ],
     );
-    // return RichText(
-    //   text: TextSpan(
-    //     children: [
-    //       WidgetSpan(
-    //         child: icon!,
-    //       ),
-    //       TextSpan(
-    //           text: text,
-    //           style: TextStyle(
-    //             color: Colors.brown,
-    //             fontSize: 13,
-    //           )),
-    //     ],
-    //   ),
-    // );
   }
 }

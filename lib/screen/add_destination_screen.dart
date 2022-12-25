@@ -98,8 +98,8 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     } catch (error) {
       Utility.getInstance().showAlertDialog(
         context: context,
-        alertTitle: 'Oops!',
-        alertMessage: 'Unknown error occurred while processing your request',
+        alertTitle: 'oops_error_title'.tr(),
+        alertMessage: 'oops_error_title'.tr(),
         popButtonText: 'ok_btn'.tr(),
         popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
@@ -146,7 +146,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         spacing: 2,
                         text: 'name_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         padding: EdgeInsets.zero,
                       ),
@@ -186,7 +186,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       AppLightText(
                         text: 'overview_az_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,
@@ -220,7 +220,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       AppLightText(
                         text: 'overview'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,
@@ -254,7 +254,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       AppLightText(
                         text: 'region_az_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,
@@ -288,7 +288,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       AppLightText(
                         text: 'region_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,
@@ -322,7 +322,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                       AppLightText(
                         text: 'category_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         spacing: 2,
                         padding: EdgeInsets.zero,
                         fontWeight: FontWeight.bold,

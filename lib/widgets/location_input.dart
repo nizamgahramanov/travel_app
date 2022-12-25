@@ -53,7 +53,7 @@ class _LocationInputState extends State<LocationInput> {
 
   void showPreview(double lat, double lng) {
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
-        latitude: lat, longitude: lng);
+        latitude: lat, longitude: lng,zoom:7);
     print("___________________________");
     print(staticMapImageUrl);
     setState(() {

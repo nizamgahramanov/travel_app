@@ -46,13 +46,11 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          // mainAxisAlignment:MainAxisAlignment.center ,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 25),
             AppLightText(
               text: widget.title,
-              color: Colors.black,
+              color: AppColors.blackColor,
               size: 18,
               textAlign: TextAlign.center,
               alignment: Alignment.center,
@@ -98,60 +96,6 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
               borderColor: AppColors.backgroundColorOfApp,
             ),
             const SizedBox(height: 25),
-            // Container(
-            //   width: MediaQuery
-            //       .of(context)
-            //       .size
-            //       .width,
-            //   height: 50,
-            //   child: InkWell(
-            //     highlightColor: Colors.grey[200],
-            //     onTap: () {
-            //       //do somethig
-            //     },
-            //     child: Center(
-            //       child: Text(
-            //         "Continue",
-            //         style: TextStyle(
-            //           fontSize: 18.0,
-            //           color: Theme
-            //               .of(context)
-            //               .primaryColor,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Divider(
-            //   height: 1,
-            // ),
-            // Container(
-            //   width: MediaQuery
-            //       .of(context)
-            //       .size
-            //       .width,
-            //   height: 50,
-            //   child: InkWell(
-            //     borderRadius: BorderRadius.only(
-            //       bottomLeft: Radius.circular(15.0),
-            //       bottomRight: Radius.circular(15.0),
-            //     ),
-            //     highlightColor: Colors.grey[200],
-            //     onTap: () {
-            //       Navigator.of(context).pop();
-            //     },
-            //     child: Center(
-            //       child: Text(
-            //         "Cancel",
-            //         style: TextStyle(
-            //           fontSize: 16.0,
-            //           fontWeight: FontWeight.normal,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),
