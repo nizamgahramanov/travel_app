@@ -145,13 +145,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       height: double.maxFinite,
       child: Column(
         children: [
-          Container(
-            width: double.maxFinite,
-            height: MediaQuery.of(context).size.height * 0.4,
+          Flexible(
+            fit: FlexFit.tight,
             child: Stack(
               children: [
                 Positioned(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  // height: MediaQuery.of(context).size.height - kToolbarHeight-375,
                   width: MediaQuery.of(context).size.width,
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
@@ -180,130 +179,118 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.height * .51,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // const SizedBox(
-                //   height: 8,
-                // ),
-                Card(
-                  margin: const EdgeInsets.only(
-                    left: 8,
-                    top: 8,
-                    right: 8,
-                  ),
-                  color: AppColors.whiteColor,
-                  child: StreamBuilder<FirestoreUser>(
-                      stream: FireStoreService().getUserDataByUID(result!.uid),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Container(
-                              child: ListView.separated(
+          Column(
+            children: [
+              const SizedBox(
+                height: 8,
+              ),
+              Container(
+                color: AppColors.whiteColor,
+                child: StreamBuilder<FirestoreUser>(
+                    stream: FireStoreService().getUserDataByUID(result!.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: titleList.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              CustomListTile(
+                            title: titleList[index],
+                            data: index != 2 ? 'loading_msg'.tr() : null,
+                            icon: index == 3
+                                ? const RotatedBox(
+                                    quarterTurns: 1,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios_outlined,
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                  ),
+                          ),
+                          separatorBuilder: (_, __) => Divider(
+                            height: 1,
+                            color: AppColors.buttonBackgroundColor,
+                          ),
+                        );
+                      } else if (snapshot.connectionState ==
+                              ConnectionState.active ||
+                          snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return ErrorAndNoNetworkAndFavoriteScreen(
+                            text: "something_went_wrong_error_msg".tr(),
+                            path: errorImage,
+                          );
+                        } else {
+                          return ListView.separated(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
                             itemCount: titleList.length,
                             itemBuilder: (BuildContext context, int index) =>
-                                CustomListTile(
-                              title: titleList[index],
-                              data: 'loading_msg'.tr(),
-                              icon: index == 3
-                                  ? const RotatedBox(
-                                      quarterTurns: 1,
-                                      child: Icon(
-                                        Icons.arrow_forward_ios_outlined,
-                                      ),
-                                    )
-                                  : const Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                    ),
+                                GestureDetector(
+                              onTap: () => _onTapToListTile(
+                                index,
+                                snapshot.data,
+                              ),
+                              behavior: HitTestBehavior.translucent,
+                              child: CustomListTile(
+                                title: titleList[index],
+                                data: _changeDataByIndex(
+                                  index,
+                                  snapshot.data,
+                                ),
+                                icon: _getIcon(index, snapshot.data),
+                              ),
                             ),
                             separatorBuilder: (_, __) => Divider(
                               height: 1,
                               color: AppColors.buttonBackgroundColor,
                             ),
-                          ));
-                        } else if (snapshot.connectionState ==
-                                ConnectionState.active ||
-                            snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            return ErrorAndNoNetworkAndFavoriteScreen(
-                              text: "something_went_wrong_error_msg".tr(),
-                              path: "assets/svg/error.svg",
-                            );
-                          } else {
-                            return Container(
-                              child: ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                itemCount: titleList.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        GestureDetector(
-                                  onTap: () => _onTapToListTile(
-                                    index,
-                                    snapshot.data,
-                                  ),
-                                  behavior: HitTestBehavior.translucent,
-                                  child: CustomListTile(
-                                    title: titleList[index],
-                                    data: _changeDataByIndex(
-                                      index,
-                                      snapshot.data,
-                                    ),
-                                    icon: _getIcon(index, snapshot.data),
-                                  ),
-                                ),
-                                separatorBuilder: (_, __) => Divider(
-                                  height: 1,
-                                  color: AppColors.buttonBackgroundColor,
-                                ),
-                              ),
-                            );
-                          }
-                        } else {
-                          return ErrorAndNoNetworkAndFavoriteScreen(
-                            text: "something_went_wrong_error_msg".tr(),
-                            path: errorImage,
                           );
                         }
-                      }),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Utility.getInstance().showAlertDialog(
-                      context: context,
-                      alertTitle: 'log_out_question'.tr(),
-                      popButtonColor: AppColors.backgroundColorOfApp,
-                      popButtonText: 'back_btn'.tr(),
-                      onPopTap: () => Navigator.of(context).pop(),
-                      isShowActionButton: true,
-                      actionButtonText: 'log_out_btn'.tr(),
-                      onTapAction: logout,
-                      actionButtonColor: AppColors.redAccent300,
-                      popButtonTextColor: AppColors.blackColor,
-                    );
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 8,
-                    ),
-                    child: CustomListTile(
-                      title: 'log_out_btn'.tr(),
-                      icon: const Icon(
-                        Icons.logout_rounded,
-                        // size: 28,
-                        // color: AppColors.blackColor38,
-                      ),
+                      } else {
+                        return ErrorAndNoNetworkAndFavoriteScreen(
+                          text: "something_went_wrong_error_msg".tr(),
+                          path: errorImage,
+                        );
+                      }
+                    }),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Utility.getInstance().showAlertDialog(
+                    context: context,
+                    alertTitle: 'log_out_question'.tr(),
+                    popButtonColor: AppColors.backgroundColorOfApp,
+                    popButtonText: 'back_btn'.tr(),
+                    onPopTap: () => Navigator.of(context).pop(),
+                    isShowActionButton: true,
+                    actionButtonText: 'log_out_btn'.tr(),
+                    onTapAction: logout,
+                    actionButtonColor: AppColors.redAccent300,
+                    popButtonTextColor: AppColors.blackColor,
+                  );
+                },
+                child: Container(
+                  color: AppColors.whiteColor,
+                  child: CustomListTile(
+                    title: 'log_out_btn'.tr(),
+                    icon: const Icon(
+                      Icons.logout_rounded,
+                      // size: 28,
+                      // color: AppColors.blackColor38,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+            ],
           ),
         ],
       ),

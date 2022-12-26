@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/main_screen.dart';
@@ -27,6 +29,28 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   void goToMainScreen() {
+    Future.wait([
+      precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, noFavoriteScreenImage),
+        null,
+      ),
+      precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, searchScreenImage),
+        null,
+      ),
+      precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, noResultFoundImage),
+        null,
+      ),
+      precachePicture(
+        ExactAssetPicture(
+            SvgPicture.svgStringDecoderBuilder, googleColorfulIconImage),
+        null,
+      ),
+    ]);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

@@ -27,11 +27,13 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
+
+  final ScrollController _scrollController = ScrollController();
   bool isSelecting = false;
-  var user = FirebaseAuth.instance.currentUser;
   bool _innerListIsScrolled = false;
+  var user = FirebaseAuth.instance.currentUser;
   Key _key = const PageStorageKey({});
+
   void toggleFavorite(Destination destination) {
     if (user != null) {
       // store destination in firestore database
@@ -414,7 +416,7 @@ class _MyBackgroundState extends State<MyBackground> {
             borderRadius: BorderRadius.circular(15.0),
             child: LimitedBox(
               maxHeight: MediaQuery.of(context).size.height * 0.3,
-              maxWidth: 70,
+              maxWidth: 60,
               child: Container(
                 width: 60,
                 color: AppColors.whiteColor,
@@ -425,7 +427,7 @@ class _MyBackgroundState extends State<MyBackground> {
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () => verticalListItemClicked(index),
                     child: showImageIndex == index
-                        ? _buildSmallList(
+                        ? _buildVerticalList(
                             showImageIndex,
                             settings.maxExtent,
                             BoxDecoration(
@@ -437,13 +439,13 @@ class _MyBackgroundState extends State<MyBackground> {
                               boxShadow: [
                                 BoxShadow(
                                   color: AppColors.buttonBackgroundColor,
-                                  spreadRadius: 2,
+                                  spreadRadius: 5,
                                   blurRadius: 5,
                                 )
                               ],
                             ),
                           )
-                        : _buildSmallList(
+                        : _buildVerticalList(
                             index,
                             settings.maxExtent,
                             BoxDecoration(
@@ -460,7 +462,7 @@ class _MyBackgroundState extends State<MyBackground> {
     );
   }
 
-  Widget _buildSmallList(int index, double height, BoxDecoration decoration) {
+  Widget _buildVerticalList(int index, double height, BoxDecoration decoration) {
     return Container(
       height: 50,
       margin: const EdgeInsets.all(4),

@@ -46,6 +46,8 @@ class FavoriteScreen extends StatelessWidget {
                             ConnectionState.active ||
                         snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
+                        print("FAVORITE AHAS ERROR");
+                        print(snapshot);
                         return ErrorAndNoNetworkAndFavoriteScreen(
                           text: "something_went_wrong_error_msg".tr(),
                           path: errorImage
@@ -54,6 +56,7 @@ class FavoriteScreen extends StatelessWidget {
                         );
                       } else {
                         if (snapshot.hasData && snapshot.data!.isEmpty) {
+                          print("NO FAVORITE");
                           return ErrorAndNoNetworkAndFavoriteScreen(
                             text: 'no_favorites_yet_info'.tr(),
                             path: noFavoriteScreenImage,

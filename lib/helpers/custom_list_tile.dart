@@ -39,7 +39,7 @@ class CustomListTile extends StatelessWidget {
                 text: data!,
                 // text:
                 // '${snapshot.data!.firstName!} ${snapshot.data!.lastName!}',
-                size: 14,
+                size: 13,
                 padding: EdgeInsets.zero,
               ),
             ],
