@@ -21,12 +21,18 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.black,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.transparent,
+    //   systemNavigationBarColor: Colors.black,
+    //   systemNavigationBarIconBrightness: Brightness.dark,
+    // ));
+    // precacheImage(AssetImage(startScreenImage), context);
     super.initState();
+  }
+  @override
+  void didChangeDependencies() {
+    precacheImage(AssetImage(startScreenImage), context);
+    super.didChangeDependencies();
   }
 
   void goToMainScreen() {

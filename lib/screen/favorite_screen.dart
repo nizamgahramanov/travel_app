@@ -84,6 +84,7 @@ class FavoriteScreen extends StatelessWidget {
                                       regionAz: snapshot.data![index].regionAz,
                                       category: snapshot.data![index].category,
                                       photoUrl: snapshot.data![index].photoUrl,
+                                      author: snapshot.data![index].author,
                                       geoPoint: snapshot.data![index].geoPoint,
                                     ),
                                   );

@@ -41,7 +41,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
       if (widget.isLogin) const Icon(Icons.person) else const Icon(Icons.login)
     ];
     Map<int, Widget> screens = {
-      0: HomeScreen(),
+      0: HomeScreen(isLogin: widget.isLogin),
       1: const AlgoliaSearchScreen(),
       2: FavoriteScreen(),
       3: widget.isLogin ? ProfileScreen() : const LoginSignupScreen(),

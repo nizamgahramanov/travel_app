@@ -128,6 +128,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    precacheImage(AssetImage(profileScreenImage), context);
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     String langCode = context.locale.languageCode;
     print("LLangCCDOO");

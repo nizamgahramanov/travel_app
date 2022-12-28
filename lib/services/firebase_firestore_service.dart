@@ -112,9 +112,9 @@ class FireStoreService {
         .map((event) => FirestoreUser.fromFirestore(event.data()!));
   }
 
-  Future<List<dynamic>> getUserByUid(String uid) {
+  Future<Map<String,dynamic>?> getUserByUid(String uid) {
     return _db.collection("users").doc(uid).get().then((value) {
-      return value.data()!['favorites'];
+      return value.data();
     });
   }
 

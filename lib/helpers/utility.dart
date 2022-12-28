@@ -23,6 +23,7 @@ class Utility {
     final Color? popButtonTextColor,
   }) {
     // set up the AlertDialog
+    print("Show ALert");
     CustomAlertDialog alert = CustomAlertDialog(
       title: alertTitle,
       description: alertMessage,

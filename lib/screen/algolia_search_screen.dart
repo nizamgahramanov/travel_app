@@ -184,10 +184,11 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                           regionAz: snap.data['region_az'],
                                           category: snap.data['category'],
                                           photoUrl: snap.data['photo_url'],
-                                          geoPoint: GeoPoint(
+                                          author: snap.data['author'],
+                                          geoPoint:snap.data['_geoloc']!=null ?GeoPoint(
                                             snap.data['_geoloc']['lat'],
                                             snap.data['_geoloc']['lng'],
-                                          ),
+                                          ):null,
                                         ),
                                       );
                                     },

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/model/destination_location.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
+import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:uuid/uuid.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/utility.dart';
@@ -77,8 +79,13 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     }
     _addDestinationForm.currentState!.save();
     try {
-      if (_destinationImageFile.isNotEmpty &&
-          _destinationLocation?.latitude != null) {
+      if (_destinationImageFile.isNotEmpty) {
+        var us =FirebaseAuth.instance.currentUser;
+        var user = await FireStoreService().getUserByUid(us!.uid);
+        print("NAME");
+        print(us);
+        print("USER DATA");
+        print(user!);
         var destinationItem = Destination(
             id: const Uuid().v4(),
             name: _nameController.text,
@@ -88,12 +95,25 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             regionAz: _regionAzController.text,
             category: dropdownValue,
             photoUrl: _destinationImageFile,
+            author: '${user['firstName'].trim()} ${user['lastName']}' ,
             geoPoint: _destinationLocation != null
-                ? GeoPoint(_destinationLocation!.latitude,
-                    _destinationLocation!.longitude)
+                ? GeoPoint(
+                    _destinationLocation!.latitude,
+                    _destinationLocation!.longitude,
+                  )
                 : null);
         Provider.of<Destinations>(context, listen: false)
             .saveData(destinationItem, _destinationImageFile);
+      } else {
+        print("I am here");
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'oops_error_title'.tr(),
+          alertMessage: 'add_image_file_dialog_msg'.tr(),
+          popButtonText: 'ok_btn'.tr(),
+          popButtonColor: AppColors.redAccent300,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
       }
     } catch (error) {
       Utility.getInstance().showAlertDialog(
@@ -384,9 +404,9 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                   const SizedBox(
                     height: 25,
                   ),
-                  LocationInput(_selectPlace,_nameController.text),
+                  LocationInput(_selectPlace, _nameController.text),
                   const SizedBox(
-                    height: 85,
+                    height: 90,
                   ),
                 ],
               ),

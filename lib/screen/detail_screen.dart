@@ -27,7 +27,6 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen>
     with TickerProviderStateMixin {
-
   final ScrollController _scrollController = ScrollController();
   bool isSelecting = false;
   bool _innerListIsScrolled = false;
@@ -149,7 +148,9 @@ class _DetailScreenState extends State<DetailScreen>
                     ),
                   ),
                 ),
-                titleTextStyle: const TextStyle(color: AppColors.redAccent300,),
+                titleTextStyle: const TextStyle(
+                  color: AppColors.redAccent300,
+                ),
                 actions: [
                   StreamBuilder<QuerySnapshot>(
                       stream: user == null
@@ -290,43 +291,75 @@ class _DetailScreenState extends State<DetailScreen>
                   child: Container(
                     width: double.maxFinite,
                     height: MediaQuery.of(context).size.height * .4,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          // color: Colors.amberAccent,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 0, horizontal: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              AppLightText(
-                                text: 'overview'.tr(),
-                                color: AppColors.blackColor,
-                                size: 22,
-                                fontWeight: FontWeight.bold,
-                                spacing: 2,
-                                padding: EdgeInsets.zero,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              AppLightText(
-                                spacing: 16,
-                                text: locale == 'az'
-                                    ? clickedDestination.overviewAz
-                                    : clickedDestination.overview,
-                                padding: EdgeInsets.zero,
-                                textAlign: TextAlign.justify,
-                              ),
-                            ],
+                    color: AppColors.backgroundColorOfApp,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 20,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            // color: Colors.brown,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                if(locale != 'az')
+                                AppLightText(
+                                  text: 'by_msg'.tr(),
+                                  padding: EdgeInsets.zero,
+                                  spacing: 0,
+                                  size: 8,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.buttonBackgroundColor,
+                                ),
+                                AppLightText(
+                                  text: clickedDestination.author,
+                                  padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
+                                  spacing: 0,
+                                  size: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.blackColor,
+                                ),
+                                if(locale == 'az')
+                                  AppLightText(
+                                    text: 'by_msg'.tr(),
+                                    padding: EdgeInsets.zero,
+                                    spacing: 0,
+                                    size: 8,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.buttonBackgroundColor,
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
+                          AppLightText(
+                            text: 'overview'.tr(),
+                            color: AppColors.blackColor,
+                            size: 22,
+                            fontWeight: FontWeight.bold,
+                            spacing: 2,
+                            padding: EdgeInsets.zero,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          AppLightText(
+                            spacing: 16,
+                            text: locale == 'az'
+                                ? clickedDestination.overviewAz
+                                : clickedDestination.overview,
+                            padding: EdgeInsets.zero,
+                            textAlign: TextAlign.justify,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -462,7 +495,8 @@ class _MyBackgroundState extends State<MyBackground> {
     );
   }
 
-  Widget _buildVerticalList(int index, double height, BoxDecoration decoration) {
+  Widget _buildVerticalList(
+      int index, double height, BoxDecoration decoration) {
     return Container(
       height: 50,
       margin: const EdgeInsets.all(4),

@@ -9,6 +9,7 @@ class Destination {
   final String regionAz;
   final String category;
   final GeoPoint? geoPoint;
+  final String author;
   List<dynamic> photoUrl;
 
   Destination({
@@ -20,6 +21,7 @@ class Destination {
     required this.regionAz,
     required this.category,
     required this.photoUrl,
+    required this.author,
     this.geoPoint,
   });
   Map<String, dynamic> createMap() {
@@ -27,12 +29,13 @@ class Destination {
       'id': id,
       'name': name,
       'overview': overview,
-      'overview_az':overviewAz,
+      'overview_az': overviewAz,
       'region': region,
-      'region_az':regionAz,
+      'region_az': regionAz,
       'category': category,
       'photo_url': photoUrl,
-      'geoPoint': geoPoint
+      'author': author,
+      'geoPoint': geoPoint,
     };
   }
 
@@ -45,5 +48,6 @@ class Destination {
         regionAz = firestoreMap['region_az'],
         category = firestoreMap['category'],
         photoUrl = firestoreMap['photo_url'].cast<String>(),
+        author = firestoreMap['author'],
         geoPoint = firestoreMap['geoPoint'];
 }
