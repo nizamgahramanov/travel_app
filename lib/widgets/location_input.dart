@@ -38,7 +38,7 @@ class _LocationInputState extends State<LocationInput> {
       "isSelecting": _isSelecting,
       "geoPoint": const GeoPoint(40.35412015822521, 47.783417697006065),
       "zoom": 7.0,
-      "name":widget.destinationName
+      "name": widget.destinationName
     };
     final selectedLocation = await Navigator.of(context).pushNamed(
       MapScreen.routeName,
@@ -53,7 +53,7 @@ class _LocationInputState extends State<LocationInput> {
 
   void showPreview(double lat, double lng) {
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
-        latitude: lat, longitude: lng,zoom:7);
+        latitude: lat, longitude: lng, zoom: 7);
     print("___________________________");
     print(staticMapImageUrl);
     setState(() {
@@ -100,16 +100,18 @@ class _LocationInputState extends State<LocationInput> {
               borderRadius: 15,
               buttonTextSize: 14,
               height: 45,
-              buttonColor: Colors.transparent,
-              textColor: Colors.black,
-              borderColor: Colors.black,
+              buttonColor: AppColors.transparent,
+              textColor: AppColors.blackColor,
+              borderColor: AppColors.blackColor,
               textPadding: const EdgeInsets.symmetric(horizontal: 5),
               icon: Container(
                 width: 22,
                 height: 22,
-                // color: Colors.green,
                 margin: const EdgeInsets.only(right: 10),
-                child: const Icon(Icons.location_on),
+                child: Icon(
+                  Icons.location_on,
+                  color: AppColors.blackColor,
+                ),
               ),
             ),
             CustomButton(
@@ -118,16 +120,18 @@ class _LocationInputState extends State<LocationInput> {
               borderRadius: 15,
               buttonTextSize: 14,
               height: 45,
-              buttonColor: Colors.transparent,
-              textColor: Colors.black,
-              borderColor: Colors.black,
+              buttonColor: AppColors.transparent,
+              textColor: AppColors.blackColor,
+              borderColor: AppColors.blackColor,
               textPadding: const EdgeInsets.only(right: 5),
               icon: Container(
                 width: 22,
                 height: 22,
-                // color: Colors.green,
                 margin: const EdgeInsets.only(right: 10),
-                child: const Icon(Icons.location_on_outlined),
+                child: Icon(
+                  Icons.location_on_outlined,
+                  color: AppColors.blackColor,
+                ),
               ),
             ),
           ],

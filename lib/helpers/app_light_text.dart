@@ -34,7 +34,7 @@ class AppLightText extends StatelessWidget {
       child: Align(
         alignment: alignment,
         child: Wrap(
-          alignment: WrapAlignment.center,
+          alignment: WrapAlignment.start,
           spacing: spacing,
           children: [
             if (isShowIcon) icon!,

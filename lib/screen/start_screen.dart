@@ -105,6 +105,9 @@ class _StartScreenState extends State<StartScreen> {
               Expanded(child: Container()),
               CustomButton(
                 buttonText: 'get_started_btn'.tr(),
+                // onTap: () {
+                //   FirebaseCrashlytics.instance.crash();
+                // },
                 onTap: goToMainScreen,
                 borderRadius: 15,
                 horizontalMargin: 20,

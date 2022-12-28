@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
+import 'package:travel_app/helpers/custom_button.dart';
 import 'package:travel_app/providers/destinations.dart';
 import 'package:travel_app/widgets/staggered_grid_view.dart';
 
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  void goToAddDestinationScreen() {
+  void _goAddDestinationScreen() {
     Navigator.of(context).pushNamed(AddDestinationScreen.routeName);
   }
 
@@ -37,20 +38,70 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                AppLightText(
-                  text: 'home_title'.tr(),
-                  color: AppColors.blackColor,
-                  fontWeight: FontWeight.bold,
-                  spacing: 2,
-                  padding: EdgeInsets.zero,
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.zero,
+                        color: Colors.redAccent,
+                        child: AppLightText(
+                          text: 'home_title'.tr(),
+                          color: AppColors.blackColor,
+                          fontWeight: FontWeight.normal,
+                          spacing: 0,
+                          padding: EdgeInsets.zero,
+                          size: 13,
+                          alignment: Alignment.centerLeft,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      Container(
+                        color: Colors.redAccent,
+                        child: AppLightText(
+                          text: 'explore_the_best_places_in_azerbaijan_msg'.tr(),
+                          padding: EdgeInsets.zero,
+                          spacing: 0,
+                          size: 13,
+                          alignment: Alignment.centerLeft,
+                          textAlign: TextAlign.start,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: goToAddDestinationScreen,
-                  label: Text('home_add_btn'.tr()),
-                  icon: const Icon(Icons.add),
-                )
+                CustomButton(
+                  onTap: _goAddDestinationScreen,
+                  buttonText: 'home_add_btn'.tr(),
+                  borderRadius: 15,
+                  buttonTextSize: 13,
+                  height: 45,
+                  buttonColor: AppColors.buttonBackgroundColor,
+                  textColor: AppColors.whiteColor,
+                  borderColor: AppColors.buttonBackgroundColor,
+                  textPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  // icon: Container(
+                  //   width: 22,
+                  //   height: 22,
+                  //   color: AppColors.buttonBackgroundColor,
+                  //   margin: const EdgeInsets.only(right: 10),
+                  //   child: const Icon(Icons.add),
+                  // ),
+                ),
+                // CustomButton(onTap: onTap, buttonText: buttonText, borderRadius: borderRadius, borderColor: borderColor)
+                // ElevatedButton.icon(
+                //   onPressed: goToAddDestinationScreen,
+                //   label: Text('home_add_btn'.tr()),
+                //   icon: const Icon(Icons.add),
+                // )
               ],
+            ),
+            SizedBox(
+              height: 10,
             ),
             Expanded(
               child: StaggeredGridView(),
