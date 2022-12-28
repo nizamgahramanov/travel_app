@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
@@ -18,16 +19,22 @@ import 'package:travel_app/screen/start_screen.dart';
 import 'package:travel_app/screen/user_info.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/network_service.dart';
-import 'package:travel_app/widgets/network_connection_checker.dart';
 
 import 'helpers/constants.dart';
-import 'model/destination.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterError.onError = (errorDetails) {
+    // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
+  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  //   return true;
+  // };
   runApp(
     EasyLocalization(
       supportedLocales: const [
