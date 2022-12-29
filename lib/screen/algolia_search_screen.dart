@@ -51,8 +51,6 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
     });
 
     if (_searchTextController.text.length < 2) {
-      print('Length');
-      print(_searchTextController.text.length);
       setState(() {
         _isShowClearIcon = false;
       });
@@ -73,7 +71,6 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 15,
-          vertical: 0,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,9 +142,8 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       height: 350,
-                                      // color: Colors.blue,
                                       child:
                                           SvgPicture.asset(noResultFoundImage),
                                     ),
@@ -158,7 +154,7 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                       fontWeight: FontWeight.bold,
                                       textAlign: TextAlign.center,
                                       alignment: Alignment.center,
-                                      color: Colors.black54,
+                                      color: AppColors.blackColor38,
                                       size: 18,
                                     ),
                                   ],
@@ -185,10 +181,12 @@ class _AlgoliaSearchScreenState extends State<AlgoliaSearchScreen> {
                                           category: snap.data['category'],
                                           photoUrl: snap.data['photo_url'],
                                           author: snap.data['author'],
-                                          geoPoint:snap.data['_geoloc']!=null ?GeoPoint(
-                                            snap.data['_geoloc']['lat'],
-                                            snap.data['_geoloc']['lng'],
-                                          ):null,
+                                          geoPoint: snap.data['_geoloc'] != null
+                                              ? GeoPoint(
+                                                  snap.data['_geoloc']['lat'],
+                                                  snap.data['_geoloc']['lng'],
+                                                )
+                                              : null,
                                         ),
                                       );
                                     },

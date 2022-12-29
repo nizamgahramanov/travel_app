@@ -29,17 +29,12 @@ class _UserInfoState extends State<UserInfo> {
   bool _isShowSaveButton = false;
 
   void checkIfNameChanged(String text) {
-    print("checkIfNameChanged");
     if (_firstnameController.text != '' && _lastnameController.text != '') {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = true;
       });
     } else {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = false;
       });
     }
@@ -55,20 +50,8 @@ class _UserInfoState extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as UserCredentials;
-    print(args.email);
-    print("KLKLKRE");
 
     void _redirectUserToProfileScreen() {
-      // Navigator.pushAndRemoveUntil(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => Wrapper(
-      //       isLogin: true,
-      //       bottomNavIndex: 3,
-      //     ),
-      //   ),
-      //   (Route<dynamic> route) => false,
-      // );
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -116,7 +99,7 @@ class _UserInfoState extends State<UserInfo> {
                       AppLightText(
                         text: 'first_name'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -152,7 +135,7 @@ class _UserInfoState extends State<UserInfo> {
                       AppLightText(
                         text: 'last_name'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -184,7 +167,7 @@ class _UserInfoState extends State<UserInfo> {
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: saveForm,
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

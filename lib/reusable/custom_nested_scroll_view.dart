@@ -74,7 +74,7 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
                 },
                 child: const Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: AppColors.blackColor38,
                 ),
               ),
               backgroundColor: AppColors.backgroundColorOfApp,
@@ -114,7 +114,6 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
                 child: Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 20,
-                    vertical: 0,
                   ),
                   child: widget.child,
                 ),
@@ -130,7 +129,6 @@ class _CustomNestedScrollViewState extends State<CustomNestedScrollView> {
 class MyBackground extends StatefulWidget {
   const MyBackground({
     Key? key,
-    // required this.scrollController,
     required this.title,
   }) : super(key: key);
   final String title;
@@ -142,13 +140,13 @@ class _MyBackgroundState extends State<MyBackground> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.all(20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           AppLightText(
             text: widget.title,
-            color: Colors.black,
+            color: AppColors.blackColor,
             size: 24,
             padding: EdgeInsets.zero,
             spacing: 2,

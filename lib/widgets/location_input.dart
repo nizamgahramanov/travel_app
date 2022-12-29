@@ -23,7 +23,6 @@ class _LocationInputState extends State<LocationInput> {
   bool _isSelecting = true;
 
   Future<void> _getCurrentUserLocation() async {
-    print("GET CURRENT USER LOCATION");
     try {
       final locData = await Location().getLocation();
       showPreview(locData.latitude!, locData.longitude!);
@@ -54,10 +53,7 @@ class _LocationInputState extends State<LocationInput> {
   void showPreview(double lat, double lng) {
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
         latitude: lat, longitude: lng, zoom: 7);
-    print("___________________________");
-    print(staticMapImageUrl);
     setState(() {
-      print(_previewImageUrl);
       _previewImageUrl = staticMapImageUrl;
     });
   }
@@ -108,7 +104,7 @@ class _LocationInputState extends State<LocationInput> {
                 width: 22,
                 height: 22,
                 margin: const EdgeInsets.only(right: 10),
-                child: Icon(
+                child: const Icon(
                   Icons.location_on,
                   color: AppColors.blackColor,
                 ),
@@ -128,7 +124,7 @@ class _LocationInputState extends State<LocationInput> {
                 width: 22,
                 height: 22,
                 margin: const EdgeInsets.only(right: 10),
-                child: Icon(
+                child: const Icon(
                   Icons.location_on_outlined,
                   color: AppColors.blackColor,
                 ),

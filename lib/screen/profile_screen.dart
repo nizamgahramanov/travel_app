@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
@@ -30,10 +29,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   void _onTapToListTile(int index, FirestoreUser? user) {
-    // snapshot.data!.firstName!,
-    // snapshot.data!.lastName!,
-    // snapshot.data!.email,
-    // snapshot.data!.password,
     if (user != null) {
       if (index == 0) {
         Navigator.push(
@@ -122,22 +117,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void logout() {
-    print('Logout');
     Navigator.of(context).pop();
     AuthService().signOut(context);
   }
 
   @override
   void didChangeDependencies() {
-    precacheImage(AssetImage(profileScreenImage), context);
+    precacheImage(const AssetImage(profileScreenImage), context);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    String langCode = context.locale.languageCode;
-    print("LLangCCDOO");
-    print(langCode);
     User? result = FirebaseAuth.instance.currentUser;
 
     final List titleList = [
@@ -146,160 +137,153 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'password_title'.tr(),
       'language_title'.tr(),
     ];
-    return Container(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child: Column(
-        children: [
-          Flexible(
-            fit: FlexFit.tight,
-            child: Stack(
-              children: [
-                Positioned(
-                  // height: MediaQuery.of(context).size.height - kToolbarHeight-375,
-                  width: MediaQuery.of(context).size.width,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
-                    ),
-                    child: Image.asset(
-                      profileScreenImage,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 50,
-                  left: 20,
-                  right: 20,
-                  child: AppLightText(
-                    text: 'profile_title'.tr(),
-                    color: AppColors.whiteColor,
-                    size: 32,
-                    fontWeight: FontWeight.bold,
-                    spacing: 2,
-                    padding: EdgeInsets.zero,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
+    return Column(
+      children: [
+        Flexible(
+          fit: FlexFit.tight,
+          child: Stack(
             children: [
-              const SizedBox(
-                height: 8,
+              Positioned(
+                width: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(0),
+                  ),
+                  child: Image.asset(
+                    profileScreenImage,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              Container(
-                color: AppColors.whiteColor,
-                child: StreamBuilder<FirestoreUser>(
-                    stream: FireStoreService().getUserDataByUID(result!.uid),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+              Positioned(
+                bottom: 50,
+                left: 20,
+                right: 20,
+                child: AppLightText(
+                  text: 'profile_title'.tr(),
+                  color: AppColors.whiteColor,
+                  size: 32,
+                  fontWeight: FontWeight.bold,
+                  spacing: 2,
+                  padding: EdgeInsets.zero,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Column(
+          children: [
+            const SizedBox(
+              height: 8,
+            ),
+            Container(
+              color: AppColors.whiteColor,
+              child: StreamBuilder<FirestoreUser>(
+                  stream: FireStoreService().getUserDataByUID(result!.uid),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return ListView.separated(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: titleList.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            CustomListTile(
+                          title: titleList[index],
+                          data: index != 2 ? 'loading_msg'.tr() : null,
+                          icon: index == 3
+                              ? const RotatedBox(
+                                  quarterTurns: 1,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_outlined,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.arrow_forward_ios_outlined,
+                                ),
+                        ),
+                        separatorBuilder: (_, __) => const Divider(
+                          height: 1,
+                          color: AppColors.primaryColorOfApp,
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
+                            ConnectionState.active ||
+                        snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return ErrorAndNoNetworkAndFavoriteScreen(
+                          text: "something_went_wrong_error_msg".tr(),
+                          path: errorImage,
+                        );
+                      } else {
                         return ListView.separated(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           itemCount: titleList.length,
                           itemBuilder: (BuildContext context, int index) =>
-                              CustomListTile(
-                            title: titleList[index],
-                            data: index != 2 ? 'loading_msg'.tr() : null,
-                            icon: index == 3
-                                ? const RotatedBox(
-                                    quarterTurns: 1,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                    ),
-                                  )
-                                : const Icon(
-                                    Icons.arrow_forward_ios_outlined,
-                                  ),
-                          ),
-                          separatorBuilder: (_, __) => Divider(
-                            height: 1,
-                            color: AppColors.buttonBackgroundColor,
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                              ConnectionState.active ||
-                          snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasError) {
-                          return ErrorAndNoNetworkAndFavoriteScreen(
-                            text: "something_went_wrong_error_msg".tr(),
-                            path: errorImage,
-                          );
-                        } else {
-                          return ListView.separated(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemCount: titleList.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                GestureDetector(
-                              onTap: () => _onTapToListTile(
+                              GestureDetector(
+                            onTap: () => _onTapToListTile(
+                              index,
+                              snapshot.data,
+                            ),
+                            behavior: HitTestBehavior.translucent,
+                            child: CustomListTile(
+                              title: titleList[index],
+                              data: _changeDataByIndex(
                                 index,
                                 snapshot.data,
                               ),
-                              behavior: HitTestBehavior.translucent,
-                              child: CustomListTile(
-                                title: titleList[index],
-                                data: _changeDataByIndex(
-                                  index,
-                                  snapshot.data,
-                                ),
-                                icon: _getIcon(index, snapshot.data),
-                              ),
+                              icon: _getIcon(index, snapshot.data),
                             ),
-                            separatorBuilder: (_, __) => Divider(
-                              height: 1,
-                              color: AppColors.buttonBackgroundColor,
-                            ),
-                          );
-                        }
-                      } else {
-                        return ErrorAndNoNetworkAndFavoriteScreen(
-                          text: "something_went_wrong_error_msg".tr(),
-                          path: errorImage,
+                          ),
+                          separatorBuilder: (_, __) => const Divider(
+                            height: 1,
+                            color: AppColors.primaryColorOfApp,
+                          ),
                         );
                       }
-                    }),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Utility.getInstance().showAlertDialog(
-                    context: context,
-                    alertTitle: 'log_out_question'.tr(),
-                    popButtonColor: AppColors.backgroundColorOfApp,
-                    popButtonText: 'back_btn'.tr(),
-                    onPopTap: () => Navigator.of(context).pop(),
-                    isShowActionButton: true,
-                    actionButtonText: 'log_out_btn'.tr(),
-                    onTapAction: logout,
-                    actionButtonColor: AppColors.redAccent300,
-                    popButtonTextColor: AppColors.blackColor,
-                  );
-                },
-                child: Container(
-                  color: AppColors.whiteColor,
-                  child: CustomListTile(
-                    title: 'log_out_btn'.tr(),
-                    icon: const Icon(
-                      Icons.logout_rounded,
-                      // size: 28,
-                      // color: AppColors.blackColor38,
-                    ),
+                    } else {
+                      return ErrorAndNoNetworkAndFavoriteScreen(
+                        text: "something_went_wrong_error_msg".tr(),
+                        path: errorImage,
+                      );
+                    }
+                  }),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                Utility.getInstance().showAlertDialog(
+                  context: context,
+                  alertTitle: 'log_out_question'.tr(),
+                  popButtonColor: AppColors.backgroundColorOfApp,
+                  popButtonText: 'back_btn'.tr(),
+                  onPopTap: () => Navigator.of(context).pop(),
+                  isShowActionButton: true,
+                  actionButtonText: 'log_out_btn'.tr(),
+                  onTapAction: logout,
+                  actionButtonColor: AppColors.redAccent300,
+                  popButtonTextColor: AppColors.blackColor,
+                );
+              },
+              child: Container(
+                color: AppColors.whiteColor,
+                child: CustomListTile(
+                  title: 'log_out_btn'.tr(),
+                  icon: const Icon(
+                    Icons.logout_rounded,
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -318,8 +302,6 @@ class RadioListBuilderState extends State<RadioListBuilder> {
   @override
   void initState() {
     super.initState();
-    print("INIT STATE");
-    print(widget.langCode);
     if (widget.langCode == 'en') {
       _isRadioSelected = false;
     } else {
@@ -340,7 +322,6 @@ class RadioListBuilderState extends State<RadioListBuilder> {
   Widget build(BuildContext context) {
     Language language = Provider.of<Language>(context);
     return Column(
-      // mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -382,7 +363,7 @@ class RadioListBuilderState extends State<RadioListBuilder> {
             saveLanguage();
             language.onLanguageChanged();
           },
-          borderColor: AppColors.buttonBackgroundColor,
+          borderColor: AppColors.primaryColorOfApp,
         ),
       ],
     );

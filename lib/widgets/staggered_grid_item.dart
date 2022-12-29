@@ -25,7 +25,6 @@ class StaggeredGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var locale = context.locale.languageCode;
     return Container(
       decoration: BoxDecoration(
@@ -33,7 +32,7 @@ class StaggeredGridItem extends StatelessWidget {
           Radius.circular(15),
         ),
         border: Border.all(
-          color: Colors.grey,
+          color: AppColors.grey,
           width: 0.1,
         ),
         color: AppColors.whiteColor,
@@ -104,11 +103,11 @@ class StaggeredGridItem extends StatelessWidget {
             text: locale == 'az' ? regionAz : region,
             spacing: 3,
             size: 13,
-            color: AppColors.buttonBackgroundColor,
-            icon: Icon(
+            color: AppColors.primaryColorOfApp,
+            icon: const Icon(
               Icons.location_on_outlined,
               size: 13,
-              color: AppColors.buttonBackgroundColor,
+              color: AppColors.primaryColorOfApp,
             ),
             isIconFirst: true,
           ),
@@ -116,7 +115,8 @@ class StaggeredGridItem extends StatelessWidget {
       ],
     );
   }
-  Widget _buildError(double? width, double? height){
+
+  Widget _buildError(double? width, double? height) {
     return Center(
       child: SvgPicture.asset(
         placeholderImage,
@@ -126,4 +126,3 @@ class StaggeredGridItem extends StatelessWidget {
     );
   }
 }
-

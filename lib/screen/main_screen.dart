@@ -23,7 +23,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-    print("MAIN SCREEN TRIGGERED");
     return StreamBuilder<app.User?>(
         stream: authService.user,
         builder: (
@@ -31,8 +30,6 @@ class _MainScreenState extends State<MainScreen> {
           AsyncSnapshot<app.User?> snapshot,
         ) {
           if (snapshot.connectionState == ConnectionState.active) {
-            print("ACTIVE");
-            print(snapshot.data);
             final app.User? user = snapshot.data;
             return user == null
                 ? Wrapper(
@@ -44,11 +41,10 @@ class _MainScreenState extends State<MainScreen> {
                     bottomNavIndex: widget.bottomNavIndex,
                   );
           } else {
-            print("PROGRESS");
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: SpinKitThreeBounce(
-                  color: AppColors.buttonBackgroundColor,
+                  color: AppColors.primaryColorOfApp,
                   size: 25.0,
                 ),
               ),

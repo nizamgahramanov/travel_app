@@ -1,11 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/auth_service.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 
@@ -62,8 +60,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   void _checkNewPasswordValidation(String character) {
-    print("_checkNewPasswordValidation");
-    print(_newPasswordController.text.length);
     if (_newPasswordController.text.length >= 6) {
       setState(() {
         _minimumPasswordLength = true;
@@ -116,12 +112,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   void _checkRepeatPasswordValidation(String character) {
-    print("_checkRepeatPasswordValidation");
     if (_newPasswordController.text == _repeatPasswordController.text) {
       setState(() {
         _isShowDoneButton = true;
       });
-      print("SHOW BUTTON TRUE");
     } else {
       setState(() {
         _isShowDoneButton = false;
@@ -130,9 +124,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   void updateUserPassword(String newPassword, String email) async {
-    print("saveResetPassword");
-    print(email);
-
     if (_isShowDoneButton) {
       final String? base16Encrypted =
           await FireStoreService().getUserPasswordFromFirestore(email);
@@ -155,7 +146,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       oldPassword,
       email,
     );
-    print("KURN");
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -167,7 +157,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   void saveForm() {
-    print("SAVE FORM");
     FocusScope.of(context).unfocus();
     _resetPasswordForm.currentState!.save();
   }
@@ -176,8 +165,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print("ARGUMENT EMA");
-    print(args['email']);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.backgroundColorOfApp,
@@ -197,7 +184,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       AppLightText(
                         text: 'new_password_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -241,7 +228,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
                       AppLightText(
                         text: 'repeat_password_title'.tr(),
                         size: 18,
-                        color: Colors.black,
+                        color: AppColors.blackColor,
                         fontWeight: FontWeight.bold,
                         spacing: 2,
                         padding: EdgeInsets.zero,
@@ -353,7 +340,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: () => saveForm(),
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

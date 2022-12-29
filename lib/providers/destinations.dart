@@ -23,11 +23,11 @@ class Destinations with ChangeNotifier {
     return _destinationItems.firstWhere((element) => element.id == id);
   }
 
-  void saveData(
+  void saveData(BuildContext context,
       Destination newDestination, List<File?> destinationPhoto) async {
     print("Destination item");
     print(newDestination.createMap().toString());
-    final urlList = await storage_service.saveDestinationImages(
+    final urlList = await storage_service.saveDestinationImages(context,
         newDestination, destinationPhoto);
     print('url');
     newDestination.photoUrl = urlList;

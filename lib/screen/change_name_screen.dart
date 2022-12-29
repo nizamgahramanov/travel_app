@@ -61,26 +61,20 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
   }
 
   void checkIfNameChanged(String text) {
-    print("checkIfNameChanged");
     if ((widget.firstName != _firstnameController?.text ||
             widget.lastName != _lastnameController?.text) &&
         (_firstnameController?.text != '' && _lastnameController?.text != '')) {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = true;
       });
     } else {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = false;
       });
     }
   }
 
   void saveForm() {
-    print("SAVE FORM");
     FocusScope.of(context).unfocus();
     _changeNameForm.currentState!.save();
   }
@@ -174,7 +168,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: () => saveForm(),
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -191,22 +185,22 @@ class _ChangeNameScreenState extends State<ChangeNameScreen>
 //       {required Offset begin, required Offset end, required double progress}) {
 //     _x = begin.dx + (end.dx - begin.dx) * progress;
 //     _y = begin.dy + (end.dy - begin.dy) * progress;
-//     print('x offset');
-//     print(_x);
-//     print('y offset');
-//     print(_y);
+//     'x offset');
+//     _x);
+//     'y offset');
+//     _y);
 //     return end;
 //   }
 //
 //   @override
 //   Animation<double> getRotationAnimation({required Animation<double> parent}) {
-//     print('getRotationAnimation');
+//     'getRotationAnimation');
 //     return Tween<double>(begin: 0.5, end: 1.0).animate(parent);
 //   }
 //
 //   @override
 //   Animation<double> getScaleAnimation({required Animation<double> parent}) {
-//     print('getScaleAnimation');
+//     'getScaleAnimation');
 //     return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
 //   }
 // }

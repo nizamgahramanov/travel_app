@@ -1,7 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
+
+import '../helpers/app_colors.dart';
 
 class ErrorAndNoNetworkAndFavoriteScreen extends StatelessWidget {
   const ErrorAndNoNetworkAndFavoriteScreen({
@@ -36,7 +37,7 @@ class ErrorAndNoNetworkAndFavoriteScreen extends StatelessWidget {
                   spacing: 0,
                   text: text,
                   size: 18,
-                  color: Colors.black54,
+                  color: AppColors.blackColor54,
                   alignment: Alignment.center,
                   padding: EdgeInsets.zero,
                   fontWeight: FontWeight.bold,

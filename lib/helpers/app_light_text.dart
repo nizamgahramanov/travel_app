@@ -21,7 +21,7 @@ class AppLightText extends StatelessWidget {
     this.icon,
     this.alignment = Alignment.centerLeft,
     required this.padding,
-    required this.spacing,
+    this.spacing=0,
     this.fontWeight = FontWeight.normal,
     this.textAlign = TextAlign.center
   }) : super(key: key);

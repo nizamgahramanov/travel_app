@@ -39,17 +39,12 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   }
 
   void checkIfPasswordChanged(String text) {
-    print("checkIfNameChanged");
     if (_passwordController.text != '') {
       setState(() {
-        print("isShow");
-        print(_isShowDoneButton);
         _isShowDoneButton = true;
       });
     } else {
       setState(() {
-        print("isShow");
-        print(_isShowDoneButton);
         _isShowDoneButton = false;
       });
     }
@@ -76,8 +71,6 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
   }
 
   void goForgotPasswordScreen(String email) {
-    print("EMAILLLL");
-    print(email);
     Navigator.pushNamed(context, ChangePasswordScreen.routeName,
         arguments: {'email': email});
   }
@@ -101,14 +94,13 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
         _goProfileScreen();
       } else {
         Utility.getInstance().showAlertDialog(
-          popButtonColor: AppColors.backgroundColorOfApp,
-          context: context,
-          alertTitle: 'password_is_not_correct_dialog_msg'.tr(),
-          alertMessage: 'please_check_and_try_again_dialog_msg'.tr(),
-          popButtonText: 'back_btn'.tr(),
-          onPopTap: () => Navigator.of(context).pop(),
-          popButtonTextColor: Colors.black,
-        );
+            popButtonColor: AppColors.backgroundColorOfApp,
+            context: context,
+            alertTitle: 'password_is_not_correct_dialog_msg'.tr(),
+            alertMessage: 'please_check_and_try_again_dialog_msg'.tr(),
+            popButtonText: 'back_btn'.tr(),
+            onPopTap: () => Navigator.of(context).pop(),
+            popButtonTextColor: AppColors.blackColor);
       }
     }
   }
@@ -167,7 +159,7 @@ class _LoginWithPasswordScreenState extends State<LoginWithPasswordScreen> {
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

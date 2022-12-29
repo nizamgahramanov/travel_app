@@ -1,11 +1,17 @@
 import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+
+import '../helpers/app_colors.dart';
+import '../helpers/utility.dart';
 import '../model/destination.dart';
 
 class FirebaseStorageService {
   final ref = FirebaseStorage.instance;
 
-  Future<List<String>> saveDestinationImages(
+  Future<List<String>> saveDestinationImages(BuildContext context,
       Destination destination, List<File?> destinationPhoto) async {
     int i = 0;
     final List<String> returnedListOfPath = [];
@@ -23,8 +29,15 @@ class FirebaseStorageService {
         returnedListOfPath.add(url);
 
         i++;
-      } catch (err) {
-        print(err);
+      } catch (error) {
+        Utility.getInstance().showAlertDialog(
+          context: context,
+          alertTitle: 'oops_error_title'.tr(),
+          alertMessage: 'unknown_error_msg'.tr(),
+          popButtonText: 'ok_btn'.tr(),
+          popButtonColor: AppColors.redAccent300,
+          onPopTap: () => Navigator.of(context).pop(),
+        );
       }
     }
     return returnedListOfPath;

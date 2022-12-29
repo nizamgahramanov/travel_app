@@ -4,7 +4,6 @@ import 'package:shimmer/shimmer.dart';
 import '../helpers/app_colors.dart';
 
 class ShimmerEffect extends StatelessWidget {
-  // const ShimmerEffect({Key? key, required this.height, required this.width}) : super(key: key);
   final double height;
   final double width;
   final bool isCircle;

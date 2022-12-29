@@ -1,8 +1,7 @@
 import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/helpers/custom_button.dart';
 
@@ -20,20 +19,13 @@ class _DestinationImagePickerState extends State<DestinationImagePicker> {
   List<XFile?> pickedImages = [];
 
   final ImagePicker imagePicker = ImagePicker();
-  void pickImage() async {
+
+  void _pickImage() async {
     final List<XFile> selectedImages = await imagePicker.pickMultiImage(
       imageQuality: 100,
       maxWidth: 800,
       maxHeight: 800,
     );
-    for (var selectedImageItem in selectedImages) {
-      var a = await selectedImageItem.readAsBytes();
-      var b = await decodeImageFromList(a);
-      print("Selected Image Height And Width");
-      print(b.height);
-      print(b.width);
-    }
-
     setState(() {
       if (selectedImages.isNotEmpty) {
         pickedImages.addAll(selectedImages);
@@ -49,7 +41,7 @@ class _DestinationImagePickerState extends State<DestinationImagePicker> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CustomButton(
-          onTap: pickImage,
+          onTap: _pickImage,
           buttonText: 'add_photo'.tr(),
           borderRadius: 15,
           buttonColor: AppColors.transparent,
@@ -65,7 +57,7 @@ class _DestinationImagePickerState extends State<DestinationImagePicker> {
         const SizedBox(
           height: 25,
         ),
-        Container(
+        SizedBox(
           height: 80,
           width: double.maxFinite,
           child: ListView.builder(

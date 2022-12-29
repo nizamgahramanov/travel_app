@@ -1,9 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/screen/main_screen.dart';
@@ -20,22 +17,24 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen> {
   @override
-  void initState() {
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   statusBarColor: Colors.transparent,
-    //   systemNavigationBarColor: Colors.black,
-    //   systemNavigationBarIconBrightness: Brightness.dark,
-    // ));
-    // precacheImage(AssetImage(startScreenImage), context);
-    super.initState();
-  }
-  @override
   void didChangeDependencies() {
-    precacheImage(AssetImage(startScreenImage), context);
+    precacheImage(const AssetImage(startScreenImage), context);
     super.didChangeDependencies();
   }
 
   void goToMainScreen() {
+    preloadSvgFiles();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MainScreen(
+          bottomNavIndex: 0,
+        ),
+      ),
+    );
+  }
+
+  void preloadSvgFiles() {
     Future.wait([
       precachePicture(
         ExactAssetPicture(
@@ -57,15 +56,11 @@ class _StartScreenState extends State<StartScreen> {
             SvgPicture.svgStringDecoderBuilder, googleColorfulIconImage),
         null,
       ),
-    ]);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainScreen(
-          bottomNavIndex: 0,
-        ),
+      precachePicture(
+        ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, offlineImage),
+        null,
       ),
-    );
+    ]);
   }
 
   @override
@@ -75,49 +70,34 @@ class _StartScreenState extends State<StartScreen> {
       body: Container(
         width: double.maxFinite,
         height: double.maxFinite,
-        decoration: BoxDecoration(
-          color: AppColors.mainColor,
-          image: const DecorationImage(
+        decoration: const BoxDecoration(
+          color: AppColors.backgroundColorOfApp,
+          image: DecorationImage(
             image: AssetImage(startScreenImage),
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          height: double.maxFinite,
-          width: double.maxFinite,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                alignment: Alignment.topCenter,
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: AppLightText(
-                  text: 'discover_the_land_of_fire'.tr(),
-                  color: AppColors.whiteColor,
-                  size: 32,
-                  fontWeight: FontWeight.bold,
-                  spacing: 0,
-                  padding: EdgeInsets.zero,
-                  alignment: Alignment.center,
-                ),
+              AppLightText(
+                text: 'discover_the_land_of_fire'.tr(),
+                color: AppColors.whiteColor,
+                size: 32,
+                fontWeight: FontWeight.bold,
+                padding: EdgeInsets.zero,
+                alignment: Alignment.centerLeft,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 30,
+                height: 100,
               ),
-              Expanded(child: Container()),
               CustomButton(
                 buttonText: 'get_started_btn'.tr(),
-                // onTap: () {
-                //   FirebaseCrashlytics.instance.crash();
-                // },
                 onTap: goToMainScreen,
                 borderRadius: 15,
-                horizontalMargin: 20,
-                verticalMargin: 20,
                 borderColor: AppColors.backgroundColorOfApp,
               ),
             ],

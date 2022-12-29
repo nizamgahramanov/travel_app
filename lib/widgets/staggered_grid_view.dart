@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/helpers/app_colors.dart';
@@ -41,8 +40,6 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
   @override
   Widget build(BuildContext context) {
     final providerData = Provider.of<Destinations>(context);
-    print("Circle Tab");
-    print(providerData);
     TabController tabController =
         TabController(length: tabNames.length, vsync: this);
     return StreamBuilder<List<Destination>>(
@@ -58,20 +55,19 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                 path: errorImage,
               );
             } else {
-              print(snapshot.data);
               return Column(
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
                     child: TabBar(
                       labelPadding: const EdgeInsets.only(right: 20),
-                      unselectedLabelColor: Colors.black38,
-                      labelColor: AppColors.buttonBackgroundColor,
+                      unselectedLabelColor: AppColors.blackColor38,
+                      labelColor: AppColors.primaryColorOfApp,
                       controller: tabController,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
-                      indicator: CustomTabIndicator(
-                        color: AppColors.buttonBackgroundColor,
+                      indicator: const CustomTabIndicator(
+                        color: AppColors.primaryColorOfApp,
                         isCircle: false,
                       ),
                       tabs: tabNames
@@ -108,7 +104,6 @@ class _StaggeredGridViewState extends State<StaggeredGridView>
                             mainAxisSpacing: 12,
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {
-                                print("CLICKED");
                                 Navigator.of(context).pushNamed(
                                   DetailScreen.routeName,
                                   arguments:

@@ -45,12 +45,12 @@ class _DetailScreenState extends State<DetailScreen>
         popButtonText: 'back_btn'.tr(),
         onPopTap: () => Navigator.of(context).pop(),
         popButtonColor: AppColors.backgroundColorOfApp,
-        popButtonTextColor: Colors.black,
+        popButtonTextColor: AppColors.blackColor,
         isShowActionButton: true,
         alertMessage:
             'please_sign_up_before_make_favorite_dialog_msg_subtitle'.tr(),
         actionButtonText: 'sign_up_btn'.tr(),
-        actionButtonColor: AppColors.buttonBackgroundColor,
+        actionButtonColor: AppColors.primaryColorOfApp,
         onTapAction: () => Navigator.push(
           context,
           MaterialPageRoute(
@@ -104,14 +104,10 @@ class _DetailScreenState extends State<DetailScreen>
       "name": clickedDestination.name
     };
     void showDestinationOnMap() {
-      print("VIEW ON MAP");
       Navigator.of(context)
           .pushNamed(MapScreen.routeName, arguments: mapArgument);
     }
 
-    final FlexibleSpaceBarSettings? settings =
-        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-    print(settings);
     return Scaffold(
       backgroundColor: AppColors.backgroundColorOfApp,
       body: NestedScrollView(
@@ -121,28 +117,29 @@ class _DetailScreenState extends State<DetailScreen>
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverAppBar(
-                // titleSpacing: 20,
                 centerTitle: true,
                 leadingWidth: 75,
                 backgroundColor: _innerListIsScrolled
-                    ? AppColors.buttonBackgroundColor
+                    ? AppColors.primaryColorOfApp
                     : AppColors.backgroundColorOfApp,
                 automaticallyImplyLeading: true,
                 leading: Container(
                   margin: const EdgeInsets.only(
-                      left: 15, right: 5, top: 5, bottom: 5),
+                    left: 15,
+                    right: 5,
+                    top: 5,
+                    bottom: 5,
+                  ),
                   // width: 60,
                   // color: Colors.redAccent,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
                       padding: EdgeInsets.zero,
-                      primary: AppColors.buttonBackgroundColor,
+                      primary: AppColors.primaryColorOfApp,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_rounded,
                       color: AppColors.backgroundColorOfApp,
                     ),
@@ -160,14 +157,17 @@ class _DetailScreenState extends State<DetailScreen>
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(
-                            child: ShimmerEffect.circular(
-                              width: 45,
-                              height: 45,
-                              shapeBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                          return Container(
+                            margin: const EdgeInsets.only(right: 5),
+                            child: Center(
+                              child: ShimmerEffect.circular(
+                                width: 45,
+                                height: 45,
+                                shapeBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                isCircle: true,
                               ),
-                              isCircle: true,
                             ),
                           );
                         } else if (snapshot.connectionState ==
@@ -184,7 +184,7 @@ class _DetailScreenState extends State<DetailScreen>
                               // color: Colors.redAccent,
                               width: 50,
                               margin: const EdgeInsets.only(
-                                right: 15,
+                                right: 20,
                                 left: 5,
                                 top: 5,
                                 bottom: 5,
@@ -195,15 +195,15 @@ class _DetailScreenState extends State<DetailScreen>
                                 style: ElevatedButton.styleFrom(
                                   shape: const CircleBorder(),
                                   padding: EdgeInsets.zero,
-                                  primary: AppColors.buttonBackgroundColor,
+                                  primary: AppColors.primaryColorOfApp,
                                 ),
                                 child: !snapshot.hasData ||
                                         snapshot.data!.docs.isEmpty
-                                    ? Icon(
+                                    ? const Icon(
                                         Icons.favorite_border_outlined,
                                         color: AppColors.backgroundColorOfApp,
                                       )
-                                    : Icon(
+                                    : const Icon(
                                         Icons.favorite,
                                         color: AppColors.backgroundColorOfApp,
                                       ),
@@ -235,36 +235,33 @@ class _DetailScreenState extends State<DetailScreen>
                           horizontal: 20,
                         ),
                   centerTitle: false,
-                  title: Container(
-                    // color: Colors.redAccent,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        AppLightText(
-                          text: clickedDestination.name,
-                          size: 16,
-                          color: AppColors.backgroundColorOfApp,
-                          fontWeight: FontWeight.bold,
-                          spacing: 2,
-                          padding: EdgeInsets.zero,
-                        ),
-                        CustomIconText(
-                          text: locale == 'az'
-                              ? clickedDestination.regionAz
-                              : clickedDestination.region,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AppLightText(
+                        text: clickedDestination.name,
+                        size: 16,
+                        color: AppColors.backgroundColorOfApp,
+                        fontWeight: FontWeight.bold,
+                        spacing: 2,
+                        padding: EdgeInsets.zero,
+                      ),
+                      CustomIconText(
+                        text: locale == 'az'
+                            ? clickedDestination.regionAz
+                            : clickedDestination.region,
+                        size: 12,
+                        color: AppColors.backgroundColorOfApp,
+                        icon: const Icon(
+                          Icons.location_on_outlined,
                           size: 12,
                           color: AppColors.backgroundColorOfApp,
-                          icon: Icon(
-                            Icons.location_on_outlined,
-                            size: 12,
-                            color: AppColors.backgroundColorOfApp,
-                          ),
-                          spacing: 3,
-                          isIconFirst: true,
-                        )
-                      ],
-                    ),
+                        ),
+                        spacing: 3,
+                        isIconFirst: true,
+                      )
+                    ],
                   ),
                   background: Builder(
                     builder: (BuildContext context) {
@@ -290,7 +287,6 @@ class _DetailScreenState extends State<DetailScreen>
                 SliverToBoxAdapter(
                   child: Container(
                     width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height * .4,
                     color: AppColors.backgroundColorOfApp,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -301,40 +297,39 @@ class _DetailScreenState extends State<DetailScreen>
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            // color: Colors.brown,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                if(locale != 'az')
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (locale != 'az')
                                 AppLightText(
                                   text: 'by_msg'.tr(),
                                   padding: EdgeInsets.zero,
                                   spacing: 0,
                                   size: 8,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.buttonBackgroundColor,
+                                  color: AppColors.primaryColorOfApp,
                                 ),
+                              AppLightText(
+                                text: clickedDestination.author,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                ),
+                                spacing: 0,
+                                size: 12,
+                                fontWeight: FontWeight.normal,
+                                color: AppColors.primaryColorOfApp,
+                              ),
+                              if (locale == 'az')
                                 AppLightText(
-                                  text: clickedDestination.author,
-                                  padding: EdgeInsets.symmetric(horizontal: 5,vertical: 0),
+                                  text: 'by_msg'.tr(),
+                                  padding: EdgeInsets.zero,
                                   spacing: 0,
-                                  size: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.blackColor,
+                                  size: 8,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primaryColorOfApp,
                                 ),
-                                if(locale == 'az')
-                                  AppLightText(
-                                    text: 'by_msg'.tr(),
-                                    padding: EdgeInsets.zero,
-                                    spacing: 0,
-                                    size: 8,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.buttonBackgroundColor,
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
                           // const SizedBox(
                           //   height: 15,
@@ -375,7 +370,7 @@ class _DetailScreenState extends State<DetailScreen>
               horizontalMargin: 20,
               verticalMargin: 20,
               onTap: () => showDestinationOnMap(),
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -405,11 +400,6 @@ class _MyBackgroundState extends State<MyBackground> {
   Widget build(BuildContext context) {
     final FlexibleSpaceBarSettings? settings =
         context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>();
-    if (settings != null) {
-      print(settings.currentExtent);
-      print(settings.maxExtent);
-      print(kToolbarHeight);
-    }
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -467,11 +457,11 @@ class _MyBackgroundState extends State<MyBackground> {
                               borderRadius: BorderRadius.circular(13),
                               border: Border.all(
                                 width: .5,
-                                color: AppColors.buttonBackgroundColor,
+                                color: AppColors.primaryColorOfApp,
                               ),
-                              boxShadow: [
+                              boxShadow: const [
                                 BoxShadow(
-                                  color: AppColors.buttonBackgroundColor,
+                                  color: AppColors.primaryColorOfApp,
                                   spreadRadius: 5,
                                   blurRadius: 5,
                                 )

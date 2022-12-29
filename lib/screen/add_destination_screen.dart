@@ -12,6 +12,7 @@ import 'package:travel_app/model/destination_location.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:uuid/uuid.dart';
+
 import '../helpers/app_light_text.dart';
 import '../helpers/utility.dart';
 import '../model/destination.dart';
@@ -42,50 +43,26 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
   final _overviewAzController = TextEditingController();
   final _regionController = TextEditingController();
   final _regionAzController = TextEditingController();
-  final _typeController = TextEditingController();
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
   final _nameFocusNode = FocusNode();
   final _overviewFocusNode = FocusNode();
   final _overviewAzFocusNode = FocusNode();
   final _regionFocusNode = FocusNode();
   final _regionAzFocusNode = FocusNode();
-  List<File?> _destinationImageFile = [];
+
+  final List<File?> _destinationImageFile = [];
   DestinationLocation? _destinationLocation;
-  var _isLoading = false;
 
   String dropdownValue = destinationType.first;
-
-  // var destinationItem = Destination(
-  //   id: const Uuid().v4(),
-  //   name: "",
-  //   overview: "",
-  //   overviewAz: "",
-  //   region: "",
-  //   regionAz: "",
-  //   type: "",
-  //   photoUrl: [],
-  //   geoPoint: const GeoPoint(40.6079186, 49.5886951),
-  // );
-
   void _saveForm() async {
     final isValid = _addDestinationForm.currentState!.validate();
-    setState(() {
-      _isLoading = true;
-    });
-    print(isValid);
     if (!isValid) {
       return;
     }
     _addDestinationForm.currentState!.save();
     try {
       if (_destinationImageFile.isNotEmpty) {
-        var us =FirebaseAuth.instance.currentUser;
-        var user = await FireStoreService().getUserByUid(us!.uid);
-        print("NAME");
-        print(us);
-        print("USER DATA");
-        print(user!);
+        var currentUser = FirebaseAuth.instance.currentUser;
+        var userData = await FireStoreService().getUserByUid(currentUser!.uid);
         var destinationItem = Destination(
             id: const Uuid().v4(),
             name: _nameController.text,
@@ -95,25 +72,16 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
             regionAz: _regionAzController.text,
             category: dropdownValue,
             photoUrl: _destinationImageFile,
-            author: '${user['firstName'].trim()} ${user['lastName']}' ,
+            author:
+                '${userData!['firstName'].trim()} ${userData['lastName'].trim()}',
             geoPoint: _destinationLocation != null
                 ? GeoPoint(
                     _destinationLocation!.latitude,
                     _destinationLocation!.longitude,
                   )
                 : null);
-        Provider.of<Destinations>(context, listen: false)
-            .saveData(destinationItem, _destinationImageFile);
-      } else {
-        print("I am here");
-        Utility.getInstance().showAlertDialog(
-          context: context,
-          alertTitle: 'oops_error_title'.tr(),
-          alertMessage: 'add_image_file_dialog_msg'.tr(),
-          popButtonText: 'ok_btn'.tr(),
-          popButtonColor: AppColors.redAccent300,
-          onPopTap: () => Navigator.of(context).pop(),
-        );
+
+        saveDestinationItem(destinationItem);
       }
     } catch (error) {
       Utility.getInstance().showAlertDialog(
@@ -125,10 +93,11 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
         onPopTap: () => Navigator.of(context).pop(),
       );
     }
+  }
 
-    setState(() {
-      _isLoading = false;
-    });
+  void saveDestinationItem(Destination destination) {
+    Provider.of<Destinations>(context, listen: false)
+        .saveData(context, destination, _destinationImageFile);
     Navigator.of(context).pop();
   }
 
@@ -136,18 +105,15 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
     for (var xFile in xFileList) {
       _destinationImageFile.add(File(xFile!.path));
     }
-    // _userImageFile = File(file[0]!.path);
   }
 
   void _selectPlace(double lat, double lng) {
-    print(lat.toString());
     _destinationLocation = DestinationLocation(latitude: lat, longitude: lng);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backgroundColorOfApp,
       body: CustomNestedScrollView(
         title: 'add_destination'.tr(),
@@ -227,8 +193,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         },
                         onFieldSubmitted: (_) => FocusScope.of(context)
                             .requestFocus(_regionFocusNode),
-                        // onFieldSubmitted: (_) => saveForm(),
-                        // onSaved: (_) => saveEmailChange(),
                       ),
                     ],
                   ),
@@ -261,8 +225,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         },
                         onFieldSubmitted: (_) => FocusScope.of(context)
                             .requestFocus(_overviewAzFocusNode),
-                        // onFieldSubmitted: (_) => saveForm(),
-                        // onSaved: (_) => saveEmailChange(),
                       ),
                     ],
                   ),
@@ -295,8 +257,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         },
                         onFieldSubmitted: (_) => FocusScope.of(context)
                             .requestFocus(_regionAzFocusNode),
-                        // onFieldSubmitted: (_) => saveForm(),
-                        // onSaved: (_) => saveEmailChange(),
                       ),
                     ],
                   ),
@@ -329,8 +289,6 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         },
                         onFieldSubmitted: (_) => FocusScope.of(context)
                             .requestFocus(_regionAzFocusNode),
-                        // onFieldSubmitted: (_) => saveForm(),
-                        // onSaved: (_) => saveEmailChange(),
                       ),
                     ],
                   ),
@@ -356,7 +314,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(
-                            color: AppColors.buttonBackgroundColor,
+                            color: AppColors.primaryColorOfApp,
                             width: 1,
                           ),
                         ),
@@ -366,15 +324,13 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
                             child: DropdownButton<String>(
                               isExpanded: true,
                               value: dropdownValue,
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.arrow_downward,
-                                color: AppColors.buttonBackgroundColor,
+                                color: AppColors.primaryColorOfApp,
                               ),
-                              style: TextStyle(
-                                  color: AppColors.buttonBackgroundColor),
+                              style: const TextStyle(
+                                  color: AppColors.primaryColorOfApp),
                               onChanged: (String? value) {
-                                print("VALUE");
-                                print(value);
                                 setState(() {
                                   dropdownValue = value!;
                                 });
@@ -419,7 +375,7 @@ class _AddDestinationScreenState extends State<AddDestinationScreen> {
         buttonText: 'done_btn'.tr(),
         borderRadius: 15,
         horizontalMargin: 20,
-        borderColor: AppColors.buttonBackgroundColor,
+        borderColor: AppColors.primaryColorOfApp,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

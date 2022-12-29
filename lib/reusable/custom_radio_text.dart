@@ -33,7 +33,7 @@ class CustomRadioText extends StatelessWidget {
           children: <Widget>[
             Radio<bool>(
               groupValue: groupValue,
-              activeColor: AppColors.buttonBackgroundColor,
+              activeColor: AppColors.primaryColorOfApp,
               value: value,
               onChanged: (bool? newValue) {
                 onChanged(newValue!);
@@ -42,7 +42,6 @@ class CustomRadioText extends StatelessWidget {
             AppLightText(
               text: label,
               size: 15,
-              // color: Colors.black,
               padding: EdgeInsets.zero,
               spacing: 0,
             ),

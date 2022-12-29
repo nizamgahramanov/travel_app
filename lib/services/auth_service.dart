@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:travel_app/helpers/utility.dart';
 import 'package:travel_app/model/user.dart';
+
 import '../exception/custom_auth_exception.dart';
 import '../helpers/app_colors.dart';
 import 'firebase_firestore_service.dart';
@@ -21,29 +22,19 @@ class AuthService {
   }
 
   Stream<User?>? get user {
-    print("USER AUTH");
     return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   Future<auth.UserCredential?> signInWithGoogle(BuildContext context) async {
     try {
-      print("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount =
           await GoogleSignIn(scopes: <String>["email"]).signIn();
-      print("Error not here");
-      print(googleSignInAccount);
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
-
-      print("Error not here2");
-      print(googleSignInAuthentication);
-
       final credential = auth.GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      print("Error not here3");
-
       auth.UserCredential result =
           await _firebaseAuth.signInWithCredential(credential);
       if (result.user != null) {
@@ -70,8 +61,6 @@ class AuthService {
       );
       throw CustomAuthException(context, authError.code, authError.message!);
     } catch (e) {
-      print("error message");
-      print(e);
       Utility.getInstance().showAlertDialog(
         context: context,
         alertTitle: 'oops_error_title'.tr(),
@@ -92,7 +81,6 @@ class AuthService {
     required String password,
   }) async {
     try {
-      print("signInWithEmailAndPassword");
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -136,8 +124,6 @@ class AuthService {
     required String password,
   }) async {
     try {
-      print("signInWithEmailAndPassword");
-
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -186,7 +172,6 @@ class AuthService {
         FireStoreService().updateUserName(
             firstName, lastName, _firebaseAuth.currentUser!.uid);
       }).catchError((authError) {
-        print(authError.message);
         Utility.getInstance().showAlertDialog(
           context: context,
           alertTitle: 'oops_error_title'.tr(),
@@ -227,16 +212,12 @@ class AuthService {
           auth.EmailAuthProvider.credential(
               email: _firebaseAuth.currentUser!.email!, password: password),
         );
-        print("Update user eamil");
         _firebaseAuth.currentUser!.updateEmail(email).then((_) {
-          print("THEN BLOCK FIREDS");
           FireStoreService().updateUserEmail(
             email,
             _firebaseAuth.currentUser!.uid,
           );
         }).catchError((authError) {
-          print("ERRROR HAPPPENENEDEDEDE");
-          print(authError.message);
           Utility.getInstance().showAlertDialog(
             context: context,
             alertTitle: 'oops_error_title'.tr(),
@@ -273,25 +254,18 @@ class AuthService {
   void updateUserPassword(BuildContext context, String password,
       String oldPassword, String email) async {
     try {
-      print("UPDATET PASSWORD AUTHSERVICE");
-      print(oldPassword);
-      print(email);
       await _firebaseAuth.currentUser!.reauthenticateWithCredential(
         auth.EmailAuthProvider.credential(
           email: email,
           password: oldPassword,
         ),
       );
-      print("Update user eamil");
       _firebaseAuth.currentUser!.updatePassword(password).then((_) {
-        print("THEN BLOCK FIREDS");
         FireStoreService().updateUserPassword(
           password,
           _firebaseAuth.currentUser!.uid,
         );
       }).catchError((authError) {
-        print("ERRROR HAPPPENENEDEDEDE");
-        print(authError.message);
         Utility.getInstance().showAlertDialog(
           context: context,
           alertTitle: 'oops_error_title'.tr(),
@@ -320,13 +294,11 @@ class AuthService {
         popButtonColor: AppColors.redAccent300,
         onPopTap: () => Navigator.of(context).pop(),
       );
-      print(e);
       throw CustomException(ctx: context, errorMessage: e.toString());
     }
   }
 
   signOut(BuildContext context) {
-    print("SIGN OUT");
     try {
       _firebaseAuth.signOut();
     } on auth.FirebaseAuthException catch (authError) {
@@ -350,12 +322,6 @@ class AuthService {
       );
       throw CustomException(ctx: context, errorMessage: e.toString());
     }
-  }
-
-  void sendResetPasswordEmail(String email) async {
-    await _firebaseAuth
-        .sendPasswordResetEmail(email: email)
-        .then((_) => print("Authservice"));
   }
 
   List<String>? splitGoogleFullName(String? fullName) {

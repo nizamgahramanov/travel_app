@@ -42,7 +42,7 @@ class CustomTextFormField extends StatelessWidget {
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 18.0,
-        color: AppColors.buttonBackgroundColor,
+        color: AppColors.primaryColorOfApp,
       ),
       decoration: InputDecoration(
         filled: true,
@@ -52,13 +52,13 @@ class CustomTextFormField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: AppColors.buttonBackgroundColor,
+            color: AppColors.primaryColorOfApp,
             width: 2,
           ),
         ),
         suffixIcon: suffixIcon,
-        suffixIconColor: AppColors.buttonBackgroundColor,
-        // focusColor: AppColors.buttonBackgroundColor
+        suffixIconColor: AppColors.primaryColorOfApp,
+        // focusColor: AppColors.primaryColorOfApp
       ),
       onSaved: onSaved,
     );

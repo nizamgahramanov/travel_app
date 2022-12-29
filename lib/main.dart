@@ -23,25 +23,19 @@ import 'package:travel_app/services/network_service.dart';
 import 'helpers/constants.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   FlutterError.onError = (errorDetails) {
-    // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };
-  // PlatformDispatcher.instance.onError = (error, stack) {
-  //   // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //   return true;
-  // };
   runApp(
     EasyLocalization(
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('az', 'Latn'),
       ],
-      fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       path: 'assets/translations',
       child: MyApp(),
     ),
@@ -63,14 +57,7 @@ class _MyAppState extends State<MyApp> {
           child: DetailScreen(),
           settings: settings,
         );
-      // case MainScreen.routeName:
-      //   return CustomPageRoute(
-      //     child: MainScreen(),
-      //     settings: settings,
-      //   );
       case PasswordScreen.routeName:
-        print("PASSWORD GO ");
-        print(settings);
         return CustomPageRoute(
           child: const PasswordScreen(),
           settings: settings,
@@ -90,16 +77,6 @@ class _MyAppState extends State<MyApp> {
           child: ChangePasswordScreen(),
           settings: settings,
         );
-      // case ChangeEmailScreen.routeName:
-      //   return CustomPageRoute(
-      //     child: const ChangeEmailScreen(),
-      //     settings: settings,
-      //   );
-      // case ChangeNameScreen.routeName:
-      //   return CustomPageRoute(
-      //     child: const ChangeNameScreen(),
-      //     settings: settings,
-      //   );
       case AddDestinationScreen.routeName:
         return CustomPageRoute(
           child: const AddDestinationScreen(),
@@ -123,20 +100,6 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  // void toggleFavorite(String id) {
-  //   print("TOGGLE FAVORITE");
-  //   final existingIndex = favorites.indexWhere((element) => element.id == id);
-  //   if (existingIndex >= 0) {
-  //     setState(() {
-  //       favorites.removeAt(existingIndex);
-  //     });
-  //   } else {
-  //     setState(() {
-  //       // favorites.add(destinations.firstWhere((element) => element.id == id));
-  //     });
-  //   }
-  // }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -153,7 +116,7 @@ class _MyAppState extends State<MyApp> {
         ),
         StreamProvider(
           create: (context) => NetworkService().controller.stream,
-          initialData: NetworkStatus.online,
+          initialData: NetworkStatus.offline,
         )
       ],
       child: MaterialApp(
@@ -161,12 +124,12 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: AppColors.buttonBackgroundColor,
+              primary: AppColors.primaryColorOfApp,
               secondary: AppColors.blackColor38),
-          textSelectionTheme: TextSelectionThemeData(
-            selectionColor: AppColors.buttonBackgroundColor,
-            cursorColor: AppColors.buttonBackgroundColor,
-            selectionHandleColor: AppColors.buttonBackgroundColor,
+          textSelectionTheme: const TextSelectionThemeData(
+            selectionColor: AppColors.primaryColorOfApp,
+            cursorColor: AppColors.primaryColorOfApp,
+            selectionHandleColor: AppColors.primaryColorOfApp,
           ),
         ),
         localizationsDelegates: context.localizationDelegates,

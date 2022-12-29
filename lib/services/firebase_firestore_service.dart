@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
+
 import '../model/destination.dart';
 import '../model/firestore_user.dart';
 
@@ -71,8 +72,6 @@ class FireStoreService {
     if (password != null) {
       encryptedPassword = EnDeCryption().encryptWithAES(password).base16;
     }
-    print("encrypted");
-    print(encryptedPassword);
     var firestoreUserItem = FirestoreUser(
       email: email,
       firstName: firstName,
@@ -96,7 +95,6 @@ class FireStoreService {
   Future<String?> getUserPasswordFromFirestore(String email) async {
     final snapshot =
         await _db.collection("users").where("email", isEqualTo: email).get();
-    print(snapshot.docs.isEmpty);
     if (snapshot.docs.isEmpty) {
       return null;
     } else {
@@ -112,7 +110,7 @@ class FireStoreService {
         .map((event) => FirestoreUser.fromFirestore(event.data()!));
   }
 
-  Future<Map<String,dynamic>?> getUserByUid(String uid) {
+  Future<Map<String, dynamic>?> getUserByUid(String uid) {
     return _db.collection("users").doc(uid).get().then((value) {
       return value.data();
     });
@@ -139,7 +137,6 @@ class FireStoreService {
   }
 
   updateUserName(String? firstName, String? lastName, String? uid) {
-    print("updateUserName");
     if (uid != null) {
       DocumentReference docRef = _db.collection('users').doc(uid);
       var batch = _db.batch();
@@ -156,6 +153,7 @@ class FireStoreService {
       batch.commit();
     }
   }
+
   updateUserPassword(String password, String? uid) {
     if (uid != null) {
       DocumentReference docRef = _db.collection('users').doc(uid);

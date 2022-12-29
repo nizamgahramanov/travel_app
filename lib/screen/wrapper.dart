@@ -33,13 +33,7 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Language language = Provider.of<Language>(context);
-    List<Widget> _icons = [
-      const Icon(Icons.home_filled),
-      const Icon(Icons.search),
-      const Icon(Icons.favorite_rounded),
-      if (widget.isLogin) const Icon(Icons.person) else const Icon(Icons.login)
-    ];
+    Provider.of<Language>(context);
     Map<int, Widget> screens = {
       0: HomeScreen(isLogin: widget.isLogin),
       1: const AlgoliaSearchScreen(),
@@ -108,12 +102,9 @@ class _WrapperState extends State<Wrapper> with SingleTickerProviderStateMixin {
         currentIndex: widget.bottomNavIndex ?? 0,
         selectedFontSize: 13,
         unselectedFontSize: 13,
-        selectedItemColor: AppColors.buttonBackgroundColor,
+        selectedItemColor: AppColors.primaryColorOfApp,
         showUnselectedLabels: true,
         showSelectedLabels: true,
-        // selectedLabelStyle: TextStyle(color: Colors.black),
-        // unselectedIconTheme: IconThemeData(color: Colors.black),
-        // elevation: 10,
         unselectedItemColor: AppColors.blackColor38,
       ),
     );

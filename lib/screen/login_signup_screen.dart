@@ -28,20 +28,16 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   bool _isShowSaveButton = false;
 
   void checkIfEmailChanged(String character) {
-    print("checkIfNameChanged");
     if (_emailController.text != '' &&
         RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
             .hasMatch(_emailController.text)) {
       // if(_emailController.text != ''){
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = true;
       });
     } else {
       setState(() {
         if (_isShowSaveButton) {
-          print("isShow false");
           _isShowSaveButton = false;
         }
       });
@@ -64,7 +60,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   AppLightText(
                     text: 'email_title'.tr(),
                     size: 18,
-                    color: Colors.black,
+                    color: AppColors.blackColor,
                     fontWeight: FontWeight.bold,
                     spacing: 2,
                     padding: EdgeInsets.zero,
@@ -93,7 +89,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       buttonText: 'continue_btn'.tr(),
                       onTap: saveForm,
                       borderRadius: 15,
-                      borderColor: AppColors.buttonBackgroundColor,
+                      borderColor: AppColors.primaryColorOfApp,
                     ),
                   Row(
                     children: <Widget>[
@@ -109,7 +105,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         spacing: 16,
                         text: 'or_divider'.tr(),
                         size: 12,
-                        color: Colors.black87,
+                        color: AppColors.primaryColorOfApp,
                         padding: EdgeInsets.zero,
                       ),
                       const Expanded(
@@ -124,11 +120,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   ),
                   CustomButton(
                     buttonText: 'continue_with_google_btn'.tr(),
-                    borderColor: AppColors.buttonBackgroundColor,
+                    borderColor: AppColors.primaryColorOfApp,
                     onTap: () => AuthService().signInWithGoogle(context),
                     borderRadius: 15,
                     buttonColor: Colors.transparent,
-                    textColor: AppColors.buttonBackgroundColor,
+                    textColor: AppColors.primaryColorOfApp,
                     icon: Container(
                       width: 22,
                       height: 22,
@@ -153,13 +149,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   void checkEmailIsRegistered(String value) async {
     if (_isShowSaveButton) {
       List<String> isEmailExistList;
-      print("value");
-      print(value);
       isEmailExistList = await _auth.fetchSignInMethodsForEmail(value.trim());
       final String? base16Encrypted =
           await FireStoreService().getUserPasswordFromFirestore(value);
-      print(isEmailExistList);
-      print(base16Encrypted);
       directNextScreen(isEmailExistList, base16Encrypted, value);
     }
   }

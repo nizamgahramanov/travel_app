@@ -4,7 +4,6 @@ import 'package:travel_app/helpers/app_light_text.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/main_screen.dart';
-import 'package:travel_app/screen/wrapper.dart';
 import 'package:travel_app/services/en_de_cryption.dart';
 
 import '../helpers/app_colors.dart';
@@ -35,21 +34,16 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
   bool _isShowSaveButton = false;
 
   void checkIfEmailChanged(String text) {
-    print("checkIfNameChanged");
     if (widget.email != _emailController?.text &&
         RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
             .hasMatch(_emailController!.text) &&
         _emailController?.text != '' &&
         _passwordController.text != '') {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = true;
       });
     } else {
       setState(() {
-        print("isShow");
-        print(_isShowSaveButton);
         _isShowSaveButton = false;
       });
     }
@@ -78,15 +72,12 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
       String enteredPassword = _passwordController.text;
       bool isPasswordCorrect =
           EnDeCryption().isPasswordCorrect(enteredPassword, widget.password!);
-      print("PASSWORD IS CORRECT");
-      print(isPasswordCorrect);
       if (isPasswordCorrect) {
         AuthService().updateUserEmail(
           context,
           enteredEmail,
           enteredPassword,
         );
-        print(enteredEmail);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -211,7 +202,7 @@ class _ChangeEmailScreenState extends State<ChangeEmailScreen> {
               horizontalMargin: 20,
               verticalMargin: 5,
               onTap: () => saveForm(),
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

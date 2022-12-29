@@ -19,9 +19,6 @@ class _UnderlinedPainter extends BoxPainter {
     Paint paint = Paint();
     paint.color = color;
     paint.isAntiAlias = true;
-    print("Configuration size");
-    print(configuration.size!.width);
-    print(configuration.size!.height);
     final Offset p1 = Offset(
         configuration.size!.width,
         configuration.size!.height);

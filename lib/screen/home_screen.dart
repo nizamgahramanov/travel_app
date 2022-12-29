@@ -24,9 +24,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print("HOMW SCREEN");
-    final providedData = Provider.of<Destinations>(context);
-    print(providedData);
+    Provider.of<Destinations>(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -52,21 +50,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   alignment: Alignment.centerLeft,
                   textAlign: TextAlign.start,
                 ),
-                if(widget.isLogin)
-                CustomButton(
-                  onTap: _goAddDestinationScreen,
-                  buttonText: 'home_add_btn'.tr(),
-                  borderRadius: 15,
-                  buttonTextSize: 13,
-                  height: 45,
-                  buttonColor: AppColors.buttonBackgroundColor,
-                  textColor: AppColors.whiteColor,
-                  borderColor: AppColors.buttonBackgroundColor,
-                  textPadding: const EdgeInsets.symmetric(horizontal: 10),
-                ),
+                if (widget.isLogin)
+                  CustomButton(
+                    onTap: _goAddDestinationScreen,
+                    buttonText: 'home_add_btn'.tr(),
+                    borderRadius: 15,
+                    buttonTextSize: 13,
+                    height: 45,
+                    buttonColor: AppColors.primaryColorOfApp,
+                    textColor: AppColors.whiteColor,
+                    borderColor: AppColors.primaryColorOfApp,
+                    textPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Expanded(

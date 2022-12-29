@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:travel_app/services/firebase_firestore_service.dart';
 import 'package:travel_app/widgets/network_connection_checker.dart';
+
 import '../helpers/constants.dart';
 import '../model/destination.dart';
 import '../widgets/spinner.dart';
@@ -15,7 +14,6 @@ import 'detail_screen.dart';
 import 'error_and_no_network_and_favorite_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
-  // final List<Destination> favoriteList;
   final _firebaseAuth = FirebaseAuth.instance.currentUser;
   FavoriteScreen({
     Key? key,
@@ -24,19 +22,17 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NetworkConnectionChecker(
-
       child: _firebaseAuth == null
           ? ErrorAndNoNetworkAndFavoriteScreen(
               text: 'no_favorites_yet_info'.tr(),
               path: noFavoriteScreenImage,
-        //       width: 300,
-        // height: 300,
+              //       width: 300,
+              // height: 300,
             )
           : SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
-                  vertical: 0,
                 ),
                 child: StreamBuilder<List<Destination>>(
                   builder: (context, snapshot) {
@@ -46,17 +42,14 @@ class FavoriteScreen extends StatelessWidget {
                             ConnectionState.active ||
                         snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
-                        print("FAVORITE AHAS ERROR");
-                        print(snapshot);
                         return ErrorAndNoNetworkAndFavoriteScreen(
-                          text: "something_went_wrong_error_msg".tr(),
-                          path: errorImage
-                          // width: 300,
-                          // height: 300,
-                        );
+                            text: "something_went_wrong_error_msg".tr(),
+                            path: errorImage
+                            // width: 300,
+                            // height: 300,
+                            );
                       } else {
                         if (snapshot.hasData && snapshot.data!.isEmpty) {
-                          print("NO FAVORITE");
                           return ErrorAndNoNetworkAndFavoriteScreen(
                             text: 'no_favorites_yet_info'.tr(),
                             path: noFavoriteScreenImage,

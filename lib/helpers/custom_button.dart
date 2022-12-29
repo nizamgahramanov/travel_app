@@ -47,7 +47,7 @@ class CustomButton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
-        color: buttonColor ?? AppColors.buttonBackgroundColor,
+        color: buttonColor ?? AppColors.primaryColorOfApp,
         border: networkStatus == NetworkStatus.online
             ? Border.all(color: borderColor)
             : Border.all(color: AppColors.redAccent),

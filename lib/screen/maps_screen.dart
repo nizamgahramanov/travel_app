@@ -5,11 +5,8 @@ import 'package:travel_app/helpers/app_colors.dart';
 import 'package:travel_app/helpers/app_light_text.dart';
 
 class MapScreen extends StatefulWidget {
-  // final DestinationLocation? initialLocation;
   final bool isSelecting;
   static const routeName = "/map_screen";
-  // this.initialLocation =
-  // const DestinationLocation(latitude: 40.6079186, longitude: 49.5886951)
   MapScreen({this.isSelecting = false});
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -18,8 +15,6 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   LatLng? _pickedLocation;
   void _selectLocation(LatLng position) {
-    print("SELECT LOCATION");
-    print(position.longitude);
     setState(() {
       _pickedLocation = position;
     });
@@ -30,8 +25,6 @@ class _MapScreenState extends State<MapScreen> {
     final data =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     final geoPointArgument = data['geoPoint'] as GeoPoint;
-    print(data);
-    print(geoPointArgument);
     return Scaffold(
       appBar: AppBar(
         title: AppLightText(

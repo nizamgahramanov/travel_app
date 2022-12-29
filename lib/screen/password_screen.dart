@@ -5,6 +5,7 @@ import 'package:travel_app/model/user_credentials.dart';
 import 'package:travel_app/reusable/custom_nested_scroll_view.dart';
 import 'package:travel_app/reusable/custom_text_form_field.dart';
 import 'package:travel_app/screen/user_info.dart';
+
 import '../helpers/app_colors.dart';
 import '../helpers/app_light_text.dart';
 import '../helpers/constants.dart';
@@ -46,8 +47,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
   }
 
   void checkPasswordValidations(String character) {
-    print(character);
-    print(_passwordController.text.length);
     if (_passwordController.text.length >= 6) {
       setState(() {
         _minimumPasswordLength = true;
@@ -98,9 +97,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print("args");
-    print(args);
-
     void goNextScreen(String value) {
       if (!args['provider'] && _isShowContinueButton) {
         Navigator.pushNamed(
@@ -138,7 +134,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   AppLightText(
                     text: 'password_title'.tr(),
                     size: 18,
-                    color: Colors.black,
+                    color: AppColors.blackColor,
                     fontWeight: FontWeight.bold,
                     spacing: 2,
                     padding: EdgeInsets.zero,
@@ -250,7 +246,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               borderRadius: 15,
               horizontalMargin: 20,
               onTap: saveForm,
-              borderColor: AppColors.buttonBackgroundColor,
+              borderColor: AppColors.primaryColorOfApp,
             )
           : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
